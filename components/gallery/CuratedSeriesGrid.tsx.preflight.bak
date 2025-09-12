@@ -1,0 +1,87 @@
+"use client"
+
+import { useMemo } from 'react'
+import type { GalleryImage } from '@/components/gallery/GalleryGrid'
+
+interface CuratedItem {
+  shareId: string
+  aspect?: 'square' | 'wide' | 'tall'
+}
+
+interface CuratedSeriesGridProps {
+  title?: string
+  images: GalleryImage[]
+  items: CuratedItem[]
+}
+
+function getShareId(src: string) {
+  const base = src.replace(/^\//, '').replace(/\.(jpe?g|png|webp)$/i, '')
+  return base.split('/').pop() || base
+}
+
+export default function CuratedSeriesGrid({ title = 'Signature Series', images, items }: CuratedSeriesGridProps) {
+  const map = useMemo(() => {
+    const m = new Map<string, GalleryImage>()
+    images.forEach(img => m.set(getShareId(img.src).toLowerCase(), img))
+    return m
+  }, [images])
+
+  const selected = items
+    .map(cfg => {
+      const img = map.get(cfg.shareId.toLowerCase())
+      if (!img) return null
+      return { img, aspect: cfg.aspect || 'wide' as const }
+    })
+    .filter(Boolean) as { img: GalleryImage; aspect: 'square' | 'wide' | 'tall' }[]
+
+  if (selected.length === 0) return null
+
+  return (
+    <section className="mb-12">
+      <header className="mb-6">
+        <h2 className="text-white text-xl sm:text-2xl font-montserrat font-semibold">{title}</h2>
+        <div className="w-20 h-[2px] bg-[#D4AF37] mt-2" />
+      </header>
+
+      <div className="grid grid-cols-2 sm:grid-cols-6 lg:grid-cols-12 gap-4">
+        {selected.map(({ img, aspect }, i) => {
+          const base = img.src.replace(/^\//, '').replace(/\.(jpe?g|png|webp)$/i, '')
+          const mobile = `/optimized/${base}_mobile.jpg`
+          const tablet = `/optimized/${base}_tablet.jpg`
+          const desktop = `/optimized/${base}_desktop.jpg`
+          const srcSet = `${mobile} 640w, ${tablet} 1024w, ${desktop} 1920w`
+
+          const aspectClass = aspect === 'square' ? 'aspect-square' : aspect === 'tall' ? 'aspect-[3/4]' : 'aspect-[3/2]'
+          const spanClass = [
+            aspect === 'tall' && 'sm:col-span-2 lg:col-span-3',
+            aspect !== 'tall' && 'sm:col-span-3 lg:col-span-4',
+          ].filter(Boolean).join(' ')
+
+          return (
+            <figure key={`${img.src}-${i}`} className={`${spanClass} ${aspectClass} group relative overflow-hidden rounded-sm`}>
+              {/* Matting + image */}
+              <div className="absolute inset-0 bg-black rounded-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={mobile}
+                  srcSet={srcSet}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  alt={img.alt}
+                  className="w-full h-full object-cover border-2 border-white/90 rounded-sm transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <div className="absolute inset-0 ring-1 ring-[#D4AF37]/0 group-hover:ring-[#D4AF37]/60 transition-[box-shadow,opacity] duration-300" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <figcaption className="absolute bottom-2 left-2 right-2 text-[11px] sm:text-xs tracking-[0.06em] text-white/80">
+                {img.caption || img.alt}
+              </figcaption>
+            </figure>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+

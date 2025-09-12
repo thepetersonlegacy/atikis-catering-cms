@@ -1,0 +1,474 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --max-width: 1200px;
+  --gutter: 2rem;
+  --spacing-1: 0.5rem;  /* 8px */
+  --spacing-2: 1rem;    /* 16px */
+  --spacing-4: 2rem;    /* 32px */
+  --spacing-8: 4rem;    /* 64px */
+}
+
+/* Base container */
+.container {
+  @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Hero specific styles */
+.hero-video-container {
+  @apply relative min-h-screen w-full overflow-hidden;
+}
+
+.hero-video-container video,
+.hero-video-container .bg-cover {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+/* Modular spacing utilities */
+.spacing-y-1 { margin-top: var(--spacing-1); margin-bottom: var(--spacing-1); }
+.spacing-y-2 { margin-top: var(--spacing-2); margin-bottom: var(--spacing-2); }
+.spacing-y-4 { margin-top: var(--spacing-4); margin-bottom: var(--spacing-4); }
+.spacing-y-8 { margin-top: var(--spacing-8); margin-bottom: var(--spacing-8); }
+
+/* Grid system */
+.grid-cols-symmetrical {
+  @apply grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Responsive typography */
+@layer base {
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+  }
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+  h3 {
+    @apply text-xl md:text-2xl lg:text-3xl font-bold;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat;
+  }
+  p {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+}
+
+/* Enhanced vertical rhythm */
+.vertical-rhythm > * + * {
+  @apply mt-6;
+}
+
+/* Symmetrical spacing for sections */
+section {
+  @apply py-12 md:py-16 lg:py-20;
+}
+
+/* Optimized animations with will-change */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s ease-out;
+  will-change: transform, opacity;
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+
+/* SEO and Performance Optimizations */
+.preload-critical {
+  font-display: swap;
+}
+
+/* Lazy loading optimization */
+.lazy-load {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+  opacity: 1;
+}
+
+/* Improve Core Web Vitals */
+img {
+  content-visibility: auto;
+}
+
+/* Critical images should load eagerly */
+.hero img,
+.above-fold img {
+  loading: eager;
+}
+
+/* Optimize animations for better performance */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-on-scroll {
+    animation: scrollReveal 0.6s ease-out forwards;
+  }
+}
+
+/* Smooth scrolling optimizations */
+html {
+
+  scroll-behavior: smooth;
+}
+
+/* Mobile readability and tap targets */
+@media (max-width: 640px) {
+  h1, h2, h3 {
+    word-break: break-word;
+    hyphens: auto;
+  }
+  p {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Fix hero section flickering */
+.hero-image-container {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.hero-image-container.transitioning {
+  will-change: opacity;
+}
+
+.hero-image-container:not(.transitioning) {
+  will-change: auto;
+}
+
+/* Prevent layout shifts */
+.aspect-ratio-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+}
+
+.aspect-ratio-16-9 {
+  padding-bottom: 56.25%;
+}
+
+/* Optimize carousel performance */
+.carousel-container {
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+.carousel-slide {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Custom scrollbar for tab navigation */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #B69121;
+}
+
+/* Performance optimizations */
+.hero-video-container,
+.hero-video-container > div {
+  will-change: auto;
+}
+
+.hero-video-container.animating,
+.hero-video-container.animating > div {
+  will-change: opacity;
+}
+
+/* RTL Language Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .container {
+  direction: rtl;
+}
+
+/* Arabic font support */
+.lang-ar {
+  font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+}
+
+.lang-ar h1, .lang-ar h2, .lang-ar h3, .lang-ar h4, .lang-ar h5, .lang-ar h6 {
+  font-weight: 600;
+}
+
+/* Chinese font support */
+.lang-zh-CN {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+/* Language-specific adjustments */
+.lang-ar .text-left {
+  text-align: right;
+}
+
+.lang-ar .text-right {
+  text-align: left;
+}
+
+/* RTL-specific spacing adjustments */
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .pl-3 {
+  padding-left: 0;
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .pr-3 {
+  padding-right: 0;
+  padding-left: 0.75rem;
+}
+
+/* Animation adjustments for RTL */
+[dir="rtl"] .animate-in {
+  --tw-enter-translate-x: 1rem;
+}
+
+/* Language selector specific styles */
+.language-selector-dropdown {
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.language-option {
+  transition: all 0.15s ease-in-out;
+}
+
+.language-option:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .language-selector-dropdown {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .language-selector-dropdown {
+    border: 2px solid;
+  }
+}
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Enhanced scroll arrow styling */
+.scroll-arrow {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.scroll-arrow:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.scroll-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Gradient fade effect for scroll indicators */
+.scroll-fade-left {
+  background: linear-gradient(to right, rgba(255,255,255,0.9) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.scroll-fade-right {
+  background: linear-gradient(to left, rgba(255,255,255,0.9) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Smooth scroll behavior for mobile process steps */
+@media (max-width: 768px) {
+  .snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .snap-center {
+    scroll-snap-align: center;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+
+    /* Custom colors */
+    --gold: 51 43% 52%;
+    --gold-dark: 51 43% 42%;
+    --jet-black: 0 0% 0%;
+    --pure-white: 0 0% 100%;
+  }
+}
+
+/* Critical CSS inlining for above-the-fold content */
+.hero-section-critical {
+  min-height: 100vh;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hydration-safe animations */
+@media (prefers-reduced-motion: no-preference) {
+  .hydration-safe-animation {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+}
+
+/* Shimmer loading animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Prevent flash of unstyled content */
+.prevent-fouc {
+  visibility: hidden;
+}
+
+.prevent-fouc.loaded {
+  visibility: visible;
+}
+
+/* Ensure consistent rendering across browsers */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Fix for iOS Safari viewport units */
+@supports (-webkit-touch-callout: none) {
+  .hero-video-container {
+    min-height: -webkit-fill-available;
+  }
+}

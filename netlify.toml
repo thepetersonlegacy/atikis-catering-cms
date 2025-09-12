@@ -1,0 +1,39 @@
+[build]
+  command = "npm install && npm run build"
+  publish = "out"
+
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "1"
+  NODE_ENV = "production"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+  NEXT_PUBLIC_SITE_URL = "https://atkins-catering.netlify.app"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "origin-when-cross-origin"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# SPA fallback to avoid 404s on client-side routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Ensure favicon.ico resolves even if only PNGs are present
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/favicon-16x16.png"
+  status = 200
+  force = true
