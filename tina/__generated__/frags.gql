@@ -1,0 +1,68 @@
+fragment SiteSettingsParts on SiteSettings {
+  __typename
+  contact {
+    __typename
+    email
+    phone
+    address
+  }
+  hero {
+    __typename
+    title
+    subtitle
+    backgroundImage
+  }
+}
+
+fragment MenuItemsParts on MenuItems {
+  __typename
+  name
+  description
+  price
+  category
+  image
+  featured
+}
+
+fragment TestimonialsParts on Testimonials {
+  __typename
+  name
+  company
+  content
+  rating
+  avatar
+}
+
+fragment GalleryImagesParts on GalleryImages {
+  __typename
+  src
+  alt
+  caption
+  album
+}
+
+fragment TranslationsParts on Translations {
+  __typename
+  language
+  nav {
+    __typename
+    home
+    menu
+    gallery
+    testimonials
+    contact
+    orderNow
+  }
+  hero {
+    __typename
+    title
+    subtitle
+    viewMenu
+  }
+  footer {
+    __typename
+    quickLinks
+    contactInfo
+    followUs
+  }
+}

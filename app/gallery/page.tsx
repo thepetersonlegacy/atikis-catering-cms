@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import type { Metadata } from 'next'
 import GalleryGrid, { type GalleryImage } from '@/components/gallery/GalleryGrid'
-import CuratedSeriesGrid from '@/components/gallery/CuratedSeriesGrid'
 import FadeInOnMount from '@/components/gallery/FadeInOnMount'
 
 export const metadata: Metadata = {
@@ -12,25 +11,25 @@ export const metadata: Metadata = {
 
 // Curated captions: key = filename without extension, lowercased
 const CAPTION_MAP: Record<string, string> = {
-  dsc_6236: 'Smoked salmon canapés with dill crème fraîche',
-  dsc_6313: 'Seasonal fruit medley with mint',
-  dsc_6361: 'Artisan cheese board with accoutrements',
-  dsc_6384: 'Herb-roasted chicken salad crostini',
-  dsc_6403: 'Mediterranean mezze selection',
-  dsc_6418: 'Mini beef tenderloin sliders',
-  "dsc_6462 (1)": 'Chef’s selection plated entrée',
-  dsc_6467: 'Lemon tartlets with toasted meringue',
-  dsc_6497: 'Caprese skewers with balsamic glaze',
-  dsc_6508: 'Chocolate ganache petit fours',
-  dsc_6543: 'Shrimp cocktail with house cocktail sauce',
-  dsc_6557: 'Vanilla bean panna cotta',
-  dsc_6574: 'Herbed chicken breast with seasonal vegetables',
-  dsc_6579: 'Mediterranean couscous salad',
-  dsc_6653: 'Gourmet cheese & charcuterie board',
-  dsc_6664: 'Fresh garden salad with vinaigrette',
-  dsc_6703: 'Gourmet charcuterie assortment',
-  "dsc_6722-enhanced-nr (1)": 'Chef’s selection plated entrée',
-  dsc_7019: 'Salmon en papillote with citrus',
+  dsc_6236: 'Ahi Tuna Poke bowl',
+  dsc_6313: 'Blackened Salmon Caesar',
+  dsc_6361: 'Chicken Caesar',
+  dsc_6384: 'Mediterranean Chicken Salad',
+  dsc_6403: 'Chicken Cobb',
+  dsc_6418: 'Butternut Chicken salad',
+  "dsc_6462 (1)": 'Arugula Chicken salad',
+  dsc_6467: 'Pulled Pork Greenery',
+  dsc_6497: 'Smoked salmon arugula',
+  dsc_6508: 'Greek salad',
+  dsc_6543: 'Ancho Steak salad',
+  dsc_6557: 'Peri Peri Chicken salad',
+  dsc_6574: 'Steak Gorgonzola',
+  dsc_6579: 'Harissa Chicken',
+  dsc_6653: 'Wild Rice arugula',
+  dsc_6664: 'Asian chicken',
+  dsc_6703: 'Nicoise salad',
+  "dsc_6722-enhanced-nr (1)": 'Shrimp Cavatappi',
+  dsc_7019: 'Buddha Salad',
   dsc_7162: 'Brie chicken with caramelized apples',
   dsc_7918: 'Toasted baguette with herb butter',
   dsc_7971: 'Chocolate-dipped strawberries',
@@ -74,7 +73,9 @@ function getGalleryImages(): GalleryImage[] {
 }
 
 export default function GalleryPage() {
-  const images = getGalleryImages()
+  const allImages = getGalleryImages()
+  // Remove items numbered 20–30 (1-based) => indices 19..29
+  const images = allImages.filter((_, i) => i < 19 || i > 29)
 
   return (
     <section className="bg-black">
@@ -96,23 +97,7 @@ export default function GalleryPage() {
               </ul>
             </div>
           ) : (
-            <>
-              <CuratedSeriesGrid
-                title="Signature Series"
-                images={images}
-                items={[
-                  { shareId: 'dsc_6703', aspect: 'wide' },
-                  { shareId: 'dsc_6467', aspect: 'wide' },
-                  { shareId: 'dsc_6664', aspect: 'tall' },
-                  { shareId: 'dsc_6313', aspect: 'tall' },
-                  { shareId: 'dsc_7019', aspect: 'wide' },
-                  { shareId: 'dsc_6236', aspect: 'square' },
-                  { shareId: 'dsc_7997', aspect: 'square' },
-                  { shareId: 'dsc_6574', aspect: 'wide' }
-                ]}
-              />
-              <GalleryGrid images={images} />
-            </>
+            <GalleryGrid images={images} />
           )}
         </FadeInOnMount>
       </div>

@@ -19,11 +19,8 @@ interface LightboxProps {
 }
 
 export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, onNext, shareId, items = [], currentIndex, onSelectIndex }: LightboxProps) {
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const [soundOn, setSoundOn] = useState(false)
-  const [canPlay, setCanPlay] = useState(false)
-  const [labelOpen, setLabelOpen] = useState(false)
-  const [volume, setVolume] = useState(0.25)
+  const singleMode = (!onPrev && !onNext && (!items || items.length <= 1))
+
   const [currentSrc, setCurrentSrc] = useState(src)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
   const [isFs, setIsFs] = useState(false)
@@ -31,7 +28,69 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
   const [anim, setAnim] = useState(false)
   const [closing, setClosing] = useState(false)
   const [showStrip, setShowStrip] = useState(true)
+  const [imgVisible, setImgVisible] = useState(true)
+
   const stripTimerRef = useRef<number | null>(null)
+  const captionRef = useRef<HTMLDivElement | null>(null)
+  const [imgMaxPx, setImgMaxPx] = useState<number | null>(null)
+
+  const [captionOffset, setCaptionOffset] = useState(0)
+
+  // Sound state
+  const [soundOn, setSoundOn] = useState(false)
+  const [volume, setVolume] = useState(0.3)
+
+  // Get or create ambient audio element
+  const getAudioEl = useCallback(() => {
+    if (typeof window === 'undefined') return null
+    let el = document.getElementById('ambient-audio') as HTMLAudioElement
+    if (!el) {
+      el = document.createElement('audio')
+      el.id = 'ambient-audio'
+      el.loop = true
+      el.preload = 'auto'
+      // Add a subtle ambient sound source - you may want to replace this with your actual audio file
+      el.src = '/audio/ambient.mp3' // Make sure this file exists in your public/audio folder
+      document.body.appendChild(el)
+    }
+    return el
+  }, [])
+
+  // Reserve vertical space so image + filmstrip + caption always fit
+  const computeMaxHeight = useCallback(() => {
+    if (!isOpen) return
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 800
+    const containerPadding = 32 // p-4 top+bottom
+    const captionH = captionRef.current?.offsetHeight ?? (caption ? 56 : 0)
+    const filmstripReserve = items && items.length > 1 ? 88 : 0 // thumbs + chrome
+    const extra = 16 // breathing space
+    const available = Math.max(200, vh - containerPadding - filmstripReserve - captionH - extra)
+    setImgMaxPx(available)
+    const off = Math.round((captionRef.current?.offsetHeight ?? 0) / 2)
+    setCaptionOffset(off)
+    setTy(off)
+  }, [isOpen, items, caption])
+
+  useEffect(() => {
+    if (!isOpen) return
+    computeMaxHeight()
+    const onR = () => computeMaxHeight()
+    window.addEventListener('resize', onR)
+    window.addEventListener('orientationchange', onR)
+    return () => {
+      window.removeEventListener('resize', onR)
+      window.removeEventListener('orientationchange', onR)
+    }
+  }, [isOpen, computeMaxHeight])
+  useEffect(() => {
+    if (!isOpen) return
+    computeMaxHeight()
+  }, [isOpen, currentSrc, imgVisible, computeMaxHeight])
+
+
+  const stripRef = useRef<HTMLDivElement | null>(null)
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null)
+
 
   const handlePointerMoveRoot = useCallback(() => {
     setShowStrip(true)
@@ -47,21 +106,11 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
   const draggingRef = useRef(false)
   const startRef = useRef<{x:number,y:number,tx:number,ty:number}>({x:0,y:0,tx:0,ty:0})
 
-  const getAudioEl = (): HTMLAudioElement | null => {
-    if (typeof document !== 'undefined') {
-      const g = document.getElementById('ambient-audio') as HTMLAudioElement | null
-      if (g) return g
-    }
-    return audioRef.current
-  }
-
   const onKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') { e.preventDefault(); handleRequestClose(); return }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); onPrev?.(); return }
-    if (e.key === 'ArrowRight') { e.preventDefault(); onNext?.(); return }
-    if (e.key.toLowerCase() === 'z') { e.preventDefault(); toggleZoom(); return }
-    if (e.key.toLowerCase() === 'l') { e.preventDefault(); setLabelOpen(v => !v); return }
-    if (e.key.toLowerCase() === 's') { e.preventDefault(); setSoundOn(v => !v); return }
+    if ((e.key === 'ArrowLeft' || e.key === 'PageUp') && onPrev) { e.preventDefault(); onPrev(); return }
+    if ((e.key === 'ArrowRight' || e.key === 'PageDown') && onNext) { e.preventDefault(); onNext(); return }
+
     if (e.key === '?' || (e.key === '/' && e.shiftKey)) { e.preventDefault(); setShowHelp(v => !v); return }
     if (e.key.toLowerCase() === 'f') { e.preventDefault(); toggleFullscreen(); return }
   }, [onPrev, onNext])
@@ -78,6 +127,11 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
 
   // Animate in/out and fullscreen state
   const handleRequestClose = useCallback(() => {
+    try {
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.()
+      }
+    } catch {}
     setClosing(true)
     setAnim(false)
     setTimeout(() => {
@@ -104,7 +158,7 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     }
   }, [isOpen])
 
-  // Auto-hide filmstrip after inactivity
+  // Auto-hide filmstrip and controls after inactivity
   useEffect(() => {
     if (!isOpen) return
     setShowStrip(true)
@@ -114,6 +168,23 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
       if (stripTimerRef.current) window.clearTimeout(stripTimerRef.current)
     }
   }, [isOpen])
+
+  // Focus close button on open for accessibility
+  useEffect(() => {
+    if (!isOpen) return
+    const t = setTimeout(() => closeBtnRef.current?.focus(), 0)
+    return () => clearTimeout(t)
+  }, [isOpen])
+
+  // Keep active thumbnail in view
+  useEffect(() => {
+    if (!isOpen) return
+    if (!stripRef.current) return
+    if (typeof currentIndex !== 'number') return
+    const imgs = stripRef.current.querySelectorAll('img')
+    const el = imgs[currentIndex] as HTMLElement | undefined
+    el?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+  }, [currentIndex, isOpen])
 
   useEffect(() => {
     const onFs = () => setIsFs(!!document.fullscreenElement)
@@ -145,10 +216,16 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     } catch {}
   }, [soundOn, volume])
 
-  // Sync image src and add graceful fallback if optimized asset missing
+  // Sync image src with crossfade and reset zoom/pan
   useEffect(() => {
-    setCurrentSrc(src)
-  }, [src])
+    setImgVisible(false)
+    const t = setTimeout(() => {
+      setCurrentSrc(src)
+      setZoom(1); setTx(0); setTy(captionOffset)
+      setImgVisible(true)
+    }, 20)
+    return () => clearTimeout(t)
+  }, [src, captionOffset])
 
   // Smooth crossfade for ambient sound and volume control
   useEffect(() => {
@@ -192,6 +269,27 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     if (!soundOn) return
     el.volume = volume
   }, [volume, soundOn])
+
+  // Wheel-based zoom centered near cursor
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
+  const onWheelZoom = (e: React.WheelEvent<HTMLImageElement>) => {
+    e.preventDefault()
+    const delta = -e.deltaY
+    const factor = delta > 0 ? 1.1 : 0.9
+    const prevZoom = zoom
+    let nextZoom = clamp(prevZoom * factor, 1, 4)
+    if (nextZoom === prevZoom) return
+    // Adjust translation so the zoom focuses around pointer
+    const rect = (e.currentTarget as HTMLImageElement).getBoundingClientRect()
+    const cx = e.clientX - rect.left - rect.width / 2
+    const cy = e.clientY - rect.top - rect.height / 2
+    const scale = nextZoom / prevZoom
+    const ntx = cx - (cx - tx) * scale
+    const nty = cy - (cy - ty) * scale
+    setZoom(nextZoom)
+    setTx(clamp(ntx, -2000, 2000))
+    setTy(clamp(nty, -2000, 2000))
+  }
 
   const handleShare = useCallback(async () => {
     const base = typeof window !== 'undefined' ? window.location.origin : ''
@@ -272,20 +370,8 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
         onClick={(e) => { if (e.target === e.currentTarget) handleRequestClose() }}
       >
         {/* Top-right controls */}
-        <div className="absolute right-4 top-4 z-[101] flex gap-2">
-          <button
-            aria-label="Toggle wall label panel"
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${labelOpen ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={() => setLabelOpen(v => !v)}
-            aria-pressed={labelOpen}
-            title="Wall label"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M4 7h16v10H4z" />
-              <path d="M6 9h8v2H6z" className="opacity-70" />
-            </svg>
-            <span className="sr-only">Wall label</span>
-          </button>
+        <div className={cn("absolute right-4 top-4 z-[101] flex gap-2 transition-opacity duration-300", (singleMode || showStrip) ? "opacity-100" : "opacity-0")}>
+
           <button
             aria-label="Toggle ambient sound"
             className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${soundOn ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
@@ -321,15 +407,7 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
               aria-label="Ambient volume"
             />
           </label>
-          <button
-            aria-label="Toggle zoom"
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${zoom>1 ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={toggleZoom}
-            title="Zoom"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0-2a8 8 0 1 0 5.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0 0 10 2z"/></svg>
-            <span className="sr-only">Zoom</span>
-          </button>
+
           <button
             aria-label="Toggle fullscreen"
             className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${isFs ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
@@ -363,6 +441,7 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
             <span className="sr-only">Share</span>
           </button>
           <button
+            ref={closeBtnRef}
             aria-label="Close image"
             className="px-2.5 py-2 rounded border border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/70"
             onClick={handleRequestClose}
@@ -393,15 +472,7 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
           </button>
         )}
 
-        {/* Ambient audio (off by default) */}
-        <audio
-          ref={audioRef}
-          src="/audio/ambient.mp3"
-          loop
-          preload="auto"
-          onCanPlay={() => setCanPlay(true)}
-          className="hidden"
-        />
+
 
         {/* Image + optional wall label panel */}
         <figure className="relative max-w-[95vw] max-h-[85vh]">
@@ -410,19 +481,17 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
           <img
             src={currentSrc}
             alt={alt}
-            onDoubleClick={toggleZoom}
-            onPointerDown={onImgPointerDown}
-            onPointerMove={onImgPointerMove}
-            onPointerUp={onImgPointerUp}
+            onClick={(e) => { e.stopPropagation(); handleRequestClose() }}
+            onTouchEnd={(e) => { e.stopPropagation(); handleRequestClose() }}
             onError={() => {
               const fallback = shareId ? `/images/gallery/${shareId}.jpg` : undefined
               if (fallback && currentSrc !== fallback) setCurrentSrc(fallback)
             }}
-            style={{ transform: `translate(${tx}px, ${ty}px) scale(${zoom})`, cursor: zoom>1 ? 'grab' : 'auto' }}
-            className="max-w-full max-h-[75vh] rounded-sm shadow-2xl transition-transform duration-300 will-change-transform"
+            style={{ transform: `translate(${tx}px, ${ty}px) scale(${zoom})`, cursor: 'auto', maxHeight: imgMaxPx ? `${imgMaxPx}px` : undefined }}
+            className={cn("max-w-full rounded-sm shadow-2xl transition-[opacity,transform] duration-300 will-change-transform", imgVisible ? "opacity-100" : "opacity-0")}
           />
           {caption && (
-            <div className="mt-4 flex flex-col items-center">
+            <div ref={captionRef} className="mt-4 flex flex-col items-center">
               <div className="w-12 h-px bg-[#D4AF37]/70 mb-2" />
               <figcaption className="text-center text-white/90 text-[13px] leading-snug tracking-wide font-light">
                 {caption}
@@ -430,21 +499,16 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
             </div>
           )}
 
-          {labelOpen && (
-            <aside className="hidden md:block absolute top-0 right-[-18rem] w-64 p-4 bg-black/70 text-white/85 rounded-sm border border-white/10">
-              <div className="text-[11px] tracking-[0.06em] uppercase text-white/80">Wall Label</div>
-              <div className="mt-2 text-sm leading-relaxed text-white/90">{caption || alt}</div>
-            </aside>
-          )}
+
         </figure>
 
         {/* Thumbnail filmstrip */}
         {items && items.length > 1 && typeof currentIndex === 'number' && (
-          <div className={cn("absolute bottom-4 left-1/2 -translate-x-1/2 z-[102] bg-black/40 backdrop-blur-sm rounded px-3 py-2 border border-white/10 transition-opacity duration-300", showStrip ? "opacity-100" : "opacity-0")}>
+          <div ref={stripRef} className={cn("absolute bottom-4 left-1/2 -translate-x-1/2 z-[102] bg-black/40 backdrop-blur-sm rounded px-3 py-2 border border-white/10 transition-opacity duration-300", showStrip ? "opacity-100" : "opacity-0")}>
             <div className="flex gap-2 overflow-x-auto max-w-[90vw] pr-1">
               {items.map((it, i) => {
                 const active = i === currentIndex
-                const base = it.src.replace(/^.*\/([^\/]+)\.(jpg|jpeg|png|webp)$/i, '$1')
+                const base = it.src.replace(/^\//, '').replace(/\.(jpe?g|png|webp)$/i, '')
                 const thumb = `/optimized/${base}_mobile.jpg`
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -476,8 +540,8 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
               <ul className="space-y-2 text-[13px]">
                 <li><b>Esc</b> — Close</li>
                 <li><b>← / →</b> — Previous / Next</li>
-                <li><b>Z</b> — Zoom</li>
-                <li><b>L</b> — Toggle Wall Label</li>
+
+
                 <li><b>S</b> — Toggle Sound</li>
                 <li><b>F</b> — Fullscreen</li>
                 <li><b>?</b> — Show this overlay</li>

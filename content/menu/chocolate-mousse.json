@@ -1,0 +1,8 @@
+{
+  "name": "Chocolate Mousse",
+  "description": "Rich and creamy chocolate mousse served in 3 oz. portions.",
+  "price": 0,
+  "category": "desserts",
+  "image": "/images/menu/chocolate-mousse.jpg",
+  "featured": false
+}

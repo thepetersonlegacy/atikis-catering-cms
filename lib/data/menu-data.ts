@@ -50,6 +50,13 @@ export const allMenuItems: MenuItem[] = [
     description: 'A selection of scones, muffins, and pastries. sevred with whipped cream cheese and butter ',
     category: 'Signature Breakfast Collection'
   },
+  {
+    id: 'breakfast-charcuterie',
+    title: 'Breakfast Charcuterie',
+    description: 'Mixed nuts, dried fruits, artisan meat skewer, cheeses, grapes, pastries, hard-boiled egg, butter cube, jam/honey, and Tabasco.',
+    category: 'Signature Breakfast Collection'
+  },
+
 
   // Healthy Bowls & Oats
   {
@@ -163,6 +170,7 @@ export const allMenuItems: MenuItem[] = [
           'Euro Breakfast',
           'Breakfast Bagel Tray',
           'Variety Breakfast Bread Tray',
+          'Breakfast Charcuterie',
           'Steel-Cut Oats',
           'Oatmeal Bake of the Day',
           'Coconut Porridge',

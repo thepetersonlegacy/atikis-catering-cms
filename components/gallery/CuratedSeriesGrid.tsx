@@ -75,6 +75,8 @@ export default function CuratedSeriesGrid({ title = 'Signature Series', images, 
                 <div className="absolute inset-0 ring-1 ring-[#D4AF37]/0 group-hover:ring-[#D4AF37]/60 transition-[box-shadow,opacity] duration-300" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
+
+
               <figcaption className="absolute bottom-2 left-2 right-2 text-[11px] sm:text-xs tracking-[0.06em] text-white/80">
                 {img.caption || img.alt}
               </figcaption>

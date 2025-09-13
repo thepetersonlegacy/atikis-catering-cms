@@ -1,0 +1,21 @@
+{
+  "language": "en",
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "gallery": "Gallery",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "orderNow": "Order Now"
+  },
+  "hero": {
+    "title": "Atikis Minnesota Aviation Catering",
+    "subtitle": "Authentic flavors, delivered with five-star service—elevating every moment of your in-flight dining.",
+    "viewMenu": "View Menu"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactInfo": "Contact Info",
+    "followUs": "Follow Us"
+  }
+}

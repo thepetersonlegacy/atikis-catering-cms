@@ -33,6 +33,7 @@ export default function Footer() {
               {[
                 { name: t('nav.home'), href: '/' },
                 { name: t('nav.menu'), href: '/menu' },
+                { name: t('nav.gallery'), href: '/gallery' },
                 { name: t('nav.testimonials'), href: '/testimonials' },
                 { name: t('nav.contact'), href: '/contact' }
               ].map((item) => (

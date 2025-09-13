@@ -13,8 +13,8 @@ const AboutSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-xl">
-              <Image 
-                src="/images/backgrounds/bg-wheels-up-02.png"
+              <Image
+                src="/images/backgrounds/about-culinary.jpg"
                 alt="Luxury aviation catering"
                 fill
                 style={{objectFit: 'cover'}}

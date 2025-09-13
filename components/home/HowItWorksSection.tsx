@@ -70,20 +70,20 @@ const HowItWorksSection = () => {
 
   const StaticSteps = () => (
     <div className="text-center">
-      <h2 className="font-montserrat text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
+      <h2 className="font-montserrat text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
         {t('howItWorks.title')}
       </h2>
       <div className="w-16 h-1 bg-[#D4AF37] mx-auto mb-4"></div>
-      <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+      <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
         {t('howItWorks.subtitle')}
       </p>
     </div>
   )
 
   return (
-    <section className="w-full py-8 md:py-12 lg:py-16 bg-[#D4AF37]" aria-label="How our aviation catering process works">
+    <section className="w-full overflow-x-hidden py-8 md:py-12 lg:py-16 bg-[#D4AF37]" aria-label="How our aviation catering process works">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="aspect-[16/9] w-full relative overflow-hidden rounded-lg shadow-xl border-4 border-white">
+        <div className="w-full relative overflow-hidden rounded-lg shadow-xl border-4 border-white min-h-[420px] sm:min-h-[500px] md:aspect-[16/9]">
           <Image
             src="/images/backgrounds/how-it-works.jpg"
             alt="How it works background"
@@ -93,15 +93,15 @@ const HowItWorksSection = () => {
             priority={false}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/80" />
-          <div className="absolute inset-0 backdrop-blur-sm" />
+
 
           <div className="relative z-10 h-full flex flex-col justify-center p-6 md:p-8 lg:p-12">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="font-montserrat text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="font-montserrat text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
                 {t('howItWorks.title')}
               </h2>
               <div className="w-16 h-1 bg-[#D4AF37] mx-auto mb-4"></div>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
                 {t('howItWorks.subtitle')}
               </p>
             </div>
@@ -180,7 +180,7 @@ const HowItWorksSection = () => {
               <div className="md:hidden">
                 <div
                   className={`
-                    flex gap-6 overflow-x-auto pb-4 px-2
+                    flex gap-4 sm:gap-6 overflow-x-auto pb-4 px-2
                     snap-x snap-mandatory scrollbar-hide
                     ${isRTL ? 'flex-row-reverse' : ''}
                   `}
@@ -193,7 +193,7 @@ const HowItWorksSection = () => {
                     return (
                       <div
                         key={step.id}
-                        className="flex-shrink-0 w-48 snap-center"
+                        className="flex-shrink-0 w-40 sm:w-48 snap-center"
                         onClick={() => handleStepClick(step.id)}
                         onKeyDown={(e) => handleKeyDown(e, step.id)}
                         tabIndex={0}
@@ -202,7 +202,7 @@ const HowItWorksSection = () => {
                       >
                         <div className="flex flex-col items-center text-center cursor-pointer group">
                           <div className={`
-                            relative w-16 h-16 rounded-full flex items-center justify-center
+                            relative w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center
                             transition-all duration-300 transform group-active:scale-95
                             ${isActive
                               ? 'bg-[#D4AF37] text-white shadow-lg shadow-[#D4AF37]/30'
@@ -211,7 +211,7 @@ const HowItWorksSection = () => {
                                 : 'bg-white/20 text-white border-2 border-white/40'
                             }
                           `}>
-                            <Icon className="w-6 h-6" />
+                            <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                             {isCompleted && !isActive && (
                               <div className="absolute inset-0 flex items-center justify-center">
                                 <CheckCircle className="w-6 h-6" />
@@ -231,12 +231,12 @@ const HowItWorksSection = () => {
 
                           <div className="mt-4">
                             <h3 className={`
-                              font-montserrat font-bold text-base mb-2 transition-colors duration-300
+                              font-montserrat font-bold text-sm sm:text-base mb-2 transition-colors duration-300
                               ${isActive ? 'text-[#D4AF37]' : 'text-white'}
                             `}>
                               {t(step.titleKey)}
                             </h3>
-                            <p className="text-sm text-white/80 leading-tight">
+                            <p className="text-xs sm:text-sm text-white/80 leading-tight">
                               {t(step.descriptionKey)}
                             </p>
                           </div>

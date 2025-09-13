@@ -6,9 +6,9 @@ import { ChevronRight } from 'lucide-react'
 
 const SEOBreadcrumbs = () => {
   const pathname = usePathname()
-  
-  if (pathname === '/') return null
-  
+
+  if (!pathname || pathname === '/') return null
+
   const pathSegments = pathname.split('/').filter(Boolean)
   
   const breadcrumbItems = [

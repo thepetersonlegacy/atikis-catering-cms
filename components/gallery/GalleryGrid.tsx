@@ -16,9 +16,9 @@ interface GalleryGridProps {
 
 export default function GalleryGrid({ images }: GalleryGridProps) {
   const [index, setIndex] = useState<number | null>(null)
-  const [layout, setLayout] = useState<'masonry' | 'grid' | 'carousel'>('masonry')
-  const [labelsMode, setLabelsMode] = useState<boolean>(false)
-  const [pinned, setPinned] = useState<Record<number, boolean>>({})
+
+
+
   const isOpen = index !== null
   const [loaded, setLoaded] = useState<Record<number, boolean>>({})
 
@@ -33,46 +33,12 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
     if (index !== null) setIndex(null)
   }, [selectedAlbum])
 
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const [soundOn, setSoundOn] = useState(false)
-  const [canPlay, setCanPlay] = useState(false)
-  const [volume, setVolume] = useState(0.25)
+
 
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  // Persist sound/volume across visits
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const savedOn = localStorage.getItem('ambientSoundOn')
-    const savedVol = localStorage.getItem('ambientVolume')
-    if (savedOn !== null) setSoundOn(savedOn === 'true')
-    if (savedVol !== null) {
-      const v = Math.max(0, Math.min(1, parseFloat(savedVol)))
-      if (!Number.isNaN(v)) setVolume(v)
-    }
-  }, [])
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      localStorage.setItem('ambientSoundOn', String(soundOn))
-      localStorage.setItem('ambientVolume', String(volume))
-    } catch {}
-  }, [soundOn, volume])
-  // Persist layout and labels mode
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const lay = localStorage.getItem('galleryLayout') as 'masonry' | 'grid' | 'carousel' | null
-    const lab = localStorage.getItem('galleryLabelsMode')
-    if (lay === 'masonry' || lay === 'grid' || lay === 'carousel') setLayout(lay)
-    if (lab !== null) setLabelsMode(lab === 'true')
-  }, [])
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      localStorage.setItem('galleryLayout', layout)
-      localStorage.setItem('galleryLabelsMode', String(labelsMode))
-    } catch {}
-  }, [layout, labelsMode])
+
+
 
   // Persist last-used album filter (load)
   useEffect(() => {
@@ -105,7 +71,6 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
     return map
   }
   const handleFilterChange = (next: string | null) => {
-    if (layout === 'carousel') { setSelectedAlbum(next); return }
     flipBeforeRef.current = capturePositions()
     flipPendingRef.current = true
     setSelectedAlbum(next)
@@ -146,123 +111,14 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
       }, 460)
     })
     flipPendingRef.current = false
-  }, [selectedAlbum, layout])
-
-  // Layout-change animation (soft fade/scale) — skipped if carousel
-  useEffect(() => {
-    if (layout === 'carousel') return
-    const el = containerRef.current
-    if (!el) return
-    const cards = Array.from(el.querySelectorAll('figure')) as HTMLElement[]
-    cards.forEach((c) => {
-      c.style.willChange = 'transform, opacity'
-      c.style.transition = 'transform 300ms ease, opacity 300ms ease'
-      c.style.transform = 'scale(0.98)'
-      c.style.opacity = '0'
-    })
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        cards.forEach((c) => {
-          c.style.transform = 'scale(1)'
-          c.style.opacity = '1'
-        })
-        window.setTimeout(() => {
-          cards.forEach((c) => {
-            c.style.transition = ''
-            c.style.willChange = ''
-          })
-        }, 360)
-      })
-    })
-  }, [layout])
-
-  // Carousel drag-to-scroll & progress
-  const isDraggingRef = useRef(false)
-  const dragStartXRef = useRef(0)
-  const scrollLeftStartRef = useRef(0)
-  const [carouselProgress, setCarouselProgress] = useState(0)
-  // Kinetic inertia tracking for carousel drag
-  const prevXRef = useRef(0)
-  const prevTRef = useRef(0)
-  const vRef = useRef(0)
+  }, [selectedAlbum])
 
 
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (layout !== 'carousel') return
-    const el = containerRef.current
-    if (!el) return
-    isDraggingRef.current = true
-    dragStartXRef.current = e.clientX
-    scrollLeftStartRef.current = el.scrollLeft
-    prevXRef.current = e.clientX
-    prevTRef.current = performance.now()
-    vRef.current = 0
-    el.setPointerCapture?.(e.pointerId)
-  }
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (layout !== 'carousel') return
-    if (!isDraggingRef.current) return
-    const el = containerRef.current
-    if (!el) return
-    const dx = e.clientX - dragStartXRef.current
-    el.scrollLeft = scrollLeftStartRef.current - dx
-    const now = performance.now()
-    const dt = now - prevTRef.current
-    if (dt > 16) { // ~1 frame at 60Hz
-      const vx = (e.clientX - prevXRef.current) / dt // px per ms
-      vRef.current = vx
-      prevXRef.current = e.clientX
-      prevTRef.current = now
-    }
-  }
-  const endDrag = (e?: React.PointerEvent<HTMLDivElement>) => {
-    if (layout !== 'carousel') return
-    isDraggingRef.current = false
-    if (e) containerRef.current?.releasePointerCapture?.(e.pointerId)
-    const el = containerRef.current
-    if (!el) return
-    const first = el.querySelector('figure') as HTMLElement | null
-    const gap = 16
-    const w = first?.clientWidth || el.clientWidth * 0.8
-    const step = w + gap
-    // Base index by position
-    let targetIndex = Math.round(el.scrollLeft / step)
-    // Inertia: use recent velocity to advance additional slides (responsive thresholds)
-    const v = vRef.current // px per ms; >0 means finger moved right (content moved left)
-    const viewport = typeof window !== 'undefined' ? window.innerWidth : el.clientWidth
-    let t1 = 0.75, t2 = 1.4, t3 = 2.1
-    if (viewport >= 1024) { t1 = 0.9; t2 = 1.8; t3 = 2.7 }
-    else if (viewport <= 640) { t1 = 0.65; t2 = 1.2; t3 = 1.8 }
-    const av = Math.abs(v)
-    let bonus = 0
-    if (av > t3) bonus = 3
-    else if (av > t2) bonus = 2
-    else if (av > t1) bonus = 1
-    if (bonus) {
-      targetIndex -= Math.sign(v) * bonus
-    }
-    targetIndex = Math.max(0, Math.min(targetIndex, Math.ceil((el.scrollWidth - el.clientWidth) / step)))
-    const targetLeft = targetIndex * step
-    el.scrollTo({ left: targetLeft, behavior: 'smooth' })
-  }
-  const onScroll = () => {
-    if (layout !== 'carousel') return
-    const el = containerRef.current
-    if (!el) return
-    const max = el.scrollWidth - el.clientWidth
-    const p = max > 0 ? el.scrollLeft / max : 0
-    setCarouselProgress(Math.max(0, Math.min(1, p)))
-  }
 
 
-  const scrollByItem = (dir: 1 | -1) => {
-    const el = containerRef.current
-    if (!el) return
-    const first = el.querySelector('figure') as HTMLElement | null
-    const gap = 16
-    const w = first?.clientWidth || el.clientWidth * 0.8
-    el.scrollBy({ left: dir * (w + gap), behavior: 'smooth' })
-  }
+
+
+
 
 
   const getShareId = (src: string) => {
@@ -304,173 +160,21 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
     })
   }, [index, filteredImages])
 
-  // Smooth crossfade for ambient sound and volume control (gallery toolbar)
-  useEffect(() => {
-    const el = audioRef.current
-    if (!el) return
-    const fadeTo = async (target: number, ms = 400) => {
-      const steps = 20
-      const start = el.volume
-      const delta = target - start
-      const stepDur = ms / steps
-      for (let i = 1; i <= steps; i++) {
-        el.volume = Math.max(0, Math.min(1, start + (delta * i) / steps))
-        await new Promise(r => setTimeout(r, stepDur))
-      }
-    }
 
-    const run = async () => {
-      try {
-        if (soundOn) {
-          el.volume = 0
-          await el.play()
-          await fadeTo(volume)
-        } else {
-          await fadeTo(0)
-          el.pause()
-        }
-      } catch {
-        // Ignore autoplay errors
-      }
-    }
 
-    void run()
-  }, [soundOn, volume])
+  const containerClass = 'grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-6 xl:gap-8'
 
-  // Apply volume changes immediately if already playing
-  useEffect(() => {
-    const el = audioRef.current
-    if (!el) return
-    if (!soundOn) return
-    el.volume = volume
-  }, [volume, soundOn])
+  const sizes = '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
 
-  const containerClass = layout === 'masonry'
-    ? 'columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 [column-fill:_balance]'
-    : layout === 'grid'
-    ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'
-    : 'flex overflow-x-auto gap-4 snap-x snap-mandatory pb-2 px-6'
-
-  const sizes = layout === 'masonry'
-    ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw'
-    : layout === 'grid'
-    ? '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
-    : '90vw'
-
-  const figureClass = layout === 'carousel'
-    ? 'snap-center flex-[0_0_auto] w-[85vw] sm:w-[60vw] lg:w-[40vw] group'
-    : 'mb-6 break-inside-avoid group'
+  const figureClass = 'mb-6 break-inside-avoid group'
 
   return (
     <div>
       {/* Layout toggle */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-white/70 text-sm">Layout:</span>
-          <div className="inline-flex rounded bg-white/10 p-1">
-            <button
-              className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${layout === 'masonry' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-              onClick={() => setLayout('masonry')}
-              aria-pressed={layout === 'masonry'}
-              aria-label="Masonry layout"
-              title="Masonry layout"
-            >
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <rect x="2" y="2" width="6" height="16" rx="1" />
-                <rect x="10" y="2" width="8" height="7" rx="1" />
-                <rect x="10" y="11" width="8" height="7" rx="1" />
-              </svg>
-              <span className="sr-only">Masonry</span>
-            </button>
-            <button
-              className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${layout === 'grid' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-              onClick={() => setLayout('grid')}
-              aria-pressed={layout === 'grid'}
-              aria-label="Grid layout"
-              title="Grid layout"
-            >
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <rect x="2" y="2" width="6" height="6" rx="1" />
-                <rect x="12" y="2" width="6" height="6" rx="1" />
-                <rect x="2" y="12" width="6" height="6" rx="1" />
-                <rect x="12" y="12" width="6" height="6" rx="1" />
-              </svg>
-              <span className="sr-only">Grid</span>
-            </button>
-            <button
-              className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${layout === 'carousel' ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-              onClick={() => setLayout('carousel')}
-              aria-pressed={layout === 'carousel'}
-              aria-label="Carousel layout"
-              title="Carousel layout"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <rect x="3" y="6" width="6" height="12" rx="1" />
-                <rect x="10" y="6" width="4" height="12" rx="1" />
-                <rect x="15" y="6" width="6" height="12" rx="1" />
-              </svg>
-              <span className="sr-only">Carousel</span>
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-white/70 text-sm">Labels:</span>
-          <button
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${labelsMode ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={() => setLabelsMode(v => !v)}
-            aria-pressed={labelsMode}
-            aria-label="Toggle wall labels"
-            title="Wall labels"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-
-              <path d="M4 7h16v10H4z" />
-              <path d="M6 9h8v2H6z" className="opacity-70" />
-            </svg>
-            <span className="sr-only">Wall Labels</span>
-          </button>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${soundOn ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={() => setSoundOn(v => !v)}
-            aria-pressed={soundOn}
-            aria-label="Sound"
-            title="Sound"
-          >
-            {soundOn ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 10v4h4l5 4V6L7 10H3z" />
-                <path d="M16 7a5 5 0 0 1 0 10" className="opacity-80" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 10v4h4l5 4V6L7 10H3z" />
-                <path d="M19 5L5 19" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            )}
-            <span className="sr-only">Sound</span>
-          </button>
-          <label className="flex items-center gap-2 rounded border border-[#D4AF37]/70 text-[#D4AF37] bg-black/30 px-2 py-1 text-xs">
-            <span aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10H3z"/></svg>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
 
 
 
-
-              value={volume}
-              onChange={(e) => setVolume(parseFloat(e.currentTarget.value))}
-              className="w-28 accent-[#D4AF37]"
-              aria-label="Ambient volume"
-            />
-          </label>
-        </div>
 
         {/* Filter chips */}
         {albums.length > 0 && (
@@ -496,54 +200,12 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
 
 
       </div>
-      <audio
-        id="ambient-audio"
-        ref={audioRef}
-        src="/audio/ambient.mp3"
-        loop
-        preload="auto"
-        onCanPlay={() => setCanPlay(true)}
-        className="hidden"
-      />
-
 
       <div className="relative">
-        {layout === 'carousel' && (
-          <>
-            <button
-              aria-label="Scroll left"
-              onClick={() => scrollByItem(-1)}
-              className="flex absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full border border-[#D4AF37]/80 text-[#D4AF37] bg-black/40 hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60 p-3"
-            >
 
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-              <span className="sr-only">Previous</span>
-            </button>
-            <button
-              aria-label="Scroll right"
-              onClick={() => scrollByItem(1)}
-              className="flex absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full border border-[#D4AF37]/80 text-[#D4AF37] bg-black/40 hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60 p-3"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-              <span className="sr-only">Next</span>
-            </button>
-            <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-[#D4AF37]" style={{ width: `${Math.round(carouselProgress*100)}%` }} />
-            </div>
-            {/* Peek gradient fades (stronger on mobile) */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-24 sm:w-20 md:w-24 lg:w-28 bg-gradient-to-r from-black/70 sm:from-black/60 md:from-black/50 via-black/25 to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-24 sm:w-20 md:w-24 lg:w-28 bg-gradient-to-l from-black/70 sm:from-black/60 md:from-black/50 via-black/25 to-transparent" />
-
-          </>
-        )}
         <div
           ref={containerRef}
           className={containerClass}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerLeave={endDrag}
-          onScroll={onScroll}
         >
         {filteredImages.map((img, i) => {
           // Derive optimized responsive variants if available
@@ -551,12 +213,12 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
           const mobile = `/optimized/${base}_mobile.jpg`
           const tablet = `/optimized/${base}_tablet.jpg`
           const desktop = `/optimized/${base}_desktop.jpg`
-          const sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw'
+          const sizesAttr = sizes
 
           const imgSrc = mobile
           const srcSet = `${mobile} 640w, ${tablet} 1024w, ${desktop} 1920w`
 
-          const eager = i === 0
+          const eager = i < 2
           const fetchPriority = eager ? 'high' : 'low'
 
           const caption = img.caption || img.alt
@@ -564,43 +226,39 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
           return (
             <figure key={img.src} data-key={img.src} className={figureClass}>
               <div className="relative w-full overflow-visible rounded-sm">
-                {/* Pin label toggle */}
-                <button
-                  className="absolute left-2 top-2 z-10 text-[11px] px-2 py-0.5 rounded bg-black/50 text-white/80 hover:text-white border border-white/20"
-                  onClick={(e) => { e.stopPropagation(); setPinned(p => ({ ...p, [i]: !p[i] })) }}
-                  aria-pressed={!!pinned[i]}
-                >Label</button>
 
-                {/* Click to open */}
-                <button
-                  className="relative block w-full overflow-hidden rounded-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                  onClick={() => setIndex(i)}
-                  aria-label={`Open image: ${img.alt}`}
+                {/* Click disabled: show static image only */}
+                <div
+                  className="relative block w-full overflow-hidden rounded-sm"
+                  aria-label={`Image: ${img.alt}`}
                 >
                   {/* Matting + image */}
                   <div className="relative rounded-sm bg-black p-1">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    {/* TODO(preflight): add width/height with intrinsic image dimensions to reduce CLS */}
-                    <img
-                      src={imgSrc}
-                      srcSet={srcSet}
-                      sizes={sizes}
-                      alt={img.alt}
-                      onLoad={() => setLoaded(prev => ({ ...prev, [i]: true }))}
-                      className={`w-full h-auto object-cover border-2 border-white/90 rounded-sm transition duration-500 ease-out group-hover:scale-[1.02] ${loaded[i] ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
-                      loading={eager ? 'eager' : 'lazy'}
-                      decoding="async"
-                      fetchPriority={fetchPriority as any}
-                    />
-                    {/* Gold ring on hover + subtle gradient veil */}
-                    <div className="pointer-events-none absolute inset-0 ring-1 ring-[#D4AF37]/0 group-hover:ring-[#D4AF37]/60 transition-[box-shadow,opacity]" />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative aspect-[1/1] sm:aspect-[4/3] md:aspect-[3/2] w-full overflow-hidden rounded-[2px]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {/* TODO(preflight): add width/height with intrinsic image dimensions to reduce CLS */}
+                      <img
+                        src={imgSrc}
+                        srcSet={srcSet}
+                        sizes={sizesAttr}
+                        alt={img.alt}
+                        onLoad={() => setLoaded(prev => ({ ...prev, [i]: true }))}
+                        className={`absolute inset-0 w-full h-full object-cover border-2 border-white/90 rounded-[2px] transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.02] ${loaded[i] ? 'opacity-100 blur-0' : 'opacity-0 blur-md'}`}
+                        loading={eager ? 'eager' : 'lazy'}
+                        decoding="async"
+                        fetchPriority={fetchPriority as any}
+                      />
+                      {/* Gold ring on hover + subtle gradient veil */}
+                      <div className="pointer-events-none absolute inset-0 ring-1 ring-[#D4AF37]/0 group-hover:ring-[#D4AF37]/60 transition-[box-shadow,opacity]" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                   </div>
-                </button>
+
+                </div>
               </div>
 
-              {/* Caption / wall label */}
-              <figcaption className={`mt-2 text-[12px] leading-snug tracking-[0.06em] font-light ${pinned[i] || labelsMode ? 'text-white/90' : 'text-white/85'}`}>
+              {/* Caption */}
+              <figcaption className="mt-2 text-[13px] md:text-[14px] leading-relaxed tracking-[0.05em] text-white/90 font-light">
                 {caption}
               </figcaption>
             </figure>
@@ -615,14 +273,6 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
         const base = img.src.replace(/^\//, '').replace(/\.(jpe?g|png|webp)$/i, '')
         const desktop = `/optimized/${base}_desktop.jpg`
         const shareId = base.split('/').pop() || base
-        const goPrev = () => setIndex((prev) => {
-          const p = (prev ?? 0)
-          return (p - 1 + filteredImages.length) % filteredImages.length
-        })
-        const goNext = () => setIndex((prev) => {
-          const p = (prev ?? 0)
-          return (p + 1) % filteredImages.length
-        })
         return (
           <Lightbox
             isOpen
@@ -635,12 +285,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
               }
               setIndex(null)
             }}
-            onPrev={goPrev}
-            onNext={goNext}
             shareId={shareId}
-            items={filteredImages}
-            currentIndex={idx}
-            onSelectIndex={(i) => setIndex(i)}
           />
         )
       })()}
