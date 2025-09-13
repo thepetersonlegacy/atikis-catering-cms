@@ -17,9 +17,7 @@ var config_default = defineConfig({
       publicFolder: "public",
       static: false
     },
-    accept: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
-    maxSize: 10 * 1024 * 1024
-    // 10MB limit
+    accept: ["image/jpeg", "image/jpg", "image/png", "image/webp"]
   },
   // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
