@@ -28,7 +28,7 @@
 **This is the only remaining step to activate the CMS!**
 
 ### **Go to Netlify Dashboard:**
-1. Visit: https://app.netlify.com/sites/classy-ganache-675671/settings/deploys#environment-variables
+1. Visit: https://app.netlify.com/sites/atikis-flight-catering/settings/deploys#environment-variables
 2. Click **"Add variable"** for each of these:
 
 ```
@@ -42,7 +42,7 @@ GITHUB_BRANCH = main
 ### **After Adding Variables:**
 1. Click **"Deploy site"** to trigger a rebuild
 2. Wait for deployment to complete (2-3 minutes)
-3. Visit `https://classy-ganache-675671.netlify.app/admin` to test the CMS
+3. Visit `https://atikis-flight-catering.netlify.app/admin` to test the CMS
 
 ---
 
