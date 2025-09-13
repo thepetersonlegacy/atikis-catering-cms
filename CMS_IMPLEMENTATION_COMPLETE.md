@@ -8,9 +8,9 @@ Your Next.js website now has a fully functional Content Management System that a
 
 ## 🌐 **Live URLs**
 
-- **Production Website**: https://atkins-catering.netlify.app
-- **CMS Admin Panel**: https://atkins-catering.netlify.app/admin *(requires setup)*
-- **Unique Deploy**: https://68c5bf0d613446a61c2d7229--atkins-catering.netlify.app
+- **Production Website**: https://classy-ganache-675671.netlify.app
+- **CMS Admin Panel**: https://classy-ganache-675671.netlify.app/admin *(requires setup)*
+- **Unique Deploy**: https://68c5ca84e040825d52335f8f--classy-ganache-675671.netlify.app
 
 ---
 
@@ -87,7 +87,7 @@ npx netlify deploy --prod
 
 ### **Accessing the CMS**
 - **Local**: `http://localhost:3000/admin` (during development)
-- **Production**: `https://atkins-catering.netlify.app/admin`
+- **Production**: `https://classy-ganache-675671.netlify.app/admin`
 
 ### **Making Content Changes**
 1. **Login**: Authenticate with GitHub
