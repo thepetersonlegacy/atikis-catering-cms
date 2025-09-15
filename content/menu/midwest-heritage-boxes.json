@@ -1,0 +1,19 @@
+{
+  "name": "Midwest Heritage Classics Boxes Available",
+  "description": "Select from our Midwest Heritage Classics items, each individually packaged in convenient boxes for easy in-flight service.",
+  "category": "content/menu-categories/midwest-heritage-classics.json",
+  "sections": [
+    {
+      "title": "Available Midwest Heritage Classics Box Options",
+      "items": [
+        "Atikis Minnesota Mixed Grill",
+        "Protein Entrée",
+        "Pumpernickel-Crusted Walleye",
+        "Wild Rice Wallakeseye Cakes",
+        "Tater Tot Hot Dish",
+        "St. Paul Dip",
+        "Snack Box"
+      ]
+    }
+  ]
+}

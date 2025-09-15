@@ -1,0 +1,19 @@
+{
+  "name": "Plant-Based Culinary Selections Boxes Available",
+  "description": "Select from our Plant-Based Culinary Selections items, each individually packaged in convenient boxes for easy in-flight service.",
+  "category": "content/menu-categories/plant-based-culinary-selections.json",
+  "sections": [
+    {
+      "title": "Available Plant-Based Culinary Selections Box Options",
+      "items": [
+        "Pea Lime Pasta",
+        "Vegan Pasta of the Day",
+        "The Marty",
+        "Tofu Fried Rice",
+        "Vegan Buttered Chicken Tofu",
+        "Hasselback Sweet Potatoes",
+        "Portafilet"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Artisan Salad & Grain Bowls Boxes Available",
+  "description": "Select from our artisan salad and grain bowl items, each individually packaged in convenient boxes for easy in-flight service.",
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "sections": [
+    {
+      "title": "Available Artisan Salad & Grain Bowl Box Options",
+      "items": [
+        "Buddha",
+        "Power",
+        "Mediterranean",
+        "Shaved Brussels Sprouts",
+        "Wild Rice Arugula",
+        "Classic Cobb",
+        "Cobbrific",
+        "Chicken and Butternut Squash",
+        "Chicken Cashew",
+        "Peri Peri Chicken LT",
+        "Banh Mi (Tofu or Chicken)",
+        "Pulled Pork Greenery",
+        "Ancho Steak",
+        "Steak and Gorgonzola",
+        "Salmon Farro",
+        "Blackened Salmon Caesar",
+        "Smoked Salmon Arugula",
+        "Ahi Ahi",
+        "Niçoise",
+        "Poke",
+        "Pico Suave",
+        "Shrimp Cavatappi"
+      ]
+    }
+  ]
+}

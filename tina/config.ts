@@ -95,6 +95,20 @@ export default defineConfig({
         ],
       },
       {
+        name: "menuCategories",
+        label: "Menu Categories",
+        path: "content/menu-categories",
+        format: "json",
+        ui: {
+          allowedActions: { create: true, delete: true },
+        },
+        fields: [
+          { type: "string", name: "name", label: "Category Name", required: true },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          { type: "number", name: "order", label: "Sort Order" },
+        ],
+      },
+      {
         name: "menuItems",
         label: "Menu Items",
         path: "content/menu",
@@ -115,20 +129,10 @@ export default defineConfig({
             },
           },
           {
-            type: "number",
-            name: "price",
-            label: "Price",
-          },
-          {
-            type: "string",
+            type: "reference",
             name: "category",
             label: "Category",
-            options: [
-              "appetizers",
-              "entrees",
-              "desserts",
-              "beverages",
-            ],
+            collections: ["menuCategories"],
           },
           {
             type: "image",
@@ -139,6 +143,24 @@ export default defineConfig({
             type: "boolean",
             name: "featured",
             label: "Featured Item",
+          },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item) => ({ label: item?.title || "Section" }),
+            },
+            fields: [
+              { type: "string", name: "title", label: "Section Title" },
+              { type: "string", name: "items", label: "Items", list: true },
+            ],
+          },
+          {
+            type: "number",
+            name: "boxMaxItemsPerBox",
+            label: "Max Items per Box (for Box Options)",
           },
         ],
       },

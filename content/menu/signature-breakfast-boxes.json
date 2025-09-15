@@ -1,0 +1,32 @@
+{
+  "name": "Signature Breakfast Collection Boxes Available",
+  "description": "Select from our signature breakfast items, each individually packaged in convenient boxes for easy in-flight service.",
+  "category": "content/menu-categories/signature-breakfast-collection.json",
+  "sections": [
+    {
+      "title": "Available Breakfast Box Options",
+      "items": [
+        "Continental Breakfast",
+        "Euro Breakfast",
+        "Breakfast Bagel Tray",
+        "Variety Breakfast Bread Tray",
+        "Breakfast Charcuterie",
+        "Steel-Cut Oats",
+        "Oatmeal Bake of the Day",
+        "Coconut Porridge",
+        "Apple Chia Breakfast Bowl",
+        "Citrus Breakfast Bowl",
+        "Vegan Chia Seed Pudding",
+        "Protein Tray",
+        "Avocado Toast",
+        "À la Carte Breakfast Sandwich",
+        "Breakfast Burrito",
+        "Omelet",
+        "Atikis Omelet with Browned Breakfast Potatoes",
+        "Frittata of the Day",
+        "Quiche of the Day",
+        "Mexican Breakfast Scramble"
+      ]
+    }
+  ]
+}

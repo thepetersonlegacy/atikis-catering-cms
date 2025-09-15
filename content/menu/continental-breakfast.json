@@ -1,8 +1,5 @@
 {
   "name": "Continental Breakfast",
   "description": "Yogurt, berry cup, fresh fruit, breakfast bread, granola, hard-boiled egg, jam, and orange juice.",
-  "price": 0,
-  "category": "appetizers",
-  "image": "/images/menu/continental-breakfast.jpg",
-  "featured": true
+  "category": "content/menu-categories/signature-breakfast-collection.json"
 }

@@ -1,0 +1,18 @@
+{
+  "name": "Gourmet Creations Boxes Available",
+  "description": "Select from our Gourmet Creations items, each individually packaged in convenient boxes for easy in-flight service.",
+  "category": "content/menu-categories/gourmet-creations.json",
+  "sections": [
+    {
+      "title": "Available Gourmet Creations Box Options",
+      "items": [
+        "Brie Chicken",
+        "Harissa Chicken",
+        "Maple Farm Golden Duck",
+        "Salmon en Papillote",
+        "Red Curry",
+        "Firecracker Shrimp or Teriyaki Chicken Bowl"
+      ]
+    }
+  ]
+}
