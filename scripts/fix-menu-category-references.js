@@ -1,6 +1,6 @@
 /*
   Normalize Tina menuItems category references by using authoritative mapping
-  from lib/data/menu-data.ts (by matching on item name/title).
+  from lib/data/menu-data.ts (by matching on item name/title) and heuristics.
 
   Usage:
     node scripts/fix-menu-category-references.js
@@ -13,6 +13,11 @@ const vm = require('vm');
 const SRC = path.join(__dirname, '..', 'lib', 'data', 'menu-data.ts');
 const ITEMS_DIR = path.join(__dirname, '..', 'content', 'menu');
 const CAT_DIR = path.join(__dirname, '..', 'content', 'menu-categories');
+const LOG = path.join(__dirname, 'normalized-log.txt');
+
+function log(line) {
+  fs.appendFileSync(LOG, line + '\n');
+}
 
 function slugify(name) {
   return (name || '')
@@ -53,8 +58,56 @@ function categoryPathFor(name) {
   return `content/menu-categories/${slug}.json`;
 }
 
+function loadValidCategories() {
+  const cats = fs.readdirSync(CAT_DIR).filter(f => f.endsWith('.json'));
+  const bySlug = new Set(cats);
+  return {
+    bySlug,
+    hasName: (name) => bySlug.has(slugify(name) + '.json'),
+  };
+}
+
+function heuristicCategoryFor(itemName) {
+  const n = (itemName || '').toLowerCase();
+  if (!n) return null;
+  // Breakfast
+  if (/breakfast|bagel|toast|oatmeal|omelet|frittata|quiche|granola|yogurt/.test(n)) {
+    return 'Signature Breakfast Collection';
+  }
+  // Desserts
+  if (/dessert|cookie|brownie|cake|mousse|cheesecake|confection|mini-dessert/.test(n)) {
+    return 'Elegant Desserts and Confections';
+  }
+  // Salads / Bowls
+  if (/salad|bowl|buddha|nicoise|caesar|arugula|greens/.test(n)) {
+    return 'Artisan Salad and Grain Bowls';
+  }
+  // Plant-based
+  if (/vegan|tofu|plant/.test(n)) {
+    return 'Plant-Based Culinary Selections';
+  }
+  // Midwest staples
+  if (/walleye|wild rice|midwest|tater tot|hotdish/.test(n)) {
+    return 'Midwest Heritage Classics';
+  }
+  // Executive express
+  if (/express/.test(n)) {
+    return 'Executive Express Selections';
+  }
+  // Lunch/entrees fallback
+  if (/entree|steak|chicken|salmon|shrimp|pasta|sandwich|tray|box|duck|pork/.test(n)) {
+    return 'Gourmet Creations';
+  }
+  // Default fallback
+  return 'In-Flight Lunch Selections';
+}
+
 (function main() {
+  try { fs.unlinkSync(LOG); } catch {}
+  log('[normalize] start');
+
   const mapByName = loadAuthoritativeMap();
+  const valid = loadValidCategories();
 
   const files = fs.readdirSync(ITEMS_DIR).filter(f => f.endsWith('.json'));
   let fixed = 0, skipped = 0;
@@ -68,28 +121,43 @@ function categoryPathFor(name) {
         continue; // already a reference
       }
       const key = (data.name || '').trim().toLowerCase();
-      const catName = key && mapByName.get(key);
+      let catName = key && mapByName.get(key);
+
+      if (!catName) {
+        // try fuzzy match: remove common suffixes and try again
+        const normalized = key.replace(/\b(bowl|square|box|boxes)\b/g, '').trim();
+        if (normalized && normalized !== key) {
+          catName = mapByName.get(normalized);
+        }
+      }
+
+      if (!catName) {
+        // Try fallback: if the current value resembles a valid category name
+        if (typeof current === 'string' && current.trim() && valid.hasName(current.trim())) {
+          catName = current.trim();
+        }
+      }
+
+      if (!catName) {
+        // Heuristic based on item name
+        catName = heuristicCategoryFor(data.name);
+      }
+
       if (catName) {
+        const before = data.category;
         data.category = categoryPathFor(catName);
         fs.writeFileSync(full, JSON.stringify(data, null, 2) + '\n', 'utf8');
         fixed++;
+        log(`[fixed] ${file}: '${before}' -> '${data.category}'`);
       } else {
-        // Try a fallback on existing readable category if it matches an existing category file
-        if (typeof current === 'string' && current.trim()) {
-          const guess = path.join(CAT_DIR, slugify(current.trim()) + '.json');
-          if (fs.existsSync(guess)) {
-            data.category = `content/menu-categories/${slugify(current.trim())}.json`;
-            fs.writeFileSync(full, JSON.stringify(data, null, 2) + '\n', 'utf8');
-            fixed++;
-            continue;
-          }
-        }
         skipped++;
+        log(`[skip] ${file}: could not determine category (current='${current}')`);
       }
     } catch (e) {
-      console.error('Failed to process', file, e.message);
+      log(`[error] ${file}: ${e.message}`);
     }
   }
+  log(`[normalize] done. Fixed=${fixed} Skipped=${skipped} Total=${files.length}`);
   console.log(`Category normalization done. Fixed: ${fixed}, Unchanged: ${skipped}, Total: ${files.length}`);
 })();
 
