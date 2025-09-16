@@ -1,0 +1,2 @@
+[normalize] start
+[normalize] done. Fixed=0 Skipped=79 Total=79

@@ -14,14 +14,45 @@ fragment SiteSettingsParts on SiteSettings {
   }
 }
 
+fragment MenuCategoriesParts on MenuCategories {
+  __typename
+  name
+  description
+  order
+}
+
 fragment MenuItemsParts on MenuItems {
   __typename
   name
   description
-  price
-  category
+  category {
+    ... on MenuCategories {
+      __typename
+      name
+      description
+      order
+    }
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+  }
   image
   featured
+  sections {
+    __typename
+    title
+    items
+  }
+  boxMaxItemsPerBox
 }
 
 fragment TestimonialsParts on Testimonials {

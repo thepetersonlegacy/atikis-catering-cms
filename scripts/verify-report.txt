@@ -1,0 +1,4 @@
+Checked 79 menu files
+OK: 79
+BAD: 0
+

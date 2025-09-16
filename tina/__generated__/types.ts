@@ -84,6 +84,8 @@ export type Query = {
   document: DocumentNode;
   siteSettings: SiteSettings;
   siteSettingsConnection: SiteSettingsConnection;
+  menuCategories: MenuCategories;
+  menuCategoriesConnection: MenuCategoriesConnection;
   menuItems: MenuItems;
   menuItemsConnection: MenuItemsConnection;
   testimonials: Testimonials;
@@ -128,6 +130,21 @@ export type QuerySiteSettingsConnectionArgs = {
   last?: InputMaybe<Scalars['Float']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<SiteSettingsFilter>;
+};
+
+
+export type QueryMenuCategoriesArgs = {
+  relativePath?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryMenuCategoriesConnectionArgs = {
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<MenuCategoriesFilter>;
 };
 
 
@@ -192,6 +209,7 @@ export type QueryTranslationsConnectionArgs = {
 
 export type DocumentFilter = {
   siteSettings?: InputMaybe<SiteSettingsFilter>;
+  menuCategories?: InputMaybe<MenuCategoriesFilter>;
   menuItems?: InputMaybe<MenuItemsFilter>;
   testimonials?: InputMaybe<TestimonialsFilter>;
   galleryImages?: InputMaybe<GalleryImagesFilter>;
@@ -235,7 +253,7 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = SiteSettings | MenuItems | Testimonials | GalleryImages | Translations | Folder;
+export type DocumentNode = SiteSettings | MenuCategories | MenuItems | Testimonials | GalleryImages | Translations | Folder;
 
 export type SiteSettingsContact = {
   __typename?: 'SiteSettingsContact';
@@ -304,14 +322,11 @@ export type SiteSettingsConnection = Connection & {
   edges?: Maybe<Array<Maybe<SiteSettingsConnectionEdges>>>;
 };
 
-export type MenuItems = Node & Document & {
-  __typename?: 'MenuItems';
+export type MenuCategories = Node & Document & {
+  __typename?: 'MenuCategories';
   name: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  price?: Maybe<Scalars['Float']['output']>;
-  category?: Maybe<Scalars['String']['output']>;
-  image?: Maybe<Scalars['String']['output']>;
-  featured?: Maybe<Scalars['Boolean']['output']>;
+  order?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -327,18 +342,69 @@ export type NumberFilter = {
   in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
 };
 
+export type MenuCategoriesFilter = {
+  name?: InputMaybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
+  order?: InputMaybe<NumberFilter>;
+};
+
+export type MenuCategoriesConnectionEdges = {
+  __typename?: 'MenuCategoriesConnectionEdges';
+  cursor: Scalars['String']['output'];
+  node?: Maybe<MenuCategories>;
+};
+
+export type MenuCategoriesConnection = Connection & {
+  __typename?: 'MenuCategoriesConnection';
+  pageInfo: PageInfo;
+  totalCount: Scalars['Float']['output'];
+  edges?: Maybe<Array<Maybe<MenuCategoriesConnectionEdges>>>;
+};
+
+export type MenuItemsCategory = MenuCategories;
+
+export type MenuItemsSections = {
+  __typename?: 'MenuItemsSections';
+  title?: Maybe<Scalars['String']['output']>;
+  items?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+};
+
+export type MenuItems = Node & Document & {
+  __typename?: 'MenuItems';
+  name: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  category: MenuItemsCategory;
+  image?: Maybe<Scalars['String']['output']>;
+  featured?: Maybe<Scalars['Boolean']['output']>;
+  sections?: Maybe<Array<Maybe<MenuItemsSections>>>;
+  boxMaxItemsPerBox?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  _sys: SystemInfo;
+  _values: Scalars['JSON']['output'];
+};
+
+export type MenuItemsCategoryFilter = {
+  menuCategories?: InputMaybe<MenuCategoriesFilter>;
+};
+
 export type BooleanFilter = {
   eq?: InputMaybe<Scalars['Boolean']['input']>;
   exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type MenuItemsSectionsFilter = {
+  title?: InputMaybe<StringFilter>;
+  items?: InputMaybe<StringFilter>;
+};
+
 export type MenuItemsFilter = {
   name?: InputMaybe<StringFilter>;
   description?: InputMaybe<StringFilter>;
-  price?: InputMaybe<NumberFilter>;
-  category?: InputMaybe<StringFilter>;
+  category?: InputMaybe<MenuItemsCategoryFilter>;
   image?: InputMaybe<ImageFilter>;
   featured?: InputMaybe<BooleanFilter>;
+  sections?: InputMaybe<MenuItemsSectionsFilter>;
+  boxMaxItemsPerBox?: InputMaybe<NumberFilter>;
 };
 
 export type MenuItemsConnectionEdges = {
@@ -503,6 +569,8 @@ export type Mutation = {
   createFolder: DocumentNode;
   updateSiteSettings: SiteSettings;
   createSiteSettings: SiteSettings;
+  updateMenuCategories: MenuCategories;
+  createMenuCategories: MenuCategories;
   updateMenuItems: MenuItems;
   createMenuItems: MenuItems;
   updateTestimonials: Testimonials;
@@ -559,6 +627,18 @@ export type MutationCreateSiteSettingsArgs = {
 };
 
 
+export type MutationUpdateMenuCategoriesArgs = {
+  relativePath: Scalars['String']['input'];
+  params: MenuCategoriesMutation;
+};
+
+
+export type MutationCreateMenuCategoriesArgs = {
+  relativePath: Scalars['String']['input'];
+  params: MenuCategoriesMutation;
+};
+
+
 export type MutationUpdateMenuItemsArgs = {
   relativePath: Scalars['String']['input'];
   params: MenuItemsMutation;
@@ -608,6 +688,7 @@ export type MutationCreateTranslationsArgs = {
 
 export type DocumentUpdateMutation = {
   siteSettings?: InputMaybe<SiteSettingsMutation>;
+  menuCategories?: InputMaybe<MenuCategoriesMutation>;
   menuItems?: InputMaybe<MenuItemsMutation>;
   testimonials?: InputMaybe<TestimonialsMutation>;
   galleryImages?: InputMaybe<GalleryImagesMutation>;
@@ -617,6 +698,7 @@ export type DocumentUpdateMutation = {
 
 export type DocumentMutation = {
   siteSettings?: InputMaybe<SiteSettingsMutation>;
+  menuCategories?: InputMaybe<MenuCategoriesMutation>;
   menuItems?: InputMaybe<MenuItemsMutation>;
   testimonials?: InputMaybe<TestimonialsMutation>;
   galleryImages?: InputMaybe<GalleryImagesMutation>;
@@ -640,13 +722,25 @@ export type SiteSettingsMutation = {
   hero?: InputMaybe<SiteSettingsHeroMutation>;
 };
 
+export type MenuCategoriesMutation = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type MenuItemsSectionsMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  items?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
 export type MenuItemsMutation = {
   name?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  price?: InputMaybe<Scalars['Float']['input']>;
   category?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   featured?: InputMaybe<Scalars['Boolean']['input']>;
+  sections?: InputMaybe<Array<InputMaybe<MenuItemsSectionsMutation>>>;
+  boxMaxItemsPerBox?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type TestimonialsMutation = {
@@ -694,7 +788,9 @@ export type TranslationsMutation = {
 
 export type SiteSettingsPartsFragment = { __typename: 'SiteSettings', contact?: { __typename: 'SiteSettingsContact', email?: string | null, phone?: string | null, address?: string | null } | null, hero?: { __typename: 'SiteSettingsHero', title?: string | null, subtitle?: string | null, backgroundImage?: string | null } | null };
 
-export type MenuItemsPartsFragment = { __typename: 'MenuItems', name: string, description?: string | null, price?: number | null, category?: string | null, image?: string | null, featured?: boolean | null };
+export type MenuCategoriesPartsFragment = { __typename: 'MenuCategories', name: string, description?: string | null, order?: number | null };
+
+export type MenuItemsPartsFragment = { __typename: 'MenuItems', name: string, description?: string | null, image?: string | null, featured?: boolean | null, boxMaxItemsPerBox?: number | null, category: { __typename: 'MenuCategories', name: string, description?: string | null, order?: number | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } }, sections?: Array<{ __typename: 'MenuItemsSections', title?: string | null, items?: Array<string | null> | null } | null> | null };
 
 export type TestimonialsPartsFragment = { __typename: 'Testimonials', name: string, company?: string | null, content: string, rating?: number | null, avatar?: string | null };
 
@@ -721,12 +817,31 @@ export type SiteSettingsConnectionQueryVariables = Exact<{
 
 export type SiteSettingsConnectionQuery = { __typename?: 'Query', siteSettingsConnection: { __typename?: 'SiteSettingsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'SiteSettingsConnectionEdges', cursor: string, node?: { __typename: 'SiteSettings', id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, contact?: { __typename: 'SiteSettingsContact', email?: string | null, phone?: string | null, address?: string | null } | null, hero?: { __typename: 'SiteSettingsHero', title?: string | null, subtitle?: string | null, backgroundImage?: string | null } | null } | null } | null> | null } };
 
+export type MenuCategoriesQueryVariables = Exact<{
+  relativePath: Scalars['String']['input'];
+}>;
+
+
+export type MenuCategoriesQuery = { __typename?: 'Query', menuCategories: { __typename: 'MenuCategories', id: string, name: string, description?: string | null, order?: number | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+
+export type MenuCategoriesConnectionQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<MenuCategoriesFilter>;
+}>;
+
+
+export type MenuCategoriesConnectionQuery = { __typename?: 'Query', menuCategoriesConnection: { __typename?: 'MenuCategoriesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'MenuCategoriesConnectionEdges', cursor: string, node?: { __typename: 'MenuCategories', id: string, name: string, description?: string | null, order?: number | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+
 export type MenuItemsQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
 }>;
 
 
-export type MenuItemsQuery = { __typename?: 'Query', menuItems: { __typename: 'MenuItems', id: string, name: string, description?: string | null, price?: number | null, category?: string | null, image?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type MenuItemsQuery = { __typename?: 'Query', menuItems: { __typename: 'MenuItems', id: string, name: string, description?: string | null, image?: string | null, featured?: boolean | null, boxMaxItemsPerBox?: number | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, category: { __typename: 'MenuCategories', name: string, description?: string | null, order?: number | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } }, sections?: Array<{ __typename: 'MenuItemsSections', title?: string | null, items?: Array<string | null> | null } | null> | null } };
 
 export type MenuItemsConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -738,7 +853,7 @@ export type MenuItemsConnectionQueryVariables = Exact<{
 }>;
 
 
-export type MenuItemsConnectionQuery = { __typename?: 'Query', menuItemsConnection: { __typename?: 'MenuItemsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'MenuItemsConnectionEdges', cursor: string, node?: { __typename: 'MenuItems', id: string, name: string, description?: string | null, price?: number | null, category?: string | null, image?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type MenuItemsConnectionQuery = { __typename?: 'Query', menuItemsConnection: { __typename?: 'MenuItemsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'MenuItemsConnectionEdges', cursor: string, node?: { __typename: 'MenuItems', id: string, name: string, description?: string | null, image?: string | null, featured?: boolean | null, boxMaxItemsPerBox?: number | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, category: { __typename: 'MenuCategories', name: string, description?: string | null, order?: number | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } }, sections?: Array<{ __typename: 'MenuItemsSections', title?: string | null, items?: Array<string | null> | null } | null> | null } | null } | null> | null } };
 
 export type TestimonialsQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -814,15 +929,47 @@ export const SiteSettingsPartsFragmentDoc = gql`
   }
 }
     `;
+export const MenuCategoriesPartsFragmentDoc = gql`
+    fragment MenuCategoriesParts on MenuCategories {
+  __typename
+  name
+  description
+  order
+}
+    `;
 export const MenuItemsPartsFragmentDoc = gql`
     fragment MenuItemsParts on MenuItems {
   __typename
   name
   description
-  price
-  category
+  category {
+    ... on MenuCategories {
+      __typename
+      name
+      description
+      order
+    }
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+  }
   image
   featured
+  sections {
+    __typename
+    title
+    items
+  }
+  boxMaxItemsPerBox
 }
     `;
 export const TestimonialsPartsFragmentDoc = gql`
@@ -928,6 +1075,63 @@ export const SiteSettingsConnectionDocument = gql`
   }
 }
     ${SiteSettingsPartsFragmentDoc}`;
+export const MenuCategoriesDocument = gql`
+    query menuCategories($relativePath: String!) {
+  menuCategories(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...MenuCategoriesParts
+  }
+}
+    ${MenuCategoriesPartsFragmentDoc}`;
+export const MenuCategoriesConnectionDocument = gql`
+    query menuCategoriesConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: MenuCategoriesFilter) {
+  menuCategoriesConnection(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    sort: $sort
+    filter: $filter
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+        ...MenuCategoriesParts
+      }
+    }
+  }
+}
+    ${MenuCategoriesPartsFragmentDoc}`;
 export const MenuItemsDocument = gql`
     query menuItems($relativePath: String!) {
   menuItems(relativePath: $relativePath) {
@@ -1164,6 +1368,12 @@ export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) 
       },
     siteSettingsConnection(variables?: SiteSettingsConnectionQueryVariables, options?: C): Promise<{data: SiteSettingsConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SiteSettingsConnectionQueryVariables, query: string}> {
         return requester<{data: SiteSettingsConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: SiteSettingsConnectionQueryVariables, query: string}, SiteSettingsConnectionQueryVariables>(SiteSettingsConnectionDocument, variables, options);
+      },
+    menuCategories(variables: MenuCategoriesQueryVariables, options?: C): Promise<{data: MenuCategoriesQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuCategoriesQueryVariables, query: string}> {
+        return requester<{data: MenuCategoriesQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuCategoriesQueryVariables, query: string}, MenuCategoriesQueryVariables>(MenuCategoriesDocument, variables, options);
+      },
+    menuCategoriesConnection(variables?: MenuCategoriesConnectionQueryVariables, options?: C): Promise<{data: MenuCategoriesConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuCategoriesConnectionQueryVariables, query: string}> {
+        return requester<{data: MenuCategoriesConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuCategoriesConnectionQueryVariables, query: string}, MenuCategoriesConnectionQueryVariables>(MenuCategoriesConnectionDocument, variables, options);
       },
     menuItems(variables: MenuItemsQueryVariables, options?: C): Promise<{data: MenuItemsQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuItemsQueryVariables, query: string}> {
         return requester<{data: MenuItemsQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: MenuItemsQueryVariables, query: string}, MenuItemsQueryVariables>(MenuItemsDocument, variables, options);

@@ -56,6 +56,8 @@ type Query {
   document(collection: String, relativePath: String): DocumentNode!
   siteSettings(relativePath: String): SiteSettings!
   siteSettingsConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: SiteSettingsFilter): SiteSettingsConnection!
+  menuCategories(relativePath: String): MenuCategories!
+  menuCategoriesConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: MenuCategoriesFilter): MenuCategoriesConnection!
   menuItems(relativePath: String): MenuItems!
   menuItemsConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: MenuItemsFilter): MenuItemsConnection!
   testimonials(relativePath: String): Testimonials!
@@ -68,6 +70,7 @@ type Query {
 
 input DocumentFilter {
   siteSettings: SiteSettingsFilter
+  menuCategories: MenuCategoriesFilter
   menuItems: MenuItemsFilter
   testimonials: TestimonialsFilter
   galleryImages: GalleryImagesFilter
@@ -97,7 +100,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = SiteSettings | MenuItems | Testimonials | GalleryImages | Translations | Folder
+union DocumentNode = SiteSettings | MenuCategories | MenuItems | Testimonials | GalleryImages | Translations | Folder
 
 type SiteSettingsContact {
   email: String
@@ -161,13 +164,10 @@ type SiteSettingsConnection implements Connection {
   edges: [SiteSettingsConnectionEdges]
 }
 
-type MenuItems implements Node & Document {
+type MenuCategories implements Node & Document {
   name: String!
   description: String
-  price: Float
-  category: String
-  image: String
-  featured: Boolean
+  order: Float
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -183,18 +183,65 @@ input NumberFilter {
   in: [Float]
 }
 
+input MenuCategoriesFilter {
+  name: StringFilter
+  description: StringFilter
+  order: NumberFilter
+}
+
+type MenuCategoriesConnectionEdges {
+  cursor: String!
+  node: MenuCategories
+}
+
+type MenuCategoriesConnection implements Connection {
+  pageInfo: PageInfo!
+  totalCount: Float!
+  edges: [MenuCategoriesConnectionEdges]
+}
+
+union MenuItemsCategory = MenuCategories
+
+type MenuItemsSections {
+  title: String
+  items: [String]
+}
+
+type MenuItems implements Node & Document {
+  name: String!
+  description: String
+  category: MenuItemsCategory!
+  image: String
+  featured: Boolean
+  sections: [MenuItemsSections]
+  boxMaxItemsPerBox: Float
+  id: ID!
+  _sys: SystemInfo!
+  _values: JSON!
+}
+
+input MenuItemsCategoryFilter {
+  menuCategories: MenuCategoriesFilter
+}
+
 input BooleanFilter {
   eq: Boolean
   exists: Boolean
 }
 
+input MenuItemsSectionsFilter {
+  title: StringFilter
+  items: StringFilter
+}
+
 input MenuItemsFilter {
   name: StringFilter
   description: StringFilter
-  price: NumberFilter
-  category: StringFilter
+  category: MenuItemsCategoryFilter
   image: ImageFilter
   featured: BooleanFilter
+  sections: MenuItemsSectionsFilter
+  boxMaxItemsPerBox: NumberFilter
 }
 
 type MenuItemsConnectionEdges {
@@ -344,6 +391,8 @@ type Mutation {
   createFolder(collection: String, relativePath: String!): DocumentNode!
   updateSiteSettings(relativePath: String!, params: SiteSettingsMutation!): SiteSettings!
   createSiteSettings(relativePath: String!, params: SiteSettingsMutation!): SiteSettings!
+  updateMenuCategories(relativePath: String!, params: MenuCategoriesMutation!): MenuCategories!
+  createMenuCategories(relativePath: String!, params: MenuCategoriesMutation!): MenuCategories!
   updateMenuItems(relativePath: String!, params: MenuItemsMutation!): MenuItems!
   createMenuItems(relativePath: String!, params: MenuItemsMutation!): MenuItems!
   updateTestimonials(relativePath: String!, params: TestimonialsMutation!): Testimonials!
@@ -356,6 +405,7 @@ type Mutation {
 
 input DocumentUpdateMutation {
   siteSettings: SiteSettingsMutation
+  menuCategories: MenuCategoriesMutation
   menuItems: MenuItemsMutation
   testimonials: TestimonialsMutation
   galleryImages: GalleryImagesMutation
@@ -365,6 +415,7 @@ input DocumentUpdateMutation {
 
 input DocumentMutation {
   siteSettings: SiteSettingsMutation
+  menuCategories: MenuCategoriesMutation
   menuItems: MenuItemsMutation
   testimonials: TestimonialsMutation
   galleryImages: GalleryImagesMutation
@@ -388,13 +439,25 @@ input SiteSettingsMutation {
   hero: SiteSettingsHeroMutation
 }
 
+input MenuCategoriesMutation {
+  name: String
+  description: String
+  order: Float
+}
+
+input MenuItemsSectionsMutation {
+  title: String
+  items: [String]
+}
+
 input MenuItemsMutation {
   name: String
   description: String
-  price: Float
   category: String
   image: String
   featured: Boolean
+  sections: [MenuItemsSectionsMutation]
+  boxMaxItemsPerBox: Float
 }
 
 input TestimonialsMutation {

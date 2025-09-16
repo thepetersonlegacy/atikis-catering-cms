@@ -133,6 +133,47 @@ export default defineConfig({
             name: "category",
             label: "Category",
             collections: ["menuCategories"],
+            required: true,
+            ui: {
+              // Limit to exactly the 8 canonical categories and show human-friendly names
+              collectionFilter: {
+                menuCategories: {
+                  name: [
+                    "Signature Breakfast Collection",
+                    "Artisan Salad and Grain Bowls",
+                    "In-Flight Lunch Selections",
+                    "Midwest Heritage Classics",
+                    "Gourmet Creations",
+                    "Plant-Based Culinary Selections",
+                    "Elegant Desserts and Confections",
+                    "Executive Express Selections",
+                  ],
+                },
+              },
+              optionComponent: (
+                props: { name?: string },
+                _internalSys: { path: string }
+              ) => {
+                try {
+                  const path = _internalSys?.path || "";
+                  const slug = path.split("/").pop() || "";
+                  const orderMap: Record<string, number> = {
+                    "signature-breakfast-collection.json": 1,
+                    "artisan-salad-and-grain-bowls.json": 2,
+                    "in-flight-lunch-selections.json": 3,
+                    "midwest-heritage-classics.json": 4,
+                    "gourmet-creations.json": 5,
+                    "plant-based-culinary-selections.json": 6,
+                    "elegant-desserts-and-confections.json": 7,
+                    "executive-express-selections.json": 8,
+                  };
+                  const prefix = orderMap[slug] ? `${orderMap[slug]} — ` : "";
+                  return `${prefix}${props?.name || path}`;
+                } catch {
+                  return props?.name || _internalSys.path;
+                }
+              },
+            },
           },
           {
             type: "image",

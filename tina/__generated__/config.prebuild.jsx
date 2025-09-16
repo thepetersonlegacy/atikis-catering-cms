@@ -87,6 +87,20 @@ var config_default = defineConfig({
         ]
       },
       {
+        name: "menuCategories",
+        label: "Menu Categories",
+        path: "content/menu-categories",
+        format: "json",
+        ui: {
+          allowedActions: { create: true, delete: true }
+        },
+        fields: [
+          { type: "string", name: "name", label: "Category Name", required: true },
+          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
+          { type: "number", name: "order", label: "Sort Order" }
+        ]
+      },
+      {
         name: "menuItems",
         label: "Menu Items",
         path: "content/menu",
@@ -107,20 +121,48 @@ var config_default = defineConfig({
             }
           },
           {
-            type: "number",
-            name: "price",
-            label: "Price"
-          },
-          {
-            type: "string",
+            type: "reference",
             name: "category",
             label: "Category",
-            options: [
-              "appetizers",
-              "entrees",
-              "desserts",
-              "beverages"
-            ]
+            collections: ["menuCategories"],
+            required: true,
+            ui: {
+              // Limit to exactly the 8 canonical categories and show human-friendly names
+              collectionFilter: {
+                menuCategories: {
+                  name: [
+                    "Signature Breakfast Collection",
+                    "Artisan Salad and Grain Bowls",
+                    "In-Flight Lunch Selections",
+                    "Midwest Heritage Classics",
+                    "Gourmet Creations",
+                    "Plant-Based Culinary Selections",
+                    "Elegant Desserts and Confections",
+                    "Executive Express Selections"
+                  ]
+                }
+              },
+              optionComponent: (props, _internalSys) => {
+                try {
+                  const path = _internalSys?.path || "";
+                  const slug = path.split("/").pop() || "";
+                  const orderMap = {
+                    "signature-breakfast-collection.json": 1,
+                    "artisan-salad-and-grain-bowls.json": 2,
+                    "in-flight-lunch-selections.json": 3,
+                    "midwest-heritage-classics.json": 4,
+                    "gourmet-creations.json": 5,
+                    "plant-based-culinary-selections.json": 6,
+                    "elegant-desserts-and-confections.json": 7,
+                    "executive-express-selections.json": 8
+                  };
+                  const prefix = orderMap[slug] ? `${orderMap[slug]} \u2014 ` : "";
+                  return `${prefix}${props?.name || path}`;
+                } catch {
+                  return props?.name || _internalSys.path;
+                }
+              }
+            }
           },
           {
             type: "image",
@@ -131,6 +173,24 @@ var config_default = defineConfig({
             type: "boolean",
             name: "featured",
             label: "Featured Item"
+          },
+          {
+            type: "object",
+            name: "sections",
+            label: "Sections",
+            list: true,
+            ui: {
+              itemProps: (item) => ({ label: item?.title || "Section" })
+            },
+            fields: [
+              { type: "string", name: "title", label: "Section Title" },
+              { type: "string", name: "items", label: "Items", list: true }
+            ]
+          },
+          {
+            type: "number",
+            name: "boxMaxItemsPerBox",
+            label: "Max Items per Box (for Box Options)"
           }
         ]
       },
