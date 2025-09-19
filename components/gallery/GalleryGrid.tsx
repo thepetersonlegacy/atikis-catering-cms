@@ -162,9 +162,9 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
 
 
 
-  const containerClass = 'grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-6 xl:gap-8'
+  const containerClass = 'grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-6 xl:gap-8'
 
-  const sizes = '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+  const sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
 
   const figureClass = 'mb-6 break-inside-avoid group'
 

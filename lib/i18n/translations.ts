@@ -174,7 +174,7 @@ export const translations: Translations = {
     },
     // Page content
     page: {
-      wheelsUpMessage: "WHEELS UP? WE'VE GOT YOUR PLATES COVERED.",
+      wheelsUpMessage: "Wheels Up? We've Got Your Plates Covered.",
       execsMessage: "Got a jet full of execs? A team en route to the big game? A family escaping to paradise?",
       understandMessage: "We understand how important your orders are—and we treat them with the care they deserve. Our team is ready to assist. Please email for specific accommodations to deliver with precision, professionalism, and pride.",
       valuedMessage: "At Atikis Minnesota Flight Catering, you're not just a client—you're valued, heard, and truly appreciated.",

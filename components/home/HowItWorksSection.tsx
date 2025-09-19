@@ -81,7 +81,7 @@ const HowItWorksSection = () => {
   )
 
   return (
-    <section className="w-full overflow-x-hidden py-8 md:py-12 lg:py-16 bg-[#D4AF37]" aria-label="How our aviation catering process works">
+    <section className="w-full overflow-x-hidden py-8 md:py-12 lg:py-16 bg-black" aria-label="How our aviation catering process works">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="w-full relative overflow-hidden rounded-lg shadow-xl border-4 border-white min-h-[420px] sm:min-h-[500px] md:aspect-[16/9]">
           <Image

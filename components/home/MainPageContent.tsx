@@ -13,7 +13,7 @@ const MainPageContent = () => {
       </div>
       <div className="absolute inset-0 bg-white/70 backdrop-blur-sm" />
       <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center">
-        <h2 className="font-montserrat text-4xl md:text-5xl lg:text-6xl font-bold text-[#D4AF37] mb-8 text-center" style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8)' }}>
+        <h2 className="font-montserrat text-4xl md:text-5xl lg:text-6xl font-bold text-[#D4AF37] mb-8 text-center" style={{ textShadow: '1px 1px 4px rgba(0, 0, 0, 0.35)' }}>
           {t('page.wheelsUpMessage')}
         </h2>
         <div className="text-lg md:text-xl text-gray-800 max-w-4xl mx-auto text-center leading-relaxed space-y-6">

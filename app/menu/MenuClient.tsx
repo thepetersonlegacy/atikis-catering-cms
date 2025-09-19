@@ -81,13 +81,13 @@ export default function MenuClient({
             <div className="lg:col-span-3">
               <Tabs defaultValue={categories[0]?.key} className="w-full">
                 <div className="mb-13 relative">
-                  <button id="scroll-left" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-0 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  <button id="scroll-left" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-0 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                     onClick={() => { const c = document.getElementById('tabs-container'); if (c) c.scrollBy({ left: -200, behavior: 'smooth' }); }} aria-label="Scroll menu left">
-                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    <svg className="w-5 h-5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                   </button>
-                  <button id="scroll-right" className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-100 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  <button id="scroll-right" className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-100 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                     onClick={() => { const c = document.getElementById('tabs-container'); if (c) c.scrollBy({ left: 200, behavior: 'smooth' }); }} aria-label="Scroll menu right">
-                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    <svg className="w-5 h-5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                   </button>
 
                   <div id="tabs-container" className="overflow-x-auto scrollbar-hide px-8"
