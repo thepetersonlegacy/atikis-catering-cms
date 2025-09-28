@@ -4,7 +4,9 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Quote } from 'lucide-react'
-import { testimonials, getTranslatedTestimonial } from '@/lib/data/testimonials-data'
+import { getTranslatedTestimonial } from '@/lib/data/testimonials-data'
+import type { Testimonial } from '@/lib/data/testimonials-data'
+import { testimonials as fallbackTestimonials } from '@/lib/data/testimonials-data'
 import { useI18n } from '@/lib/i18n/i18n-context'
 import { useHydration } from '@/lib/hooks/useHydration'
 import ClientOnly from '@/components/ClientOnly'
@@ -14,7 +16,8 @@ const TestimonialPreview = () => {
   const { t, language } = useI18n()
   const isHydrated = useHydration()
 
-  const memoizedTestimonials = useMemo(() => testimonials, [])
+  const [list, setList] = useState<Testimonial[]>(fallbackTestimonials)
+  const memoizedTestimonials = useMemo(() => list, [list])
 
   const rotateTestimonial = useCallback(() => {
     setActiveIndex((current) => (current + 1) % memoizedTestimonials.length)
@@ -22,13 +25,29 @@ const TestimonialPreview = () => {
 
   useEffect(() => {
     if (!isHydrated) return
-    
+    let cancelled = false
+    const load = async () => {
+      try {
+        const res = await fetch('/api/testimonials', { cache: 'no-store' })
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled && Array.isArray(data) && data.length) setList(data)
+      } catch {}
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [isHydrated])
+
+  useEffect(() => {
+    if (!isHydrated || memoizedTestimonials.length === 0) return
     const interval = setInterval(rotateTestimonial, 5000)
     return () => clearInterval(interval)
-  }, [isHydrated, rotateTestimonial])
+  }, [isHydrated, rotateTestimonial, memoizedTestimonials.length])
 
-  const currentTestimonial = useMemo(() => 
-    getTranslatedTestimonial(memoizedTestimonials[activeIndex], language), 
+  const currentTestimonial = useMemo(() =>
+    getTranslatedTestimonial(memoizedTestimonials[activeIndex], language),
     [memoizedTestimonials, activeIndex, language]
   )
 
@@ -88,9 +107,9 @@ const TestimonialPreview = () => {
         </ClientOnly>
 
         <div className="text-center mt-12">
-          <Button 
+          <Button
             asChild
-            variant="outline" 
+            variant="outline"
             className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black"
           >
             <Link href="/testimonials" className="inline-flex items-center">
