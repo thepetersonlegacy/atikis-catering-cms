@@ -110,7 +110,8 @@ ${data.name}
         specialRequests: data.specialRequests || ''
       }
 
-      const endpoints = ['/contact-submit.php', '/.netlify/functions/contact-submit']
+      // Prefer Netlify Function in production; PHP endpoint removed for static hosting
+      const endpoints = ['/.netlify/functions/contact-submit']
       for (const ep of endpoints) {
         try {
           const resp = await fetch(ep, {
@@ -129,10 +130,8 @@ ${data.name}
         }
       }
 
-      // Fallback: open email client via mailto
-      // TODO(DEMO): For production, consider posting to a serverless/API endpoint or a form service
-      // (e.g., Netlify Forms, Resend, AWS SES) instead of relying on a mailto link. This
-      // ensures submissions are captured even if the user lacks a default mail client.
+      // Fallback: open email client via mailto to ensure user can still contact us if the
+      // serverless endpoint is temporarily unavailable.
       const mailtoLink = `mailto:order@atikismn.com?subject=${subject}&body=${body}`
 
       // Open email client

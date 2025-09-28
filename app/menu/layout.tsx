@@ -14,7 +14,9 @@ export const metadata = {
   openGraph: {
     title: 'Gourmet Aviation Menu | In-Flight Dining Options',
     description: 'Explore our extensive aviation catering menu featuring signature breakfast collections, artisan salads, premium entrées, and plant-based selections.',
-    images: ['/Untitled design (12).png'],
+    images: [
+      { url: '/images/og/atikis-social-preview.png?v=1', width: 1200, height: 630, alt: 'Atikis Minnesota Aviation Catering — Social Preview' }
+    ],
   },
 }
 

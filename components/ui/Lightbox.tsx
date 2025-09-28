@@ -29,10 +29,32 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
   const [closing, setClosing] = useState(false)
   const [showStrip, setShowStrip] = useState(true)
   const [imgVisible, setImgVisible] = useState(true)
+  const [showHint, setShowHint] = useState(false)
+
 
   const stripTimerRef = useRef<number | null>(null)
   const captionRef = useRef<HTMLDivElement | null>(null)
-  const [imgMaxPx, setImgMaxPx] = useState<number | null>(null)
+  const PHI = 1.61803398875
+  const INV_PHI = 1 / PHI
+
+  const [naturalW, setNaturalW] = useState<number | null>(null)
+  const [naturalH, setNaturalH] = useState<number | null>(null)
+  const triedSrcsRef = useRef<Set<string>>(new Set())
+
+
+  const [maxW, setMaxW] = useState<number | null>(null)
+  const [maxH, setMaxH] = useState<number | null>(null)
+
+  const [padTop, setPadTop] = useState(16)
+  const [padRight, setPadRight] = useState(16)
+  const [padBottom, setPadBottom] = useState(16)
+  const [padLeft, setPadLeft] = useState(16)
+
+  const [ctrlTop, setCtrlTop] = useState(16)
+  const [ctrlRight, setCtrlRight] = useState(16)
+  const [arrowLeft, setArrowLeft] = useState(16)
+  const [arrowRight, setArrowRight] = useState(16)
+  const [stripBottom, setStripBottom] = useState(16)
 
   const [captionOffset, setCaptionOffset] = useState(0)
 
@@ -56,20 +78,68 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     return el
   }, [])
 
-  // Reserve vertical space so image + filmstrip + caption always fit
+  // Golden-ratio layout: compute image max size and modal paddings
   const computeMaxHeight = useCallback(() => {
     if (!isOpen) return
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1280
     const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-    const containerPadding = 32 // p-4 top+bottom
     const captionH = captionRef.current?.offsetHeight ?? (caption ? 56 : 0)
-    const filmstripReserve = items && items.length > 1 ? 88 : 0 // thumbs + chrome
-    const extra = 16 // breathing space
-    const available = Math.max(200, vh - containerPadding - filmstripReserve - captionH - extra)
-    setImgMaxPx(available)
+    const filmstripReserve = items && items.length > 1 ? 88 : 0
+    const minPad = 12
+
+    // Effective vertical space for image + golden padding
+    const effVh = Math.max(200, vh - filmstripReserve - captionH)
+
+    // Golden ratio constraints relative to viewport
+    const Wg = vw / PHI
+    const Hg = effVh / PHI
+
+    const r = (naturalW && naturalH && naturalH !== 0) ? (naturalW / naturalH) : (3/2)
+
+    // Candidate 1: width-limited
+    let w1 = Math.min(Wg, vw - 2 * minPad)
+    let h1 = w1 / r
+
+    // Candidate 2: height-limited
+    let h2 = Math.min(Hg, effVh - 2 * minPad)
+    let w2 = h2 * r
+    if (w2 > vw - 2 * minPad) { w2 = vw - 2 * minPad; h2 = w2 / r }
+
+    // Choose the larger area that fits
+    const area1 = Math.max(0, w1) * Math.max(0, h1)
+    const area2 = Math.max(0, w2) * Math.max(0, h2)
+    let w = w1, h = h1
+    if (area2 > area1) { w = w2; h = h2 }
+
+    setMaxW(Math.floor(w))
+    setMaxH(Math.floor(h))
+
+    // Golden-ratio padding from remaining space
+    const leftoverV = Math.max(0, vh - filmstripReserve - captionH - h)
+    const leftoverH = Math.max(0, vw - w)
+
+    const tPad = Math.max(minPad, leftoverV * INV_PHI)
+    const bPad = Math.max(minPad, leftoverV - tPad)
+    const lPad = Math.max(minPad, leftoverH * INV_PHI)
+    const rPad = Math.max(minPad, leftoverH - lPad)
+
+    setPadTop(Math.round(tPad))
+    setPadBottom(Math.round(bPad))
+    setPadLeft(Math.round(lPad))
+    setPadRight(Math.round(rPad))
+
+    // Control offsets using golden spacing relative to viewport edges
+    setCtrlTop(Math.round(Math.max(12, tPad * INV_PHI)))
+    setCtrlRight(Math.round(Math.max(12, rPad * INV_PHI)))
+    setArrowLeft(Math.round(Math.max(16, lPad * INV_PHI)))
+    setArrowRight(Math.round(Math.max(16, rPad * INV_PHI)))
+    setStripBottom(Math.round(Math.max(12, bPad * INV_PHI)))
+
+    // Center caption influence
     const off = Math.round((captionRef.current?.offsetHeight ?? 0) / 2)
     setCaptionOffset(off)
     setTy(off)
-  }, [isOpen, items, caption])
+  }, [isOpen, items, caption, naturalW, naturalH])
 
   useEffect(() => {
     if (!isOpen) return
@@ -115,15 +185,50 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     if (e.key.toLowerCase() === 'f') { e.preventDefault(); toggleFullscreen(); return }
   }, [onPrev, onNext])
 
+  const scrollYRef = useRef(0)
+
   useEffect(() => {
     if (!isOpen) return
     document.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
+    // Lock body scroll and preserve current scroll position
+    try {
+      scrollYRef.current = typeof window !== 'undefined' ? window.scrollY : 0
+      const body = document.body
+      body.style.overflow = 'hidden'
+      body.style.position = 'fixed'
+      body.style.width = '100%'
+      body.style.top = `-${scrollYRef.current}px`
+    } catch {}
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      // Restore scroll
+      try {
+        const body = document.body
+        body.style.overflow = ''
+        body.style.position = ''
+        body.style.width = ''
+        const y = scrollYRef.current
+        body.style.top = ''
+        if (typeof window !== 'undefined') window.scrollTo(0, y)
+      } catch {}
     }
   }, [isOpen, onKey])
+
+  // One-time onboarding hint
+  useEffect(() => {
+    if (!isOpen) return
+    try {
+      const seen = typeof window !== 'undefined' ? localStorage.getItem('lightboxOnboarded') === 'true' : true
+      if (!seen) {
+        setShowHint(true)
+        const t = window.setTimeout(() => {
+          setShowHint(false)
+          try { localStorage.setItem('lightboxOnboarded', 'true') } catch {}
+        }, 2600)
+        return () => window.clearTimeout(t)
+      }
+    } catch {}
+  }, [isOpen])
 
   // Animate in/out and fullscreen state
   const handleRequestClose = useCallback(() => {
@@ -158,12 +263,10 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     }
   }, [isOpen])
 
-  // Auto-hide filmstrip and controls after inactivity
+  // Keep filmstrip/controls visible for clarity
   useEffect(() => {
     if (!isOpen) return
     setShowStrip(true)
-    if (stripTimerRef.current) window.clearTimeout(stripTimerRef.current)
-    stripTimerRef.current = window.setTimeout(() => setShowStrip(false), 1600)
     return () => {
       if (stripTimerRef.current) window.clearTimeout(stripTimerRef.current)
     }
@@ -172,7 +275,14 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
   // Focus close button on open for accessibility
   useEffect(() => {
     if (!isOpen) return
-    const t = setTimeout(() => closeBtnRef.current?.focus(), 0)
+    const t = setTimeout(() => {
+      try {
+        // Focus without causing browser to scroll the underlying page
+        (closeBtnRef.current as any)?.focus?.({ preventScroll: true })
+      } catch {
+        closeBtnRef.current?.focus()
+      }
+    }, 0)
     return () => clearTimeout(t)
   }, [isOpen])
 
@@ -208,6 +318,53 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
   }, [isOpen])
 
   // Persist on change
+  // Reset tried sources whenever the src prop changes
+  useEffect(() => {
+    triedSrcsRef.current = new Set([src])
+  }, [src])
+
+  // Compute successive fallback sources for the image if one fails to load
+  const nextFallbackSrc = useCallback((): string | null => {
+    const cur = currentSrc
+    if (!cur) return null
+    const tried = triedSrcsRef.current
+
+    const pushIf = (s?: string | null) => {
+      if (!s) return null
+      if (tried.has(s)) return null
+      tried.add(s)
+      return s
+    }
+
+    // If optimized desktop fails, try tablet, then mobile
+    if (/\/optimized\//.test(cur)) {
+      if (/_desktop\.jpg$/i.test(cur)) return pushIf(cur.replace(/_desktop\.jpg$/i, '_tablet.jpg'))
+      if (/_tablet\.jpg$/i.test(cur)) return pushIf(cur.replace(/_tablet\.jpg$/i, '_mobile.jpg'))
+      // If optimized without suffix, try desktop
+      if (!/_mobile|_tablet|_desktop/i.test(cur)) return pushIf(cur.replace(/\.jpg$/i, '_desktop.jpg'))
+    }
+
+    // Try deriving from original item path if available
+    if (items && typeof currentIndex === 'number' && items[currentIndex]) {
+      const orig = items[currentIndex].src
+      if (orig) {
+        const base = orig.replace(/^\//, '').replace(/\.(jpe?g|png|webp)$/i, '')
+        const desk = `/optimized/${base}_desktop.jpg`
+        const tab = `/optimized/${base}_tablet.jpg`
+        const mob = `/optimized/${base}_mobile.jpg`
+        return pushIf(desk) || pushIf(tab) || pushIf(mob)
+      }
+    }
+
+    // Last resort: legacy gallery path by shareId
+    if (shareId) {
+      const legacy = `/images/gallery/${shareId}.jpg`
+      return pushIf(legacy)
+    }
+
+    return null
+  }, [currentSrc, items, currentIndex, shareId])
+
   useEffect(() => {
     if (typeof window === 'undefined') return
     try {
@@ -216,16 +373,17 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
     } catch {}
   }, [soundOn, volume])
 
-  // Sync image src with crossfade and reset zoom/pan
+  // Sync image src with crossfade only when it actually changes; reset zoom/pan
   useEffect(() => {
+    if (src === currentSrc) return
     setImgVisible(false)
     const t = setTimeout(() => {
       setCurrentSrc(src)
       setZoom(1); setTx(0); setTy(captionOffset)
       setImgVisible(true)
-    }, 20)
+    }, 0)
     return () => clearTimeout(t)
-  }, [src, captionOffset])
+  }, [src, currentSrc, captionOffset])
 
   // Smooth crossfade for ambient sound and volume control
   useEffect(() => {
@@ -364,111 +522,62 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
       onPointerMove={handlePointerMoveRoot}
     >
       <div
-        className="relative w-full h-full flex items-center justify-center p-4"
+        className="relative w-full h-full flex items-center justify-center"
+        style={{ paddingTop: padTop, paddingRight: padRight, paddingBottom: padBottom, paddingLeft: padLeft }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onClick={(e) => { if (e.target === e.currentTarget) handleRequestClose() }}
       >
+        {/* Image counter (top-center) */}
+        {items && items.length > 1 && typeof currentIndex === 'number' && (
+          <div className="absolute left-1/2 -translate-x-1/2 text-white/90 bg-black/40 backdrop-blur-sm rounded px-2 py-1 border border-white/10 text-xs md:text-sm" style={{ top: ctrlTop }}>
+            {currentIndex + 1} of {items.length}
+          </div>
+        )}
+
         {/* Top-right controls */}
-        <div className={cn("absolute right-4 top-4 z-[101] flex gap-2 transition-opacity duration-300", (singleMode || showStrip) ? "opacity-100" : "opacity-0")}>
-
-          <button
-            aria-label="Toggle ambient sound"
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${soundOn ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={() => setSoundOn(v => !v)}
-            aria-pressed={soundOn}
-            title="Sound"
-          >
-            {soundOn ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 10v4h4l5 4V6L7 10H3z" />
-                <path d="M16 7a5 5 0 0 1 0 10" className="opacity-80" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M3 10v4h4l5 4V6L7 10H3z" />
-                <path d="M19 5L5 19" stroke="currentColor" strokeWidth="2" />
-              </svg>
-            )}
-            <span className="sr-only">Sound</span>
-          </button>
-          <label className="flex items-center gap-2 rounded border border-[#D4AF37]/70 text-[#D4AF37] bg-black/30 px-2 py-1 text-xs">
-            <span aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 4V6L7 10H3z"/></svg>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={volume}
-              onChange={(e) => setVolume(parseFloat(e.currentTarget.value))}
-              className="w-28 accent-[#D4AF37]"
-              aria-label="Ambient volume"
-            />
-          </label>
-
-          <button
-            aria-label="Toggle fullscreen"
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${isFs ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={toggleFullscreen}
-            title="Fullscreen"
-          >
-            {isFs ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 9H5V5h4V3H3v6h6zM15 3v2h4v4h2V3h-6zM21 15h-2v4h-4v2h6v-6zM3 15v6h6v-2H5v-4H3z"/></svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 7H5v4H3V5h6v2zM21 5v6h-2V7h-4V5h6zM3 19v-6h2v4h4v2H3zM15 21v-2h4v-4h2v6h-6z"/></svg>
-            )}
-            <span className="sr-only">Fullscreen</span>
-          </button>
-          <button
-            aria-label="Keyboard shortcuts"
-            className={`px-2.5 py-2 rounded border text-sm focus:outline-none focus:ring-2 ${showHelp ? 'bg-[#D4AF37] text-black border-[#D4AF37]' : 'border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:ring-[#D4AF37]/70'}`}
-            onClick={() => setShowHelp(v => !v)}
-            title="Keyboard shortcuts"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><text x="7" y="17" fontSize="14" fontFamily="ui-sans-serif,system-ui">?</text></svg>
-            <span className="sr-only">Help</span>
-          </button>
-
-          <button
-            aria-label="Copy link to this image"
-            className="px-2.5 py-2 rounded border border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/70"
-            onClick={handleShare}
-            title="Share"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 9V5l7 7-7 7v-4H4V9z"/></svg>
-            <span className="sr-only">Share</span>
-          </button>
+        <div className={cn("absolute z-[101] flex gap-2 transition-opacity duration-300", (singleMode || showStrip) ? "opacity-100" : "opacity-0")} style={{ top: ctrlTop, right: ctrlRight }}>
           <button
             ref={closeBtnRef}
-            aria-label="Close image"
-            className="px-2.5 py-2 rounded border border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/70"
+            aria-label="Close (Esc)"
+            className="px-3 py-2 rounded bg-[#D4AF37] text-black border border-[#D4AF37] hover:bg-[#c39a2f] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/70 text-sm md:text-base"
             onClick={handleRequestClose}
-            title="Close"
+            title="Close (Esc)"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2"/></svg>
-            <span className="sr-only">Close</span>
+            <span className="hidden sm:inline">Close</span>
+            <span className="sm:hidden">✕</span>
           </button>
         </div>
+        {/* Onboarding hint (fades after first use) */}
+        {showHint && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[103] text-white/95 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20 text-xs md:text-sm shadow-lg">
+            <span className="hidden sm:inline">Use ←/→ to navigate · Esc to close</span>
+            <span className="sm:hidden">Swipe left/right · Swipe down to close</span>
+          </div>
+        )}
+
 
         {/* Prev/Next controls */}
         {onPrev && (
           <button
             aria-label="Previous image"
-            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 text-white p-3 hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-white/60"
+            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/60 text-white w-12 h-12 md:w-14 md:h-14 flex items-center justify-center hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white/60"
+            style={{ left: arrowLeft }}
             onClick={onPrev}
+            title="Previous (←)"
           >
-            ‹
+            <span className="text-2xl md:text-3xl">‹</span>
           </button>
         )}
         {onNext && (
           <button
             aria-label="Next image"
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 text-white p-3 hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-white/60"
+            className="absolute top-1/2 -translate-y-1/2 rounded-full bg-black/60 text-white w-12 h-12 md:w-14 md:h-14 flex items-center justify-center hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white/60"
+            style={{ right: arrowRight }}
             onClick={onNext}
+            title="Next (→)"
           >
-            ›
+            <span className="text-2xl md:text-3xl">›</span>
           </button>
         )}
 
@@ -481,14 +590,23 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
           <img
             src={currentSrc}
             alt={alt}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             onClick={(e) => { e.stopPropagation(); handleRequestClose() }}
             onTouchEnd={(e) => { e.stopPropagation(); handleRequestClose() }}
-            onError={() => {
-              const fallback = shareId ? `/images/gallery/${shareId}.jpg` : undefined
-              if (fallback && currentSrc !== fallback) setCurrentSrc(fallback)
+            onLoad={(e) => {
+              const el = e.currentTarget as HTMLImageElement
+              if (el?.naturalWidth && el?.naturalHeight) { setNaturalW(el.naturalWidth); setNaturalH(el.naturalHeight) }
             }}
-            style={{ transform: `translate(${tx}px, ${ty}px) scale(${zoom})`, cursor: 'auto', maxHeight: imgMaxPx ? `${imgMaxPx}px` : undefined }}
-            className={cn("max-w-full rounded-sm shadow-2xl transition-[opacity,transform] duration-300 will-change-transform", imgVisible ? "opacity-100" : "opacity-0")}
+            onError={() => {
+              const next = nextFallbackSrc()
+              if (next && next !== currentSrc) {
+                setCurrentSrc(next)
+              }
+            }}
+            style={{ transform: `translate(${tx}px, ${ty}px) scale(${zoom})`, cursor: 'auto', maxWidth: maxW ? `${maxW}px` : undefined, maxHeight: maxH ? `${maxH}px` : undefined }}
+            className={cn("max-w-full rounded-sm shadow-2xl transition-[opacity,transform] duration-200 will-change-transform", imgVisible ? "opacity-100" : "opacity-0")}
           />
           {caption && (
             <div ref={captionRef} className="mt-4 flex flex-col items-center">
@@ -504,7 +622,7 @@ export default function Lightbox({ isOpen, src, alt, caption, onClose, onPrev, o
 
         {/* Thumbnail filmstrip */}
         {items && items.length > 1 && typeof currentIndex === 'number' && (
-          <div ref={stripRef} className={cn("absolute bottom-4 left-1/2 -translate-x-1/2 z-[102] bg-black/40 backdrop-blur-sm rounded px-3 py-2 border border-white/10 transition-opacity duration-300", showStrip ? "opacity-100" : "opacity-0")}>
+          <div ref={stripRef} className={cn("absolute left-1/2 -translate-x-1/2 z-[102] bg-black/60 backdrop-blur-sm rounded px-3 py-2 border border-white/20 transition-opacity duration-300", showStrip ? "opacity-100" : "opacity-0")} style={{ bottom: stripBottom }}>
             <div className="flex gap-2 overflow-x-auto max-w-[90vw] pr-1">
               {items.map((it, i) => {
                 const active = i === currentIndex

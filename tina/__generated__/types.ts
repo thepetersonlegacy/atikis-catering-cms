@@ -501,11 +501,163 @@ export type TranslationsHero = {
   viewMenu?: Maybe<Scalars['String']['output']>;
 };
 
+export type TranslationsAbout = {
+  __typename?: 'TranslationsAbout';
+  title?: Maybe<Scalars['String']['output']>;
+  description1?: Maybe<Scalars['String']['output']>;
+  description2?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsAviationMessage = {
+  __typename?: 'TranslationsAviationMessage';
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsMenuBoxOptions = {
+  __typename?: 'TranslationsMenuBoxOptions';
+  selectItemsToAdd?: Maybe<Scalars['String']['output']>;
+  addItemsPrefix?: Maybe<Scalars['String']['output']>;
+  itemSingular?: Maybe<Scalars['String']['output']>;
+  itemPlural?: Maybe<Scalars['String']['output']>;
+  toastAddedPrefix?: Maybe<Scalars['String']['output']>;
+  toastFrom?: Maybe<Scalars['String']['output']>;
+  perOptionNotePlaceholder?: Maybe<Scalars['String']['output']>;
+  validationSelectAtLeastOne?: Maybe<Scalars['String']['output']>;
+  addToOrder?: Maybe<Scalars['String']['output']>;
+  selectedItemsLabel?: Maybe<Scalars['String']['output']>;
+  inlineAdded?: Maybe<Scalars['String']['output']>;
+  selectionHeader?: Maybe<Scalars['String']['output']>;
+  numberOfBoxesLabel?: Maybe<Scalars['String']['output']>;
+  quantityLabel?: Maybe<Scalars['String']['output']>;
+  chooseUpTo?: Maybe<Scalars['String']['output']>;
+  reachedMax?: Maybe<Scalars['String']['output']>;
+  clearSelections?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsMenu = {
+  __typename?: 'TranslationsMenu';
+  title?: Maybe<Scalars['String']['output']>;
+  subtitle?: Maybe<Scalars['String']['output']>;
+  heroTitle?: Maybe<Scalars['String']['output']>;
+  heroSubtitle?: Maybe<Scalars['String']['output']>;
+  customMenuTitle?: Maybe<Scalars['String']['output']>;
+  customMenuDescription?: Maybe<Scalars['String']['output']>;
+  requestCustomMenu?: Maybe<Scalars['String']['output']>;
+  qualityTitle?: Maybe<Scalars['String']['output']>;
+  qualityDescription1?: Maybe<Scalars['String']['output']>;
+  qualityDescription2?: Maybe<Scalars['String']['output']>;
+  boxOptions?: Maybe<TranslationsMenuBoxOptions>;
+};
+
+export type TranslationsTestimonials = {
+  __typename?: 'TranslationsTestimonials';
+  title?: Maybe<Scalars['String']['output']>;
+  subtitle?: Maybe<Scalars['String']['output']>;
+  viewAll?: Maybe<Scalars['String']['output']>;
+  joinClients?: Maybe<Scalars['String']['output']>;
+  experienceDescription?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsGallery = {
+  __typename?: 'TranslationsGallery';
+  title?: Maybe<Scalars['String']['output']>;
+  subtitle?: Maybe<Scalars['String']['output']>;
+  prev?: Maybe<Scalars['String']['output']>;
+  next?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsCommon = {
+  __typename?: 'TranslationsCommon';
+  loading?: Maybe<Scalars['String']['output']>;
+  error?: Maybe<Scalars['String']['output']>;
+  tryAgain?: Maybe<Scalars['String']['output']>;
+  close?: Maybe<Scalars['String']['output']>;
+  save?: Maybe<Scalars['String']['output']>;
+  cancel?: Maybe<Scalars['String']['output']>;
+  confirm?: Maybe<Scalars['String']['output']>;
+  delete?: Maybe<Scalars['String']['output']>;
+  edit?: Maybe<Scalars['String']['output']>;
+  add?: Maybe<Scalars['String']['output']>;
+  remove?: Maybe<Scalars['String']['output']>;
+  search?: Maybe<Scalars['String']['output']>;
+  filter?: Maybe<Scalars['String']['output']>;
+  sort?: Maybe<Scalars['String']['output']>;
+  next?: Maybe<Scalars['String']['output']>;
+  previous?: Maybe<Scalars['String']['output']>;
+  page?: Maybe<Scalars['String']['output']>;
+  of?: Maybe<Scalars['String']['output']>;
+  results?: Maybe<Scalars['String']['output']>;
+  noResults?: Maybe<Scalars['String']['output']>;
+  selectLanguage?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsMeta = {
+  __typename?: 'TranslationsMeta';
+  homeTitle?: Maybe<Scalars['String']['output']>;
+  homeDescription?: Maybe<Scalars['String']['output']>;
+  menuTitle?: Maybe<Scalars['String']['output']>;
+  menuDescription?: Maybe<Scalars['String']['output']>;
+  testimonialsTitle?: Maybe<Scalars['String']['output']>;
+  testimonialsDescription?: Maybe<Scalars['String']['output']>;
+  contactTitle?: Maybe<Scalars['String']['output']>;
+  contactDescription?: Maybe<Scalars['String']['output']>;
+  ogImage?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsContact = {
+  __typename?: 'TranslationsContact';
+  title?: Maybe<Scalars['String']['output']>;
+  subtitle?: Maybe<Scalars['String']['output']>;
+  getInTouch?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  address?: Maybe<Scalars['String']['output']>;
+  hours?: Maybe<Scalars['String']['output']>;
+  hoursText?: Maybe<Scalars['String']['output']>;
+  fastResponse?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  phoneLabel?: Maybe<Scalars['String']['output']>;
+  deliveryDate?: Maybe<Scalars['String']['output']>;
+  wheelsUpTime?: Maybe<Scalars['String']['output']>;
+  specialRequests?: Maybe<Scalars['String']['output']>;
+  specialRequestsPlaceholder?: Maybe<Scalars['String']['output']>;
+  submitInquiry?: Maybe<Scalars['String']['output']>;
+  submitting?: Maybe<Scalars['String']['output']>;
+  thankYou?: Maybe<Scalars['String']['output']>;
+  thankYouMessage?: Maybe<Scalars['String']['output']>;
+  sendAnother?: Maybe<Scalars['String']['output']>;
+  phoneMain?: Maybe<Scalars['String']['output']>;
+  phoneDirect?: Maybe<Scalars['String']['output']>;
+  emailAddress?: Maybe<Scalars['String']['output']>;
+  addressLine1?: Maybe<Scalars['String']['output']>;
+  addressLine2?: Maybe<Scalars['String']['output']>;
+  addressCountry?: Maybe<Scalars['String']['output']>;
+};
+
 export type TranslationsFooter = {
   __typename?: 'TranslationsFooter';
+  airportsServed?: Maybe<Scalars['String']['output']>;
+  emailDescription?: Maybe<Scalars['String']['output']>;
   quickLinks?: Maybe<Scalars['String']['output']>;
-  contactInfo?: Maybe<Scalars['String']['output']>;
-  followUs?: Maybe<Scalars['String']['output']>;
+  legal?: Maybe<Scalars['String']['output']>;
+  privacyPolicy?: Maybe<Scalars['String']['output']>;
+  termsOfService?: Maybe<Scalars['String']['output']>;
+  copyright?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsHowItWorks = {
+  __typename?: 'TranslationsHowItWorks';
+  title?: Maybe<Scalars['String']['output']>;
+  subtitle?: Maybe<Scalars['String']['output']>;
+};
+
+export type TranslationsPage = {
+  __typename?: 'TranslationsPage';
+  airportKMSP?: Maybe<Scalars['String']['output']>;
+  airportKSTP?: Maybe<Scalars['String']['output']>;
+  airportKFCM?: Maybe<Scalars['String']['output']>;
+  airportKANE?: Maybe<Scalars['String']['output']>;
 };
 
 export type Translations = Node & Document & {
@@ -513,7 +665,17 @@ export type Translations = Node & Document & {
   language: Scalars['String']['output'];
   nav?: Maybe<TranslationsNav>;
   hero?: Maybe<TranslationsHero>;
+  about?: Maybe<TranslationsAbout>;
+  aviationMessage?: Maybe<TranslationsAviationMessage>;
+  menu?: Maybe<TranslationsMenu>;
+  testimonials?: Maybe<TranslationsTestimonials>;
+  gallery?: Maybe<TranslationsGallery>;
+  common?: Maybe<TranslationsCommon>;
+  meta?: Maybe<TranslationsMeta>;
+  contact?: Maybe<TranslationsContact>;
   footer?: Maybe<TranslationsFooter>;
+  howItWorks?: Maybe<TranslationsHowItWorks>;
+  page?: Maybe<TranslationsPage>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -534,17 +696,168 @@ export type TranslationsHeroFilter = {
   viewMenu?: InputMaybe<StringFilter>;
 };
 
+export type TranslationsAboutFilter = {
+  title?: InputMaybe<StringFilter>;
+  description1?: InputMaybe<StringFilter>;
+  description2?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsAviationMessageFilter = {
+  title?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsMenuBoxOptionsFilter = {
+  selectItemsToAdd?: InputMaybe<StringFilter>;
+  addItemsPrefix?: InputMaybe<StringFilter>;
+  itemSingular?: InputMaybe<StringFilter>;
+  itemPlural?: InputMaybe<StringFilter>;
+  toastAddedPrefix?: InputMaybe<StringFilter>;
+  toastFrom?: InputMaybe<StringFilter>;
+  perOptionNotePlaceholder?: InputMaybe<StringFilter>;
+  validationSelectAtLeastOne?: InputMaybe<StringFilter>;
+  addToOrder?: InputMaybe<StringFilter>;
+  selectedItemsLabel?: InputMaybe<StringFilter>;
+  inlineAdded?: InputMaybe<StringFilter>;
+  selectionHeader?: InputMaybe<StringFilter>;
+  numberOfBoxesLabel?: InputMaybe<StringFilter>;
+  quantityLabel?: InputMaybe<StringFilter>;
+  chooseUpTo?: InputMaybe<StringFilter>;
+  reachedMax?: InputMaybe<StringFilter>;
+  clearSelections?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsMenuFilter = {
+  title?: InputMaybe<StringFilter>;
+  subtitle?: InputMaybe<StringFilter>;
+  heroTitle?: InputMaybe<StringFilter>;
+  heroSubtitle?: InputMaybe<StringFilter>;
+  customMenuTitle?: InputMaybe<StringFilter>;
+  customMenuDescription?: InputMaybe<StringFilter>;
+  requestCustomMenu?: InputMaybe<StringFilter>;
+  qualityTitle?: InputMaybe<StringFilter>;
+  qualityDescription1?: InputMaybe<StringFilter>;
+  qualityDescription2?: InputMaybe<StringFilter>;
+  boxOptions?: InputMaybe<TranslationsMenuBoxOptionsFilter>;
+};
+
+export type TranslationsTestimonialsFilter = {
+  title?: InputMaybe<StringFilter>;
+  subtitle?: InputMaybe<StringFilter>;
+  viewAll?: InputMaybe<StringFilter>;
+  joinClients?: InputMaybe<StringFilter>;
+  experienceDescription?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsGalleryFilter = {
+  title?: InputMaybe<StringFilter>;
+  subtitle?: InputMaybe<StringFilter>;
+  prev?: InputMaybe<StringFilter>;
+  next?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsCommonFilter = {
+  loading?: InputMaybe<StringFilter>;
+  error?: InputMaybe<StringFilter>;
+  tryAgain?: InputMaybe<StringFilter>;
+  close?: InputMaybe<StringFilter>;
+  save?: InputMaybe<StringFilter>;
+  cancel?: InputMaybe<StringFilter>;
+  confirm?: InputMaybe<StringFilter>;
+  delete?: InputMaybe<StringFilter>;
+  edit?: InputMaybe<StringFilter>;
+  add?: InputMaybe<StringFilter>;
+  remove?: InputMaybe<StringFilter>;
+  search?: InputMaybe<StringFilter>;
+  filter?: InputMaybe<StringFilter>;
+  sort?: InputMaybe<StringFilter>;
+  next?: InputMaybe<StringFilter>;
+  previous?: InputMaybe<StringFilter>;
+  page?: InputMaybe<StringFilter>;
+  of?: InputMaybe<StringFilter>;
+  results?: InputMaybe<StringFilter>;
+  noResults?: InputMaybe<StringFilter>;
+  selectLanguage?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsMetaFilter = {
+  homeTitle?: InputMaybe<StringFilter>;
+  homeDescription?: InputMaybe<StringFilter>;
+  menuTitle?: InputMaybe<StringFilter>;
+  menuDescription?: InputMaybe<StringFilter>;
+  testimonialsTitle?: InputMaybe<StringFilter>;
+  testimonialsDescription?: InputMaybe<StringFilter>;
+  contactTitle?: InputMaybe<StringFilter>;
+  contactDescription?: InputMaybe<StringFilter>;
+  ogImage?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsContactFilter = {
+  title?: InputMaybe<StringFilter>;
+  subtitle?: InputMaybe<StringFilter>;
+  getInTouch?: InputMaybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
+  phone?: InputMaybe<StringFilter>;
+  email?: InputMaybe<StringFilter>;
+  address?: InputMaybe<StringFilter>;
+  hours?: InputMaybe<StringFilter>;
+  hoursText?: InputMaybe<StringFilter>;
+  fastResponse?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  phoneLabel?: InputMaybe<StringFilter>;
+  deliveryDate?: InputMaybe<StringFilter>;
+  wheelsUpTime?: InputMaybe<StringFilter>;
+  specialRequests?: InputMaybe<StringFilter>;
+  specialRequestsPlaceholder?: InputMaybe<StringFilter>;
+  submitInquiry?: InputMaybe<StringFilter>;
+  submitting?: InputMaybe<StringFilter>;
+  thankYou?: InputMaybe<StringFilter>;
+  thankYouMessage?: InputMaybe<StringFilter>;
+  sendAnother?: InputMaybe<StringFilter>;
+  phoneMain?: InputMaybe<StringFilter>;
+  phoneDirect?: InputMaybe<StringFilter>;
+  emailAddress?: InputMaybe<StringFilter>;
+  addressLine1?: InputMaybe<StringFilter>;
+  addressLine2?: InputMaybe<StringFilter>;
+  addressCountry?: InputMaybe<StringFilter>;
+};
+
 export type TranslationsFooterFilter = {
+  airportsServed?: InputMaybe<StringFilter>;
+  emailDescription?: InputMaybe<StringFilter>;
   quickLinks?: InputMaybe<StringFilter>;
-  contactInfo?: InputMaybe<StringFilter>;
-  followUs?: InputMaybe<StringFilter>;
+  legal?: InputMaybe<StringFilter>;
+  privacyPolicy?: InputMaybe<StringFilter>;
+  termsOfService?: InputMaybe<StringFilter>;
+  copyright?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsHowItWorksFilter = {
+  title?: InputMaybe<StringFilter>;
+  subtitle?: InputMaybe<StringFilter>;
+};
+
+export type TranslationsPageFilter = {
+  airportKMSP?: InputMaybe<StringFilter>;
+  airportKSTP?: InputMaybe<StringFilter>;
+  airportKFCM?: InputMaybe<StringFilter>;
+  airportKANE?: InputMaybe<StringFilter>;
 };
 
 export type TranslationsFilter = {
   language?: InputMaybe<StringFilter>;
   nav?: InputMaybe<TranslationsNavFilter>;
   hero?: InputMaybe<TranslationsHeroFilter>;
+  about?: InputMaybe<TranslationsAboutFilter>;
+  aviationMessage?: InputMaybe<TranslationsAviationMessageFilter>;
+  menu?: InputMaybe<TranslationsMenuFilter>;
+  testimonials?: InputMaybe<TranslationsTestimonialsFilter>;
+  gallery?: InputMaybe<TranslationsGalleryFilter>;
+  common?: InputMaybe<TranslationsCommonFilter>;
+  meta?: InputMaybe<TranslationsMetaFilter>;
+  contact?: InputMaybe<TranslationsContactFilter>;
   footer?: InputMaybe<TranslationsFooterFilter>;
+  howItWorks?: InputMaybe<TranslationsHowItWorksFilter>;
+  page?: InputMaybe<TranslationsPageFilter>;
 };
 
 export type TranslationsConnectionEdges = {
@@ -773,17 +1086,168 @@ export type TranslationsHeroMutation = {
   viewMenu?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type TranslationsAboutMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  description1?: InputMaybe<Scalars['String']['input']>;
+  description2?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsAviationMessageMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsMenuBoxOptionsMutation = {
+  selectItemsToAdd?: InputMaybe<Scalars['String']['input']>;
+  addItemsPrefix?: InputMaybe<Scalars['String']['input']>;
+  itemSingular?: InputMaybe<Scalars['String']['input']>;
+  itemPlural?: InputMaybe<Scalars['String']['input']>;
+  toastAddedPrefix?: InputMaybe<Scalars['String']['input']>;
+  toastFrom?: InputMaybe<Scalars['String']['input']>;
+  perOptionNotePlaceholder?: InputMaybe<Scalars['String']['input']>;
+  validationSelectAtLeastOne?: InputMaybe<Scalars['String']['input']>;
+  addToOrder?: InputMaybe<Scalars['String']['input']>;
+  selectedItemsLabel?: InputMaybe<Scalars['String']['input']>;
+  inlineAdded?: InputMaybe<Scalars['String']['input']>;
+  selectionHeader?: InputMaybe<Scalars['String']['input']>;
+  numberOfBoxesLabel?: InputMaybe<Scalars['String']['input']>;
+  quantityLabel?: InputMaybe<Scalars['String']['input']>;
+  chooseUpTo?: InputMaybe<Scalars['String']['input']>;
+  reachedMax?: InputMaybe<Scalars['String']['input']>;
+  clearSelections?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsMenuMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  subtitle?: InputMaybe<Scalars['String']['input']>;
+  heroTitle?: InputMaybe<Scalars['String']['input']>;
+  heroSubtitle?: InputMaybe<Scalars['String']['input']>;
+  customMenuTitle?: InputMaybe<Scalars['String']['input']>;
+  customMenuDescription?: InputMaybe<Scalars['String']['input']>;
+  requestCustomMenu?: InputMaybe<Scalars['String']['input']>;
+  qualityTitle?: InputMaybe<Scalars['String']['input']>;
+  qualityDescription1?: InputMaybe<Scalars['String']['input']>;
+  qualityDescription2?: InputMaybe<Scalars['String']['input']>;
+  boxOptions?: InputMaybe<TranslationsMenuBoxOptionsMutation>;
+};
+
+export type TranslationsTestimonialsMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  subtitle?: InputMaybe<Scalars['String']['input']>;
+  viewAll?: InputMaybe<Scalars['String']['input']>;
+  joinClients?: InputMaybe<Scalars['String']['input']>;
+  experienceDescription?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsGalleryMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  subtitle?: InputMaybe<Scalars['String']['input']>;
+  prev?: InputMaybe<Scalars['String']['input']>;
+  next?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsCommonMutation = {
+  loading?: InputMaybe<Scalars['String']['input']>;
+  error?: InputMaybe<Scalars['String']['input']>;
+  tryAgain?: InputMaybe<Scalars['String']['input']>;
+  close?: InputMaybe<Scalars['String']['input']>;
+  save?: InputMaybe<Scalars['String']['input']>;
+  cancel?: InputMaybe<Scalars['String']['input']>;
+  confirm?: InputMaybe<Scalars['String']['input']>;
+  delete?: InputMaybe<Scalars['String']['input']>;
+  edit?: InputMaybe<Scalars['String']['input']>;
+  add?: InputMaybe<Scalars['String']['input']>;
+  remove?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  next?: InputMaybe<Scalars['String']['input']>;
+  previous?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  of?: InputMaybe<Scalars['String']['input']>;
+  results?: InputMaybe<Scalars['String']['input']>;
+  noResults?: InputMaybe<Scalars['String']['input']>;
+  selectLanguage?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsMetaMutation = {
+  homeTitle?: InputMaybe<Scalars['String']['input']>;
+  homeDescription?: InputMaybe<Scalars['String']['input']>;
+  menuTitle?: InputMaybe<Scalars['String']['input']>;
+  menuDescription?: InputMaybe<Scalars['String']['input']>;
+  testimonialsTitle?: InputMaybe<Scalars['String']['input']>;
+  testimonialsDescription?: InputMaybe<Scalars['String']['input']>;
+  contactTitle?: InputMaybe<Scalars['String']['input']>;
+  contactDescription?: InputMaybe<Scalars['String']['input']>;
+  ogImage?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsContactMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  subtitle?: InputMaybe<Scalars['String']['input']>;
+  getInTouch?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  hours?: InputMaybe<Scalars['String']['input']>;
+  hoursText?: InputMaybe<Scalars['String']['input']>;
+  fastResponse?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phoneLabel?: InputMaybe<Scalars['String']['input']>;
+  deliveryDate?: InputMaybe<Scalars['String']['input']>;
+  wheelsUpTime?: InputMaybe<Scalars['String']['input']>;
+  specialRequests?: InputMaybe<Scalars['String']['input']>;
+  specialRequestsPlaceholder?: InputMaybe<Scalars['String']['input']>;
+  submitInquiry?: InputMaybe<Scalars['String']['input']>;
+  submitting?: InputMaybe<Scalars['String']['input']>;
+  thankYou?: InputMaybe<Scalars['String']['input']>;
+  thankYouMessage?: InputMaybe<Scalars['String']['input']>;
+  sendAnother?: InputMaybe<Scalars['String']['input']>;
+  phoneMain?: InputMaybe<Scalars['String']['input']>;
+  phoneDirect?: InputMaybe<Scalars['String']['input']>;
+  emailAddress?: InputMaybe<Scalars['String']['input']>;
+  addressLine1?: InputMaybe<Scalars['String']['input']>;
+  addressLine2?: InputMaybe<Scalars['String']['input']>;
+  addressCountry?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type TranslationsFooterMutation = {
+  airportsServed?: InputMaybe<Scalars['String']['input']>;
+  emailDescription?: InputMaybe<Scalars['String']['input']>;
   quickLinks?: InputMaybe<Scalars['String']['input']>;
-  contactInfo?: InputMaybe<Scalars['String']['input']>;
-  followUs?: InputMaybe<Scalars['String']['input']>;
+  legal?: InputMaybe<Scalars['String']['input']>;
+  privacyPolicy?: InputMaybe<Scalars['String']['input']>;
+  termsOfService?: InputMaybe<Scalars['String']['input']>;
+  copyright?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsHowItWorksMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  subtitle?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TranslationsPageMutation = {
+  airportKMSP?: InputMaybe<Scalars['String']['input']>;
+  airportKSTP?: InputMaybe<Scalars['String']['input']>;
+  airportKFCM?: InputMaybe<Scalars['String']['input']>;
+  airportKANE?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TranslationsMutation = {
   language?: InputMaybe<Scalars['String']['input']>;
   nav?: InputMaybe<TranslationsNavMutation>;
   hero?: InputMaybe<TranslationsHeroMutation>;
+  about?: InputMaybe<TranslationsAboutMutation>;
+  aviationMessage?: InputMaybe<TranslationsAviationMessageMutation>;
+  menu?: InputMaybe<TranslationsMenuMutation>;
+  testimonials?: InputMaybe<TranslationsTestimonialsMutation>;
+  gallery?: InputMaybe<TranslationsGalleryMutation>;
+  common?: InputMaybe<TranslationsCommonMutation>;
+  meta?: InputMaybe<TranslationsMetaMutation>;
+  contact?: InputMaybe<TranslationsContactMutation>;
   footer?: InputMaybe<TranslationsFooterMutation>;
+  howItWorks?: InputMaybe<TranslationsHowItWorksMutation>;
+  page?: InputMaybe<TranslationsPageMutation>;
 };
 
 export type SiteSettingsPartsFragment = { __typename: 'SiteSettings', contact?: { __typename: 'SiteSettingsContact', email?: string | null, phone?: string | null, address?: string | null } | null, hero?: { __typename: 'SiteSettingsHero', title?: string | null, subtitle?: string | null, backgroundImage?: string | null } | null };
@@ -796,7 +1260,7 @@ export type TestimonialsPartsFragment = { __typename: 'Testimonials', name: stri
 
 export type GalleryImagesPartsFragment = { __typename: 'GalleryImages', src: string, alt: string, caption?: string | null, album?: string | null };
 
-export type TranslationsPartsFragment = { __typename: 'Translations', language: string, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, footer?: { __typename: 'TranslationsFooter', quickLinks?: string | null, contactInfo?: string | null, followUs?: string | null } | null };
+export type TranslationsPartsFragment = { __typename: 'Translations', language: string, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, about?: { __typename: 'TranslationsAbout', title?: string | null, description1?: string | null, description2?: string | null } | null, aviationMessage?: { __typename: 'TranslationsAviationMessage', title?: string | null } | null, menu?: { __typename: 'TranslationsMenu', title?: string | null, subtitle?: string | null, heroTitle?: string | null, heroSubtitle?: string | null, customMenuTitle?: string | null, customMenuDescription?: string | null, requestCustomMenu?: string | null, qualityTitle?: string | null, qualityDescription1?: string | null, qualityDescription2?: string | null, boxOptions?: { __typename: 'TranslationsMenuBoxOptions', selectItemsToAdd?: string | null, addItemsPrefix?: string | null, itemSingular?: string | null, itemPlural?: string | null, toastAddedPrefix?: string | null, toastFrom?: string | null, perOptionNotePlaceholder?: string | null, validationSelectAtLeastOne?: string | null, addToOrder?: string | null, selectedItemsLabel?: string | null, inlineAdded?: string | null, selectionHeader?: string | null, numberOfBoxesLabel?: string | null, quantityLabel?: string | null, chooseUpTo?: string | null, reachedMax?: string | null, clearSelections?: string | null } | null } | null, testimonials?: { __typename: 'TranslationsTestimonials', title?: string | null, subtitle?: string | null, viewAll?: string | null, joinClients?: string | null, experienceDescription?: string | null } | null, gallery?: { __typename: 'TranslationsGallery', title?: string | null, subtitle?: string | null, prev?: string | null, next?: string | null } | null, common?: { __typename: 'TranslationsCommon', loading?: string | null, error?: string | null, tryAgain?: string | null, close?: string | null, save?: string | null, cancel?: string | null, confirm?: string | null, delete?: string | null, edit?: string | null, add?: string | null, remove?: string | null, search?: string | null, filter?: string | null, sort?: string | null, next?: string | null, previous?: string | null, page?: string | null, of?: string | null, results?: string | null, noResults?: string | null, selectLanguage?: string | null } | null, meta?: { __typename: 'TranslationsMeta', homeTitle?: string | null, homeDescription?: string | null, menuTitle?: string | null, menuDescription?: string | null, testimonialsTitle?: string | null, testimonialsDescription?: string | null, contactTitle?: string | null, contactDescription?: string | null, ogImage?: string | null } | null, contact?: { __typename: 'TranslationsContact', title?: string | null, subtitle?: string | null, getInTouch?: string | null, description?: string | null, phone?: string | null, email?: string | null, address?: string | null, hours?: string | null, hoursText?: string | null, fastResponse?: string | null, name?: string | null, phoneLabel?: string | null, deliveryDate?: string | null, wheelsUpTime?: string | null, specialRequests?: string | null, specialRequestsPlaceholder?: string | null, submitInquiry?: string | null, submitting?: string | null, thankYou?: string | null, thankYouMessage?: string | null, sendAnother?: string | null, phoneMain?: string | null, phoneDirect?: string | null, emailAddress?: string | null, addressLine1?: string | null, addressLine2?: string | null, addressCountry?: string | null } | null, footer?: { __typename: 'TranslationsFooter', airportsServed?: string | null, emailDescription?: string | null, quickLinks?: string | null, legal?: string | null, privacyPolicy?: string | null, termsOfService?: string | null, copyright?: string | null } | null, howItWorks?: { __typename: 'TranslationsHowItWorks', title?: string | null, subtitle?: string | null } | null, page?: { __typename: 'TranslationsPage', airportKMSP?: string | null, airportKSTP?: string | null, airportKFCM?: string | null, airportKANE?: string | null } | null };
 
 export type SiteSettingsQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -898,7 +1362,7 @@ export type TranslationsQueryVariables = Exact<{
 }>;
 
 
-export type TranslationsQuery = { __typename?: 'Query', translations: { __typename: 'Translations', id: string, language: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, footer?: { __typename: 'TranslationsFooter', quickLinks?: string | null, contactInfo?: string | null, followUs?: string | null } | null } };
+export type TranslationsQuery = { __typename?: 'Query', translations: { __typename: 'Translations', id: string, language: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, about?: { __typename: 'TranslationsAbout', title?: string | null, description1?: string | null, description2?: string | null } | null, aviationMessage?: { __typename: 'TranslationsAviationMessage', title?: string | null } | null, menu?: { __typename: 'TranslationsMenu', title?: string | null, subtitle?: string | null, heroTitle?: string | null, heroSubtitle?: string | null, customMenuTitle?: string | null, customMenuDescription?: string | null, requestCustomMenu?: string | null, qualityTitle?: string | null, qualityDescription1?: string | null, qualityDescription2?: string | null, boxOptions?: { __typename: 'TranslationsMenuBoxOptions', selectItemsToAdd?: string | null, addItemsPrefix?: string | null, itemSingular?: string | null, itemPlural?: string | null, toastAddedPrefix?: string | null, toastFrom?: string | null, perOptionNotePlaceholder?: string | null, validationSelectAtLeastOne?: string | null, addToOrder?: string | null, selectedItemsLabel?: string | null, inlineAdded?: string | null, selectionHeader?: string | null, numberOfBoxesLabel?: string | null, quantityLabel?: string | null, chooseUpTo?: string | null, reachedMax?: string | null, clearSelections?: string | null } | null } | null, testimonials?: { __typename: 'TranslationsTestimonials', title?: string | null, subtitle?: string | null, viewAll?: string | null, joinClients?: string | null, experienceDescription?: string | null } | null, gallery?: { __typename: 'TranslationsGallery', title?: string | null, subtitle?: string | null, prev?: string | null, next?: string | null } | null, common?: { __typename: 'TranslationsCommon', loading?: string | null, error?: string | null, tryAgain?: string | null, close?: string | null, save?: string | null, cancel?: string | null, confirm?: string | null, delete?: string | null, edit?: string | null, add?: string | null, remove?: string | null, search?: string | null, filter?: string | null, sort?: string | null, next?: string | null, previous?: string | null, page?: string | null, of?: string | null, results?: string | null, noResults?: string | null, selectLanguage?: string | null } | null, meta?: { __typename: 'TranslationsMeta', homeTitle?: string | null, homeDescription?: string | null, menuTitle?: string | null, menuDescription?: string | null, testimonialsTitle?: string | null, testimonialsDescription?: string | null, contactTitle?: string | null, contactDescription?: string | null, ogImage?: string | null } | null, contact?: { __typename: 'TranslationsContact', title?: string | null, subtitle?: string | null, getInTouch?: string | null, description?: string | null, phone?: string | null, email?: string | null, address?: string | null, hours?: string | null, hoursText?: string | null, fastResponse?: string | null, name?: string | null, phoneLabel?: string | null, deliveryDate?: string | null, wheelsUpTime?: string | null, specialRequests?: string | null, specialRequestsPlaceholder?: string | null, submitInquiry?: string | null, submitting?: string | null, thankYou?: string | null, thankYouMessage?: string | null, sendAnother?: string | null, phoneMain?: string | null, phoneDirect?: string | null, emailAddress?: string | null, addressLine1?: string | null, addressLine2?: string | null, addressCountry?: string | null } | null, footer?: { __typename: 'TranslationsFooter', airportsServed?: string | null, emailDescription?: string | null, quickLinks?: string | null, legal?: string | null, privacyPolicy?: string | null, termsOfService?: string | null, copyright?: string | null } | null, howItWorks?: { __typename: 'TranslationsHowItWorks', title?: string | null, subtitle?: string | null } | null, page?: { __typename: 'TranslationsPage', airportKMSP?: string | null, airportKSTP?: string | null, airportKFCM?: string | null, airportKANE?: string | null } | null } };
 
 export type TranslationsConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -910,7 +1374,7 @@ export type TranslationsConnectionQueryVariables = Exact<{
 }>;
 
 
-export type TranslationsConnectionQuery = { __typename?: 'Query', translationsConnection: { __typename?: 'TranslationsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'TranslationsConnectionEdges', cursor: string, node?: { __typename: 'Translations', id: string, language: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, footer?: { __typename: 'TranslationsFooter', quickLinks?: string | null, contactInfo?: string | null, followUs?: string | null } | null } | null } | null> | null } };
+export type TranslationsConnectionQuery = { __typename?: 'Query', translationsConnection: { __typename?: 'TranslationsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'TranslationsConnectionEdges', cursor: string, node?: { __typename: 'Translations', id: string, language: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, nav?: { __typename: 'TranslationsNav', home?: string | null, menu?: string | null, gallery?: string | null, testimonials?: string | null, contact?: string | null, orderNow?: string | null } | null, hero?: { __typename: 'TranslationsHero', title?: string | null, subtitle?: string | null, viewMenu?: string | null } | null, about?: { __typename: 'TranslationsAbout', title?: string | null, description1?: string | null, description2?: string | null } | null, aviationMessage?: { __typename: 'TranslationsAviationMessage', title?: string | null } | null, menu?: { __typename: 'TranslationsMenu', title?: string | null, subtitle?: string | null, heroTitle?: string | null, heroSubtitle?: string | null, customMenuTitle?: string | null, customMenuDescription?: string | null, requestCustomMenu?: string | null, qualityTitle?: string | null, qualityDescription1?: string | null, qualityDescription2?: string | null, boxOptions?: { __typename: 'TranslationsMenuBoxOptions', selectItemsToAdd?: string | null, addItemsPrefix?: string | null, itemSingular?: string | null, itemPlural?: string | null, toastAddedPrefix?: string | null, toastFrom?: string | null, perOptionNotePlaceholder?: string | null, validationSelectAtLeastOne?: string | null, addToOrder?: string | null, selectedItemsLabel?: string | null, inlineAdded?: string | null, selectionHeader?: string | null, numberOfBoxesLabel?: string | null, quantityLabel?: string | null, chooseUpTo?: string | null, reachedMax?: string | null, clearSelections?: string | null } | null } | null, testimonials?: { __typename: 'TranslationsTestimonials', title?: string | null, subtitle?: string | null, viewAll?: string | null, joinClients?: string | null, experienceDescription?: string | null } | null, gallery?: { __typename: 'TranslationsGallery', title?: string | null, subtitle?: string | null, prev?: string | null, next?: string | null } | null, common?: { __typename: 'TranslationsCommon', loading?: string | null, error?: string | null, tryAgain?: string | null, close?: string | null, save?: string | null, cancel?: string | null, confirm?: string | null, delete?: string | null, edit?: string | null, add?: string | null, remove?: string | null, search?: string | null, filter?: string | null, sort?: string | null, next?: string | null, previous?: string | null, page?: string | null, of?: string | null, results?: string | null, noResults?: string | null, selectLanguage?: string | null } | null, meta?: { __typename: 'TranslationsMeta', homeTitle?: string | null, homeDescription?: string | null, menuTitle?: string | null, menuDescription?: string | null, testimonialsTitle?: string | null, testimonialsDescription?: string | null, contactTitle?: string | null, contactDescription?: string | null, ogImage?: string | null } | null, contact?: { __typename: 'TranslationsContact', title?: string | null, subtitle?: string | null, getInTouch?: string | null, description?: string | null, phone?: string | null, email?: string | null, address?: string | null, hours?: string | null, hoursText?: string | null, fastResponse?: string | null, name?: string | null, phoneLabel?: string | null, deliveryDate?: string | null, wheelsUpTime?: string | null, specialRequests?: string | null, specialRequestsPlaceholder?: string | null, submitInquiry?: string | null, submitting?: string | null, thankYou?: string | null, thankYouMessage?: string | null, sendAnother?: string | null, phoneMain?: string | null, phoneDirect?: string | null, emailAddress?: string | null, addressLine1?: string | null, addressLine2?: string | null, addressCountry?: string | null } | null, footer?: { __typename: 'TranslationsFooter', airportsServed?: string | null, emailDescription?: string | null, quickLinks?: string | null, legal?: string | null, privacyPolicy?: string | null, termsOfService?: string | null, copyright?: string | null } | null, howItWorks?: { __typename: 'TranslationsHowItWorks', title?: string | null, subtitle?: string | null } | null, page?: { __typename: 'TranslationsPage', airportKMSP?: string | null, airportKSTP?: string | null, airportKFCM?: string | null, airportKANE?: string | null } | null } | null } | null> | null } };
 
 export const SiteSettingsPartsFragmentDoc = gql`
     fragment SiteSettingsParts on SiteSettings {
@@ -1010,11 +1474,151 @@ export const TranslationsPartsFragmentDoc = gql`
     subtitle
     viewMenu
   }
+  about {
+    __typename
+    title
+    description1
+    description2
+  }
+  aviationMessage {
+    __typename
+    title
+  }
+  menu {
+    __typename
+    title
+    subtitle
+    heroTitle
+    heroSubtitle
+    customMenuTitle
+    customMenuDescription
+    requestCustomMenu
+    qualityTitle
+    qualityDescription1
+    qualityDescription2
+    boxOptions {
+      __typename
+      selectItemsToAdd
+      addItemsPrefix
+      itemSingular
+      itemPlural
+      toastAddedPrefix
+      toastFrom
+      perOptionNotePlaceholder
+      validationSelectAtLeastOne
+      addToOrder
+      selectedItemsLabel
+      inlineAdded
+      selectionHeader
+      numberOfBoxesLabel
+      quantityLabel
+      chooseUpTo
+      reachedMax
+      clearSelections
+    }
+  }
+  testimonials {
+    __typename
+    title
+    subtitle
+    viewAll
+    joinClients
+    experienceDescription
+  }
+  gallery {
+    __typename
+    title
+    subtitle
+    prev
+    next
+  }
+  common {
+    __typename
+    loading
+    error
+    tryAgain
+    close
+    save
+    cancel
+    confirm
+    delete
+    edit
+    add
+    remove
+    search
+    filter
+    sort
+    next
+    previous
+    page
+    of
+    results
+    noResults
+    selectLanguage
+  }
+  meta {
+    __typename
+    homeTitle
+    homeDescription
+    menuTitle
+    menuDescription
+    testimonialsTitle
+    testimonialsDescription
+    contactTitle
+    contactDescription
+    ogImage
+  }
+  contact {
+    __typename
+    title
+    subtitle
+    getInTouch
+    description
+    phone
+    email
+    address
+    hours
+    hoursText
+    fastResponse
+    name
+    phoneLabel
+    deliveryDate
+    wheelsUpTime
+    specialRequests
+    specialRequestsPlaceholder
+    submitInquiry
+    submitting
+    thankYou
+    thankYouMessage
+    sendAnother
+    phoneMain
+    phoneDirect
+    emailAddress
+    addressLine1
+    addressLine2
+    addressCountry
+  }
   footer {
     __typename
+    airportsServed
+    emailDescription
     quickLinks
-    contactInfo
-    followUs
+    legal
+    privacyPolicy
+    termsOfService
+    copyright
+  }
+  howItWorks {
+    __typename
+    title
+    subtitle
+  }
+  page {
+    __typename
+    airportKMSP
+    airportKSTP
+    airportKFCM
+    airportKANE
   }
 }
     `;

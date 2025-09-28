@@ -17,7 +17,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact Aviation Catering Services | Get Quote',
     description: 'Contact Atikis Minnesota Aviation Catering for premium in-flight dining services. Professional consultation and custom quotes available.',
-    images: ['/images/backgrounds/bg-wheels-up-03.png'],
+    images: [
+      { url: '/images/og/atikis-social-preview.png?v=1', width: 1200, height: 630, alt: 'Atikis Minnesota Aviation Catering — Social Preview' }
+    ],
   },
 }
 

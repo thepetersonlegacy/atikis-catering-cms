@@ -14,8 +14,8 @@ const AboutSection = () => {
           <div className="relative">
             <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-xl">
               <Image
-                src="/images/aircraft/aircraft-jet-interior-02.png"
-                alt="Luxury aircraft interior setting for premium in-flight dining"
+                src="/images/gallery/DSC_6653.jpg"
+                alt="Premium in-flight dining presentation from our gallery"
                 fill
                 style={{objectFit: 'cover'}}
                 quality={90}

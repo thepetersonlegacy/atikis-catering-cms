@@ -12,12 +12,9 @@ import ResponsiveImage from '@/components/ui/ResponsiveImage'
 import { LOGOS } from '@/lib/data/assets'
 
 const heroImages = [
-  { url: "/images/food/food-carousel-01.jpg", type: "hospitality", alt: "Elegant food presentation showcasing premium aviation catering service quality", season: "Culinary Excellence" },
   { url: "/images/aircraft/aircraft-jet-exterior-01.png", type: "aircraft", alt: "Luxury private aircraft prepared for premium catering service", season: "Winter Elegance" },
-  { url: "/images/food/food-carousel-03.jpg", type: "hospitality", alt: "Beautifully arranged gourmet meal demonstrating attention to detail in aviation dining", season: "Gourmet Artistry" },
-  { url: "/images/food/food-carousel-06.jpg", type: "hospitality", alt: "Professional catering staff preparing exceptional dining experience for aviation clients", season: "Hospitality Focus" },
-  { url: "/images/aircraft/aircraft-jet-interior-01.png", type: "aircraft", alt: "Premium aircraft interior ready for exceptional catering service", season: "Summer Meadows" },
-  { url: "/images/food/food-carousel-08.jpg", type: "hospitality", alt: "Exquisite food styling and presentation showcasing culinary expertise in aviation catering", season: "Culinary Mastery" }
+  { url: "/images/aircraft/aircraft-jet-exterior-03.png", type: "aircraft", alt: "Executive jet exterior highlighting premium service", season: "Signature Fleet" },
+  { url: "/images/aircraft/aircraft-jet-interior-02.png", type: "aircraft", alt: "Premium aircraft interior ready for exceptional catering service", season: "Summer Elegance" }
 ]
 
 const HeroSection = () => {

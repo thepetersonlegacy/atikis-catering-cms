@@ -11,7 +11,8 @@ const MenuHero = () => {
     <section className="relative bg-black py-32">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <Image src="/images/backgrounds/bg-wheels-up-01.png" alt="Menu background" fill className="object-cover opacity-60" priority />
+        <Image src="/images/backgrounds/Atikis_Snow.jpg" alt="Menu background" fill className="object-cover" priority />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center">

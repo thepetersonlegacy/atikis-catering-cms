@@ -20,12 +20,37 @@ const openSans = Open_Sans({
 })
 
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:4173'
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  ...(rawSiteUrl ? { metadataBase: new URL(rawSiteUrl) } : {}),
   title: 'Premium Aviation Catering Services in Minnesota | Atikis',
   description: 'Atikis Minnesota Aviation Catering provides exceptional in-flight dining for private jets. Serving KMSP, KSTP, KFCM, and KANE airports with gourmet meals crafted for altitude dining.',
+  openGraph: {
+    title: 'Atikis Minnesota Aviation Catering',
+    description: 'Premium aviation catering for private jets across Minnesota.',
+    images: [
+      {
+        url: '/images/og/atikis-social-preview.png?v=1',
+        width: 1200,
+        height: 630,
+        alt: 'Atikis Minnesota Aviation Catering — Social Preview',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Atikis Minnesota Aviation Catering',
+    description: 'Premium aviation catering for private jets across Minnesota.',
+    images: [
+      {
+        url: '/images/og/atikis-social-preview.png?v=1',
+        width: 1200,
+        height: 630,
+        alt: 'Atikis Minnesota Aviation Catering — Social Preview',
+      },
+    ],
+  },
   icons: {
     icon: [
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },

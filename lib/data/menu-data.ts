@@ -396,7 +396,7 @@ export const allMenuItems: MenuItem[] = [
     id: 'protein-entree',
     title: 'Protein Entrée',
     description: 'Choice of T-bone steak, ribeye, filet, airline chicken, chicken thigh, chicken breast, salmon, or shrimp with starch and seasonal vegetables.',
-    category: 'Midwest Heritage Classics'
+    category: 'Gourmet Creations'
   },
   {
     id: 'pumpernickel-crusted-walleye',
@@ -406,14 +406,8 @@ export const allMenuItems: MenuItem[] = [
   },
   {
     id: 'walleye-cake',
-    title: 'Wild Rice Wallakeseye Cakes',
+    title: 'Wild Rice Walleye Cakes',
     description: 'Served with lemon cream sauce.',
-    category: 'Midwest Heritage Classics'
-  },
-  {
-    id: 'tater-tot-hotdish',
-    title: 'Tater Tot Hot Dish',
-    description: 'Seasoned ground beef, mixed vegetables, cream of mushroom soup, and cheddar cheese, topped with crispy golden tater tots.',
     category: 'Midwest Heritage Classics'
   },
   {
@@ -463,10 +457,8 @@ export const allMenuItems: MenuItem[] = [
         title: 'Available Midwest Heritage Classics Box Options',
         items: [
           'Atikis Minnesota Mixed Grill',
-          'Protein Entrée',
           'Pumpernickel-Crusted Walleye',
-          'Wild Rice Wallakeseye Cakes',
-          'Tater Tot Hot Dish',
+          'Wild Rice Walleye Cakes',
           'St. Paul Dip',
           'Snack Box'
         ]
@@ -556,7 +548,8 @@ export const allMenuItems: MenuItem[] = [
           'Maple Farm Golden Duck',
           'Salmon en Papillote',
           'Red Curry',
-          'Firecracker Shrimp or Teriyaki Chicken Bowl'
+          'Firecracker Shrimp or Teriyaki Chicken Bowl',
+          'Protein Entrée'
         ]
       }
     ]

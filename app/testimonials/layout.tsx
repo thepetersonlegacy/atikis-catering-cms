@@ -14,7 +14,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Client Reviews & Testimonials | Aviation Catering Excellence',
     description: 'Read testimonials from satisfied clients about our exceptional aviation catering services and in-flight dining experiences.',
-    images: ['/images/backgrounds/bg-wheels-up-02.png'],
+    images: [
+      { url: '/images/og/atikis-social-preview.png?v=1', width: 1200, height: 630, alt: 'Atikis Minnesota Aviation Catering — Social Preview' }
+    ],
   },
 }
 

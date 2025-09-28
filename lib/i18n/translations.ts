@@ -6,6 +6,8 @@ export interface Translations {
   [language: string]: Translation;
 }
 
+import enOverrides from '@/content/translations/en.json';
+
 export const translations: Translations = {
   en: {
     // Navigation
@@ -1025,8 +1027,31 @@ export const translations: Translations = {
         description: "الكمال المقدم على الارتفاع"
       }
     }
+
   }
 };
+
+// Merge Tina-managed English overrides from content/translations/en.json
+function isObject(item: any): item is Record<string, any> {
+  return item && typeof item === 'object' && !Array.isArray(item)
+}
+
+function deepMerge<T extends Record<string, any>>(target: T, source: Record<string, any>): T {
+  const output: Record<string, any> = { ...target }
+  for (const key of Object.keys(source)) {
+    const sVal = (source as any)[key]
+    const tVal = (output as any)[key]
+    if (isObject(sVal) && isObject(tVal)) {
+      (output as any)[key] = deepMerge(tVal, sVal)
+    } else {
+      (output as any)[key] = sVal
+    }
+  }
+  return output as T
+}
+
+translations.en = deepMerge(translations.en as any, (enOverrides as any) || {})
+
 
 export const languages = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },

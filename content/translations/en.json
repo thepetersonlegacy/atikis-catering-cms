@@ -13,9 +13,138 @@
     "subtitle": "Authentic flavors, delivered with five-star service—elevating every moment of your in-flight dining.",
     "viewMenu": "View Menu"
   },
+  "about": {
+    "title": "Culinary Excellence at Altitude",
+    "description1": "Founded in 2008, Atikis Minnesota Aviation Catering has set a new standard for in-flight dining. Our culinary team crafts exquisite meals designed to preserve both flavor and presentation at high altitudes.",
+    "description2": "We source only the finest ingredients, with a focus on local and sustainable selections whenever possible. Our dedication to quality goes beyond the cuisine—premium packaging, thoughtful presentation, and reliable delivery ensure excellence in every detail."
+  },
+  "aviationMessage": {
+    "title": "We Cater Exclusively to the Aviation Community"
+  },
+  "menu": {
+    "title": "Our Aviation Catering Menu",
+    "subtitle": "Browse our carefully curated menu selections, each designed to provide an exceptional dining experience at altitude.",
+    "heroTitle": "Making Your Taste Buds Soar Above 10,000 Feet",
+    "heroSubtitle": "Exquisite dining experiences curated for discerning travelers",
+    "customMenuTitle": "Custom Menus Available",
+    "customMenuDescription": "Our executive chef can create bespoke menus tailored to your specific preferences and dietary requirements.",
+    "requestCustomMenu": "Request Custom Menu",
+    "qualityTitle": "Committed to Quality",
+    "qualityDescription1": "We source only the finest ingredients, focused on local and other sustainable market options.",
+    "qualityDescription2": "All meals are prepared in our state-of-the-art kitchen facility by our team and packaged using specialized techniques to ensure optimal flavor and presentation at altitude.",
+    "boxOptions": {
+      "selectItemsToAdd": "Select items to add",
+      "addItemsPrefix": "Add",
+      "itemSingular": "item",
+      "itemPlural": "items",
+      "toastAddedPrefix": "Added",
+      "toastFrom": "from",
+      "perOptionNotePlaceholder": "Add note (optional)",
+      "validationSelectAtLeastOne": "Please select at least one item from the box options above.",
+      "addToOrder": "Add to Order",
+      "selectedItemsLabel": "Selected Items:",
+      "inlineAdded": "Selections added",
+      "selectionHeader": "Select items and quantities for your box:",
+      "numberOfBoxesLabel": "Number of Boxes:",
+      "quantityLabel": "Quantity:",
+      "chooseUpTo": "Choose up to",
+      "reachedMax": "Reached max of",
+      "clearSelections": "Clear selections"
+    }
+  },
+  "testimonials": {
+    "title": "Client Testimonials",
+    "subtitle": "Hear what our clients have to say about their experiences with Atikis Aviation Catering.",
+    "viewAll": "View All Testimonials",
+    "joinClients": "Join Our Satisfied Clients",
+    "experienceDescription": "Experience the Atikis difference for yourself. Contact us today to discuss your in-flight catering needs."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help with all your aviation catering needs",
+    "getInTouch": "Get In Touch",
+    "description": "We're here to answer any questions you may have about our services. Reach out to us and we'll respond as soon as possible.",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "hours": "Hours",
+    "hoursText": "Email us 24 hours, 7 days a week",
+    "fastResponse": "Fast Response Time",
+    "name": "Name",
+    "phoneLabel": "Phone",
+    "deliveryDate": "Delivery Date",
+    "wheelsUpTime": "Wheels Up Time",
+    "specialRequests": "Special Requests/Dietary Notes",
+    "specialRequestsPlaceholder": "Tell us about any special requirements or dietary restrictions",
+    "submitInquiry": "Submit Inquiry",
+    "submitting": "Submitting...",
+    "thankYou": "Thank You!",
+    "thankYouMessage": "Your inquiry has been received. We'll contact you as soon as possible.",
+    "sendAnother": "Send Another Inquiry",
+    "phoneMain": "(651) 647-4940 (Main)",
+    "phoneDirect": "(612) 900-8667 (Direct)",
+    "emailAddress": "order@atikismn.com",
+    "addressLine1": "2850 Anthony Ln S",
+    "addressLine2": "Minneapolis, MN 55418",
+    "addressCountry": "United States"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Explore our curated selection of images",
+    "prev": "Previous",
+    "next": "Next"
+  },
   "footer": {
+    "airportsServed": "We Proudly Serve the Following Airports:",
+    "emailDescription": "Send us your inquiry for a detailed response",
     "quickLinks": "Quick Links",
-    "contactInfo": "Contact Info",
-    "followUs": "Follow Us"
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "Atikis Minnesota Aviation Catering. All rights reserved."
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "From selection to service, we make exceptional aviation catering effortless"
+  },
+  "meta": {
+    "homeTitle": "Premium Aviation Catering Services in Minnesota | Atikis",
+    "homeDescription": "Atikis Minnesota Aviation Catering provides exceptional in-flight dining for private jets. Serving KMSP, KSTP, KFCM, and KANE airports with gourmet meals crafted for altitude dining.",
+    "menuTitle": "Gourmet Aviation Menu | In-Flight Dining Options",
+    "menuDescription": "Explore our extensive aviation catering menu featuring signature breakfast collections, artisan salads, premium entr\u00E9es, and plant-based selections. Custom menus available for private jets.",
+    "testimonialsTitle": "Client Reviews & Testimonials | Aviation Catering Excellence",
+    "testimonialsDescription": "Read testimonials from satisfied clients about Atikis Minnesota Aviation Catering services. Flight attendants and aviation professionals praise our exceptional in-flight dining.",
+    "contactTitle": "Contact Aviation Catering Services | Get Quote",
+    "contactDescription": "Contact Atikis Minnesota Aviation Catering for premium in-flight dining services. Call (651) 647-4940 or email order@atikismn.com for quotes and consultations.",
+    "ogImage": "/images/og/atikis-social-preview.png"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "tryAgain": "Try Again",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "page": "Page",
+    "of": "of",
+    "results": "results",
+    "noResults": "No results found",
+    "selectLanguage": "Select Language"
+  },
+  "page": {
+    "airportKMSP": "Minneapolis–St. Paul International (KMSP)",
+    "airportKSTP": "St. Paul Downtown (KSTP)",
+    "airportKFCM": "Flying Cloud – Eden Prairie (KFCM)",
+    "airportKANE": "Anoka County–Blaine (KANE)"
   }
 }

@@ -21,7 +21,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Premium Aviation Catering Services in Minnesota | Atikis',
     description: 'Exceptional in-flight dining for private jets. Serving Minnesota airports with gourmet meals crafted for altitude dining.',
-    images: ['/images/backgrounds/bg-wheels-up-04.png'],
+    images: [
+      { url: '/images/og/atikis-social-preview.png?v=1', width: 1200, height: 630, alt: 'Atikis Minnesota Aviation Catering — Social Preview' }
+    ],
   },
 }
 
