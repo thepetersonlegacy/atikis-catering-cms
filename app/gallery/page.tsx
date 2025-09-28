@@ -47,35 +47,50 @@ const CAPTION_MAP: Record<string, string> = {
 
 
 function getGalleryImages(): GalleryImage[] {
+  // Load gallery from Tina content entries (content/gallery/*.json)
   try {
-    const galleryDir = path.join(process.cwd(), 'public', 'images', 'gallery')
-    const files = fs.readdirSync(galleryDir)
-    const allowed = new Set(['.jpg', '.jpeg', '.png', '.webp'])
-    const images = files
-      .filter(f => allowed.has(path.extname(f).toLowerCase()))
-      .sort()
-      .map(file => {
-        const ext = path.extname(file)
-        const key = path.basename(file, ext).toLowerCase()
-        const name = file.replace(/[-_]/g, ' ').replace(/\.[^.]+$/, '')
-        const pretty = name.charAt(0).toUpperCase() + name.slice(1)
-        const caption = CAPTION_MAP[key] ?? pretty
-        return {
-          src: `/images/gallery/${file}`,
-          alt: caption,
-          caption
-        }
-      })
-    return images
+    const contentDir = path.join(process.cwd(), 'content', 'gallery')
+    const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.json')).sort()
+    const images: GalleryImage[] = files.map(file => {
+      const full = path.join(contentDir, file)
+      const raw = fs.readFileSync(full, 'utf-8')
+      const doc = JSON.parse(raw) as Partial<GalleryImage> & { src?: string }
+      const src = doc.src || ''
+      const ext = path.extname(src)
+      const key = path.basename(src || file, ext || '.json').toLowerCase()
+      const fallbackPretty = key.replace(/[-_]/g, ' ').replace(/\s+\(\d+\)$/,'')
+      const fallbackCaption = CAPTION_MAP[key] ?? (fallbackPretty.charAt(0).toUpperCase() + fallbackPretty.slice(1))
+      return {
+        src,
+        alt: doc.alt || fallbackCaption,
+        caption: doc.caption || fallbackCaption,
+        album: doc.album,
+      }
+    })
+    // De-duplicate by src and filter out invalid entries
+    const bySrc = new Map<string, GalleryImage>()
+    for (const img of images) {
+      if (typeof img.src === 'string' && img.src.length > 0 && !bySrc.has(img.src)) {
+        bySrc.set(img.src, img)
+      }
+    }
+    // Only include images that actually exist under /public
+    const existing = Array.from(bySrc.values()).filter(img => {
+      try {
+        const p = path.join(process.cwd(), 'public', (img.src || '').replace(/^\//, ''))
+        return fs.existsSync(p)
+      } catch {
+        return false
+      }
+    })
+    return existing
   } catch {
     return []
   }
 }
 
 export default function GalleryPage() {
-  const allImages = getGalleryImages()
-  // Remove items numbered 20–30 (1-based) => indices 19..29
-  const images = allImages.filter((_, i) => i < 19 || i > 29)
+  const images = getGalleryImages()
 
   return (
     <section className="bg-black">
