@@ -338,26 +338,6 @@ type TranslationsAviationMessage {
   title: String
 }
 
-type TranslationsMenuBoxOptions {
-  selectItemsToAdd: String
-  addItemsPrefix: String
-  itemSingular: String
-  itemPlural: String
-  toastAddedPrefix: String
-  toastFrom: String
-  perOptionNotePlaceholder: String
-  validationSelectAtLeastOne: String
-  addToOrder: String
-  selectedItemsLabel: String
-  inlineAdded: String
-  selectionHeader: String
-  numberOfBoxesLabel: String
-  quantityLabel: String
-  chooseUpTo: String
-  reachedMax: String
-  clearSelections: String
-}
-
 type TranslationsMenu {
   title: String
   subtitle: String
@@ -369,110 +349,6 @@ type TranslationsMenu {
   qualityTitle: String
   qualityDescription1: String
   qualityDescription2: String
-  boxOptions: TranslationsMenuBoxOptions
-}
-
-type TranslationsTestimonials {
-  title: String
-  subtitle: String
-  viewAll: String
-  joinClients: String
-  experienceDescription: String
-}
-
-type TranslationsGallery {
-  title: String
-  subtitle: String
-  prev: String
-  next: String
-}
-
-type TranslationsCommon {
-  loading: String
-  error: String
-  tryAgain: String
-  close: String
-  save: String
-  cancel: String
-  confirm: String
-  delete: String
-  edit: String
-  add: String
-  remove: String
-  search: String
-  filter: String
-  sort: String
-  next: String
-  previous: String
-  page: String
-  of: String
-  results: String
-  noResults: String
-  selectLanguage: String
-}
-
-type TranslationsMeta {
-  homeTitle: String
-  homeDescription: String
-  menuTitle: String
-  menuDescription: String
-  testimonialsTitle: String
-  testimonialsDescription: String
-  contactTitle: String
-  contactDescription: String
-  ogImage: String
-}
-
-type TranslationsContact {
-  title: String
-  subtitle: String
-  getInTouch: String
-  description: String
-  phone: String
-  email: String
-  address: String
-  hours: String
-  hoursText: String
-  fastResponse: String
-  name: String
-  phoneLabel: String
-  deliveryDate: String
-  wheelsUpTime: String
-  specialRequests: String
-  specialRequestsPlaceholder: String
-  submitInquiry: String
-  submitting: String
-  thankYou: String
-  thankYouMessage: String
-  sendAnother: String
-  phoneMain: String
-  phoneDirect: String
-  emailAddress: String
-  addressLine1: String
-  addressLine2: String
-  addressCountry: String
-}
-
-type TranslationsFooter {
-  airportsServed: String
-  emailDescription: String
-  quickLinks: String
-  legal: String
-  privacyPolicy: String
-  termsOfService: String
-  copyright: String
-}
-
-type TranslationsHowItWorks {
-  title: String
-  subtitle: String
-}
-
-type TranslationsPage {
-  airportKMSP: String
-  airportKSTP: String
-  airportKFCM: String
-  airportKANE: String
 }
 
 type Translations implements Node & Document {
@@ -482,14 +358,6 @@ type Translations implements Node & Document {
   about: TranslationsAbout
   aviationMessage: TranslationsAviationMessage
   menu: TranslationsMenu
-  testimonials: TranslationsTestimonials
-  gallery: TranslationsGallery
-  common: TranslationsCommon
-  meta: TranslationsMeta
-  contact: TranslationsContact
-  footer: TranslationsFooter
-  howItWorks: TranslationsHowItWorks
-  page: TranslationsPage
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -520,26 +388,6 @@ input TranslationsAviationMessageFilter {
   title: StringFilter
 }
 
-input TranslationsMenuBoxOptionsFilter {
-  selectItemsToAdd: StringFilter
-  addItemsPrefix: StringFilter
-  itemSingular: StringFilter
-  itemPlural: StringFilter
-  toastAddedPrefix: StringFilter
-  toastFrom: StringFilter
-  perOptionNotePlaceholder: StringFilter
-  validationSelectAtLeastOne: StringFilter
-  addToOrder: StringFilter
-  selectedItemsLabel: StringFilter
-  inlineAdded: StringFilter
-  selectionHeader: StringFilter
-  numberOfBoxesLabel: StringFilter
-  quantityLabel: StringFilter
-  chooseUpTo: StringFilter
-  reachedMax: StringFilter
-  clearSelections: StringFilter
-}
-
 input TranslationsMenuFilter {
   title: StringFilter
   subtitle: StringFilter
@@ -551,110 +399,6 @@ input TranslationsMenuFilter {
   qualityTitle: StringFilter
   qualityDescription1: StringFilter
   qualityDescription2: StringFilter
-  boxOptions: TranslationsMenuBoxOptionsFilter
-}
-
-input TranslationsTestimonialsFilter {
-  title: StringFilter
-  subtitle: StringFilter
-  viewAll: StringFilter
-  joinClients: StringFilter
-  experienceDescription: StringFilter
-}
-
-input TranslationsGalleryFilter {
-  title: StringFilter
-  subtitle: StringFilter
-  prev: StringFilter
-  next: StringFilter
-}
-
-input TranslationsCommonFilter {
-  loading: StringFilter
-  error: StringFilter
-  tryAgain: StringFilter
-  close: StringFilter
-  save: StringFilter
-  cancel: StringFilter
-  confirm: StringFilter
-  delete: StringFilter
-  edit: StringFilter
-  add: StringFilter
-  remove: StringFilter
-  search: StringFilter
-  filter: StringFilter
-  sort: StringFilter
-  next: StringFilter
-  previous: StringFilter
-  page: StringFilter
-  of: StringFilter
-  results: StringFilter
-  noResults: StringFilter
-  selectLanguage: StringFilter
-}
-
-input TranslationsMetaFilter {
-  homeTitle: StringFilter
-  homeDescription: StringFilter
-  menuTitle: StringFilter
-  menuDescription: StringFilter
-  testimonialsTitle: StringFilter
-  testimonialsDescription: StringFilter
-  contactTitle: StringFilter
-  contactDescription: StringFilter
-  ogImage: StringFilter
-}
-
-input TranslationsContactFilter {
-  title: StringFilter
-  subtitle: StringFilter
-  getInTouch: StringFilter
-  description: StringFilter
-  phone: StringFilter
-  email: StringFilter
-  address: StringFilter
-  hours: StringFilter
-  hoursText: StringFilter
-  fastResponse: StringFilter
-  name: StringFilter
-  phoneLabel: StringFilter
-  deliveryDate: StringFilter
-  wheelsUpTime: StringFilter
-  specialRequests: StringFilter
-  specialRequestsPlaceholder: StringFilter
-  submitInquiry: StringFilter
-  submitting: StringFilter
-  thankYou: StringFilter
-  thankYouMessage: StringFilter
-  sendAnother: StringFilter
-  phoneMain: StringFilter
-  phoneDirect: StringFilter
-  emailAddress: StringFilter
-  addressLine1: StringFilter
-  addressLine2: StringFilter
-  addressCountry: StringFilter
-}
-
-input TranslationsFooterFilter {
-  airportsServed: StringFilter
-  emailDescription: StringFilter
-  quickLinks: StringFilter
-  legal: StringFilter
-  privacyPolicy: StringFilter
-  termsOfService: StringFilter
-  copyright: StringFilter
-}
-
-input TranslationsHowItWorksFilter {
-  title: StringFilter
-  subtitle: StringFilter
-}
-
-input TranslationsPageFilter {
-  airportKMSP: StringFilter
-  airportKSTP: StringFilter
-  airportKFCM: StringFilter
-  airportKANE: StringFilter
 }
 
 input TranslationsFilter {
@@ -664,14 +408,6 @@ input TranslationsFilter {
   about: TranslationsAboutFilter
   aviationMessage: TranslationsAviationMessageFilter
   menu: TranslationsMenuFilter
-  testimonials: TranslationsTestimonialsFilter
-  gallery: TranslationsGalleryFilter
-  common: TranslationsCommonFilter
-  meta: TranslationsMetaFilter
-  contact: TranslationsContactFilter
-  footer: TranslationsFooterFilter
-  howItWorks: TranslationsHowItWorksFilter
-  page: TranslationsPageFilter
 }
 
 type TranslationsConnectionEdges {
@@ -802,26 +538,6 @@ input TranslationsAviationMessageMutation {
   title: String
 }
 
-input TranslationsMenuBoxOptionsMutation {
-  selectItemsToAdd: String
-  addItemsPrefix: String
-  itemSingular: String
-  itemPlural: String
-  toastAddedPrefix: String
-  toastFrom: String
-  perOptionNotePlaceholder: String
-  validationSelectAtLeastOne: String
-  addToOrder: String
-  selectedItemsLabel: String
-  inlineAdded: String
-  selectionHeader: String
-  numberOfBoxesLabel: String
-  quantityLabel: String
-  chooseUpTo: String
-  reachedMax: String
-  clearSelections: String
-}
-
 input TranslationsMenuMutation {
   title: String
   subtitle: String
@@ -833,110 +549,6 @@ input TranslationsMenuMutation {
   qualityTitle: String
   qualityDescription1: String
   qualityDescription2: String
-  boxOptions: TranslationsMenuBoxOptionsMutation
-}
-
-input TranslationsTestimonialsMutation {
-  title: String
-  subtitle: String
-  viewAll: String
-  joinClients: String
-  experienceDescription: String
-}
-
-input TranslationsGalleryMutation {
-  title: String
-  subtitle: String
-  prev: String
-  next: String
-}
-
-input TranslationsCommonMutation {
-  loading: String
-  error: String
-  tryAgain: String
-  close: String
-  save: String
-  cancel: String
-  confirm: String
-  delete: String
-  edit: String
-  add: String
-  remove: String
-  search: String
-  filter: String
-  sort: String
-  next: String
-  previous: String
-  page: String
-  of: String
-  results: String
-  noResults: String
-  selectLanguage: String
-}
-
-input TranslationsMetaMutation {
-  homeTitle: String
-  homeDescription: String
-  menuTitle: String
-  menuDescription: String
-  testimonialsTitle: String
-  testimonialsDescription: String
-  contactTitle: String
-  contactDescription: String
-  ogImage: String
-}
-
-input TranslationsContactMutation {
-  title: String
-  subtitle: String
-  getInTouch: String
-  description: String
-  phone: String
-  email: String
-  address: String
-  hours: String
-  hoursText: String
-  fastResponse: String
-  name: String
-  phoneLabel: String
-  deliveryDate: String
-  wheelsUpTime: String
-  specialRequests: String
-  specialRequestsPlaceholder: String
-  submitInquiry: String
-  submitting: String
-  thankYou: String
-  thankYouMessage: String
-  sendAnother: String
-  phoneMain: String
-  phoneDirect: String
-  emailAddress: String
-  addressLine1: String
-  addressLine2: String
-  addressCountry: String
-}
-
-input TranslationsFooterMutation {
-  airportsServed: String
-  emailDescription: String
-  quickLinks: String
-  legal: String
-  privacyPolicy: String
-  termsOfService: String
-  copyright: String
-}
-
-input TranslationsHowItWorksMutation {
-  title: String
-  subtitle: String
-}
-
-input TranslationsPageMutation {
-  airportKMSP: String
-  airportKSTP: String
-  airportKFCM: String
-  airportKANE: String
 }
 
 input TranslationsMutation {
@@ -946,14 +558,6 @@ input TranslationsMutation {
   about: TranslationsAboutMutation
   aviationMessage: TranslationsAviationMessageMutation
   menu: TranslationsMenuMutation
-  testimonials: TranslationsTestimonialsMutation
-  gallery: TranslationsGalleryMutation
-  common: TranslationsCommonMutation
-  meta: TranslationsMetaMutation
-  contact: TranslationsContactMutation
-  footer: TranslationsFooterMutation
-  howItWorks: TranslationsHowItWorksMutation
-  page: TranslationsPageMutation
 }
 
 schema {

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus, Minus, ShoppingCart, ChevronDown } from 'lucide-react'
-import { MenuItem } from '@/lib/data/menu-data'
+import { TinaMenuItem as MenuItem } from '@/lib/content/menu'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/lib/hooks/use-toast'
 import { useI18n } from '@/lib/i18n/i18n-context'
@@ -30,8 +30,8 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
 
   // Check if this is a box options item
   const isBoxOptionsItem = item.sections && item.sections.some(section =>
-    section.title.toLowerCase().includes('box options') ||
-    section.title.toLowerCase().includes('available')
+    section.title?.toLowerCase().includes('box options') ||
+    section.title?.toLowerCase().includes('available')
   )
 
   const handleQuantityChange = (newQuantity: number) => {
@@ -91,8 +91,8 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
       {item.sections && (
         <div className="space-y-6 mt-6 mb-8">
           {item.sections.map((section, index) => {
-            const isBoxSection = section.title.toLowerCase().includes('box options') ||
-                                section.title.toLowerCase().includes('available')
+            const isBoxSection = section.title?.toLowerCase().includes('box options') ||
+                                section.title?.toLowerCase().includes('available')
 
             if (isBoxSection) {
               return (
@@ -108,7 +108,7 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                     {/* Interactive Box Selection */}
                     <div className="grid gap-4">
                       {(() => {
-                        const sortedItems = [...section.items].sort((a, b) => {
+                        const sortedItems = [...(section.items || [])].sort((a, b) => {
                           const aSel = boxSelections.find(sel => sel.itemName === a)
                           const bSel = boxSelections.find(sel => sel.itemName === b)
                           const aQty = aSel?.quantity || 0
@@ -236,7 +236,7 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                     {section.title}
                   </h4>
                   <ul className="space-y-3">
-                    {section.items.map((listItem, itemIndex) => (
+                    {(section.items || []).map((listItem, itemIndex) => (
                       <li key={itemIndex} className="text-gray-700 flex items-start text-sm">
                         <span className="text-[#D4AF37] mr-3 mt-1.5 flex-shrink-0 text-base">•</span>
                         <span className="leading-[1.618]">{listItem}</span>

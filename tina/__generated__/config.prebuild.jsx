@@ -22,9 +22,13 @@ var config_default = defineConfig({
   // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
     collections: [
+      // ========================================
+      // 🏢 WEBSITE CONTENT
+      // Core website settings and content
+      // ========================================
       {
         name: "siteSettings",
-        label: "Site Settings",
+        label: "\u{1F3E2} Website Settings",
         path: "content/settings",
         format: "json",
         ui: {
@@ -37,22 +41,26 @@ var config_default = defineConfig({
           {
             type: "object",
             name: "contact",
-            label: "Contact Information",
+            label: "\u{1F4DE} Contact Information",
+            description: "Your business contact details displayed throughout the website",
             fields: [
               {
                 type: "string",
                 name: "email",
-                label: "Email"
+                label: "Business Email Address",
+                description: "Primary email for customer inquiries and orders"
               },
               {
                 type: "string",
                 name: "phone",
-                label: "Phone"
+                label: "Business Phone Number",
+                description: "Main phone number for customer contact"
               },
               {
                 type: "string",
                 name: "address",
-                label: "Address",
+                label: "Business Address",
+                description: "Full business address for location and delivery information",
                 ui: {
                   component: "textarea"
                 }
@@ -62,17 +70,20 @@ var config_default = defineConfig({
           {
             type: "object",
             name: "hero",
-            label: "Hero Section",
+            label: "\u{1F3AF} Homepage Hero Section",
+            description: "The main banner area that visitors see first on your homepage",
             fields: [
               {
                 type: "string",
                 name: "title",
-                label: "Title"
+                label: "Main Headline",
+                description: "The primary headline that captures attention (keep it compelling and concise)"
               },
               {
                 type: "string",
                 name: "subtitle",
-                label: "Subtitle",
+                label: "Supporting Message",
+                description: "Additional text that explains your value proposition (2-3 lines recommended)",
                 ui: {
                   component: "textarea"
                 }
@@ -80,191 +91,282 @@ var config_default = defineConfig({
               {
                 type: "image",
                 name: "backgroundImage",
-                label: "Background Image"
+                label: "Hero Background Image",
+                description: "High-quality image that represents your brand (recommended: 1920x1080px, under 500KB)"
               }
             ]
           }
         ]
       },
+      // ========================================
+      // 🍽️ MENU MANAGEMENT
+      // Organize your catering menu and offerings
+      // ========================================
       {
         name: "menuCategories",
-        label: "Menu Categories",
+        label: "\u{1F3F7}\uFE0F Menu Categories",
         path: "content/menu-categories",
         format: "json",
         ui: {
-          allowedActions: { create: true, delete: true }
+          allowedActions: { create: true, delete: true },
+          filename: {
+            slugify: (values) => {
+              return `${values?.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
+            }
+          }
         },
-        fields: [
-          { type: "string", name: "name", label: "Category Name", required: true },
-          { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
-          { type: "number", name: "order", label: "Sort Order" }
-        ]
-      },
-      {
-        name: "menuItems",
-        label: "Menu Items",
-        path: "content/menu",
-        format: "json",
         fields: [
           {
             type: "string",
             name: "name",
-            label: "Item Name",
-            required: true
-          },
-          {
-            type: "string",
-            name: "description",
-            label: "Description",
-            ui: {
-              component: "textarea"
-            }
-          },
-          {
-            type: "reference",
-            name: "category",
-            label: "Category",
-            collections: ["menuCategories"],
+            label: "\u{1F4DD} Category Display Name",
             required: true,
+            description: "The name customers will see (e.g., 'Signature Breakfast Collection', 'Elegant Desserts')",
             ui: {
-              // Limit to exactly the 8 canonical categories and show human-friendly names
-              collectionFilter: {
-                menuCategories: {
-                  name: [
-                    "Signature Breakfast Collection",
-                    "Artisan Salad and Grain Bowls",
-                    "In-Flight Lunch Selections",
-                    "Midwest Heritage Classics",
-                    "Gourmet Creations",
-                    "Plant-Based Culinary Selections",
-                    "Elegant Desserts and Confections",
-                    "Executive Express Selections"
-                  ]
+              validate: (value) => {
+                if (!value || value.length < 3) {
+                  return "Category name must be at least 3 characters long";
                 }
-              },
-              optionComponent: (props, _internalSys) => {
-                try {
-                  const path = _internalSys?.path || "";
-                  const slug = path.split("/").pop() || "";
-                  const orderMap = {
-                    "signature-breakfast-collection.json": 1,
-                    "artisan-salad-and-grain-bowls.json": 2,
-                    "in-flight-lunch-selections.json": 3,
-                    "midwest-heritage-classics.json": 4,
-                    "gourmet-creations.json": 5,
-                    "plant-based-culinary-selections.json": 6,
-                    "elegant-desserts-and-confections.json": 7,
-                    "executive-express-selections.json": 8
-                  };
-                  const prefix = orderMap[slug] ? `${orderMap[slug]} \u2014 ` : "";
-                  return `${prefix}${props?.name || path}`;
-                } catch {
-                  return props?.name || _internalSys.path;
+                if (value.length > 50) {
+                  return "Category name should be 50 characters or less for better display";
                 }
               }
             }
           },
           {
+            type: "string",
+            name: "description",
+            label: "\u{1F4C4} Category Description",
+            ui: {
+              component: "textarea"
+            },
+            description: "Optional description to help customers understand this category's offerings"
+          },
+          {
+            type: "number",
+            name: "order",
+            label: "\u{1F4CA} Display Order",
+            description: "Controls the order categories appear on your menu (1 = first, 2 = second, etc.)",
+            ui: {
+              validate: (value) => {
+                if (value && (value < 1 || value > 100)) {
+                  return "Display order should be between 1 and 100";
+                }
+                if (value && !Number.isInteger(value)) {
+                  return "Display order must be a whole number";
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        name: "menuItems",
+        label: "\u{1F37D}\uFE0F Menu Items",
+        path: "content/menu",
+        format: "json",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              return `${values?.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
+            }
+          }
+        },
+        fields: [
+          // === BASIC INFORMATION ===
+          {
+            type: "string",
+            name: "name",
+            label: "\u{1F3F7}\uFE0F Item Name",
+            required: true,
+            description: "The name customers will see on your menu",
+            ui: {
+              validate: (value) => {
+                if (!value || value.length < 3) {
+                  return "Item name must be at least 3 characters long";
+                }
+                if (value.length > 80) {
+                  return "Item name should be 80 characters or less for better display";
+                }
+              }
+            }
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "\u{1F4DD} Item Description",
+            ui: {
+              component: "textarea",
+              validate: (value) => {
+                if (value && value.length > 500) {
+                  return "Description should be 500 characters or less for better readability";
+                }
+                if (value && value.length < 10) {
+                  return "Description should be at least 10 characters to be helpful to customers";
+                }
+              }
+            },
+            description: "Detailed description that helps customers understand what they're ordering (10-500 characters recommended)"
+          },
+          // === CATEGORIZATION ===
+          {
+            type: "reference",
+            name: "category",
+            label: "\u{1F3F7}\uFE0F Menu Category",
+            collections: ["menuCategories"],
+            required: true,
+            description: "Which category should this item appear under?",
+            ui: {}
+          },
+          // === VISUAL & PROMOTION ===
+          {
             type: "image",
             name: "image",
-            label: "Image"
+            label: "\u{1F4F8} Item Photo",
+            description: "High-quality photo of this menu item (recommended: 800x600px, under 200KB)"
           },
           {
             type: "boolean",
             name: "featured",
-            label: "Featured Item"
+            label: "\u2B50 Featured Item",
+            description: "Mark as featured to highlight this item prominently on your menu"
           },
+          // === ADVANCED OPTIONS ===
           {
             type: "object",
             name: "sections",
-            label: "Sections",
+            label: "\u{1F4CB} Item Sections & Options",
             list: true,
-            ui: {
-              itemProps: (item) => ({ label: item?.title || "Section" })
-            },
+            description: "Add sections like 'Includes', 'Box Options', or 'Available Sides' (optional - expand for advanced features)",
+            ui: {},
             fields: [
-              { type: "string", name: "title", label: "Section Title" },
-              { type: "string", name: "items", label: "Items", list: true }
+              {
+                type: "string",
+                name: "title",
+                label: "Section Title",
+                description: "e.g., 'Includes', 'Box Options', 'Available Sides'"
+              },
+              {
+                type: "string",
+                name: "items",
+                label: "Section Items",
+                list: true,
+                description: "List the items included in this section"
+              }
             ]
           },
           {
             type: "number",
             name: "boxMaxItemsPerBox",
-            label: "Max Items per Box (for Box Options)"
+            label: "\u{1F4E6} Maximum Items Per Box",
+            description: "For box-style items, set the maximum number of items customers can select (leave empty if not applicable)"
           }
         ]
       },
+      // ========================================
+      // 💬 CUSTOMER TESTIMONIALS
+      // ========================================
       {
         name: "testimonials",
-        label: "Testimonials",
+        label: "\u{1F4AC} Customer Testimonials",
         path: "content/testimonials",
         format: "json",
+        ui: {},
         fields: [
           {
             type: "string",
             name: "name",
-            label: "Customer Name",
-            required: true
+            label: "\u{1F464} Customer Name",
+            required: true,
+            description: "Full name of the customer (will be displayed publicly)"
           },
           {
             type: "string",
             name: "company",
-            label: "Company/Title"
+            label: "\u{1F3E2} Company or Title",
+            description: "Company name, job title, or organization (optional but adds credibility)"
           },
           {
             type: "string",
             name: "content",
-            label: "Testimonial",
+            label: "\u{1F4AD} Testimonial Text",
             required: true,
             ui: {
               component: "textarea"
-            }
+            },
+            description: "The customer's feedback in their own words"
           },
           {
             type: "number",
             name: "rating",
-            label: "Rating (1-5)"
+            label: "\u2B50 Star Rating",
+            ui: {
+              validate: (value) => {
+                if (value && (value < 1 || value > 5)) {
+                  return "Rating must be between 1 and 5 stars";
+                }
+              }
+            },
+            description: "How many stars did they give? (1-5 stars)"
           },
           {
             type: "image",
             name: "avatar",
-            label: "Avatar Image"
+            label: "\u{1F4F7} Customer Photo",
+            description: "Optional photo of the customer (adds authenticity, but respect privacy)"
           }
         ]
       },
+      // ========================================
+      // 📸 MEDIA ASSETS
+      // ========================================
       {
         name: "galleryImages",
-        label: "Gallery Images",
+        label: "\u{1F4F8} Photo Gallery",
         path: "content/gallery",
         format: "json",
+        ui: {},
         fields: [
           {
             type: "image",
             name: "src",
-            label: "Image",
-            required: true
+            label: "\u{1F4F7} Upload Photo",
+            required: true,
+            description: "Upload your image (JPG, PNG, or WebP recommended \u2022 Max 2MB for best performance)"
           },
           {
             type: "string",
             name: "alt",
-            label: "Alt Text",
-            required: true
+            label: "\u{1F50D} Image Description (Alt Text)",
+            required: true,
+            description: "Describe what's in the image for accessibility and search engines"
           },
           {
             type: "string",
             name: "caption",
-            label: "Caption"
+            label: "\u{1F4AC} Photo Caption",
+            description: "Optional caption that visitors will see (keep it engaging!)"
           },
           {
             type: "string",
             name: "album",
-            label: "Album/Category"
+            label: "\u{1F4C1} Photo Album",
+            description: "Organize your photos into albums for easy browsing",
+            options: [
+              { value: "general", label: "\u{1F31F} General Gallery" },
+              { value: "food", label: "\u{1F37D}\uFE0F Food & Catering" },
+              { value: "events", label: "\u{1F389} Events & Celebrations" },
+              { value: "behind-scenes", label: "\u{1F468}\u200D\u{1F373} Behind the Scenes" }
+            ]
           }
         ]
       },
+      // ========================================
+      // 🌐 WEBSITE TEXT & TRANSLATIONS
+      // ========================================
       {
         name: "translations",
-        label: "Translations",
+        label: "\u{1F310} Website Text & Translations",
         path: "content/translations",
         format: "json",
         ui: {
@@ -274,238 +376,73 @@ var config_default = defineConfig({
           }
         },
         fields: [
-          { type: "string", name: "language", label: "Language Code", required: true },
-          // Navigation
+          {
+            type: "string",
+            name: "language",
+            label: "\u{1F30D} Language Code",
+            required: true,
+            description: "Language code for this translation (e.g., 'en' for English, 'es' for Spanish)"
+          },
           {
             type: "object",
             name: "nav",
-            label: "Navigation",
+            label: "\u{1F9ED} Navigation Menu",
+            description: "Text for your website's main navigation links",
             fields: [
-              { type: "string", name: "home", label: "Home" },
-              { type: "string", name: "menu", label: "Menu" },
-              { type: "string", name: "gallery", label: "Gallery" },
-              { type: "string", name: "testimonials", label: "Testimonials" },
-              { type: "string", name: "contact", label: "Contact" },
-              { type: "string", name: "orderNow", label: "Order Now" }
+              { type: "string", name: "home", label: "Home Link" },
+              { type: "string", name: "menu", label: "Menu Link" },
+              { type: "string", name: "gallery", label: "Gallery Link" },
+              { type: "string", name: "testimonials", label: "Testimonials Link" },
+              { type: "string", name: "contact", label: "Contact Link" },
+              { type: "string", name: "orderNow", label: "Order Now Button" }
             ]
           },
-          // Hero Section
           {
             type: "object",
             name: "hero",
-            label: "Hero Section",
+            label: "\u{1F3AF} Homepage Hero Section",
+            description: "The main banner text that visitors see first",
             fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle" },
-              { type: "string", name: "viewMenu", label: "View Menu Button" }
+              { type: "string", name: "title", label: "Main Headline" },
+              { type: "string", name: "subtitle", label: "Supporting Text" },
+              { type: "string", name: "viewMenu", label: "Call-to-Action Button" }
             ]
           },
-          // About Section
           {
             type: "object",
             name: "about",
-            label: "About Section",
+            label: "\u2139\uFE0F About Section",
+            description: "Tell your story and explain what makes your catering special",
             fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "description1", label: "Description 1", ui: { component: "textarea" } },
-              { type: "string", name: "description2", label: "Description 2", ui: { component: "textarea" } }
+              { type: "string", name: "title", label: "Section Heading" },
+              { type: "string", name: "description1", label: "First Paragraph", ui: { component: "textarea" } },
+              { type: "string", name: "description2", label: "Second Paragraph", ui: { component: "textarea" } }
             ]
           },
-          // Aviation Message
           {
             type: "object",
             name: "aviationMessage",
-            label: "Aviation Message",
+            label: "\u2708\uFE0F Aviation Message",
             fields: [
               { type: "string", name: "title", label: "Title" }
             ]
           },
-          // Menu copy
           {
             type: "object",
             name: "menu",
-            label: "Menu Copy",
+            label: "\u{1F37D}\uFE0F Menu Page Content",
+            description: "All text content for your menu page",
             fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle" },
-              { type: "string", name: "heroTitle", label: "Hero Title" },
-              { type: "string", name: "heroSubtitle", label: "Hero Subtitle" },
-              { type: "string", name: "customMenuTitle", label: "Custom Menus Title" },
-              { type: "string", name: "customMenuDescription", label: "Custom Menus Description", ui: { component: "textarea" } },
-              { type: "string", name: "requestCustomMenu", label: "Request Custom Menu Button" },
-              { type: "string", name: "qualityTitle", label: "Quality Title" },
-              { type: "string", name: "qualityDescription1", label: "Quality Description 1", ui: { component: "textarea" } },
-              { type: "string", name: "qualityDescription2", label: "Quality Description 2", ui: { component: "textarea" } },
-              {
-                type: "object",
-                name: "boxOptions",
-                label: "Box Selection UI",
-                fields: [
-                  { type: "string", name: "selectItemsToAdd", label: "Select Items To Add" },
-                  { type: "string", name: "addItemsPrefix", label: "Add Items Prefix" },
-                  { type: "string", name: "itemSingular", label: "Item (singular)" },
-                  { type: "string", name: "itemPlural", label: "Item (plural)" },
-                  { type: "string", name: "toastAddedPrefix", label: "Toast Added Prefix" },
-                  { type: "string", name: "toastFrom", label: "Toast From" },
-                  { type: "string", name: "perOptionNotePlaceholder", label: "Per-option Note Placeholder" },
-                  { type: "string", name: "validationSelectAtLeastOne", label: "Validation Message" },
-                  { type: "string", name: "addToOrder", label: "Add To Order Button" },
-                  { type: "string", name: "selectedItemsLabel", label: "Selected Items Label" },
-                  { type: "string", name: "inlineAdded", label: "Inline Added Text" },
-                  { type: "string", name: "selectionHeader", label: "Selection Header" },
-                  { type: "string", name: "numberOfBoxesLabel", label: "Number of Boxes Label" },
-                  { type: "string", name: "quantityLabel", label: "Quantity Label" },
-                  { type: "string", name: "chooseUpTo", label: "Choose Up To" },
-                  { type: "string", name: "reachedMax", label: "Reached Max" },
-                  { type: "string", name: "clearSelections", label: "Clear Selections" }
-                ]
-              }
-            ]
-          },
-          // Testimonials Page
-          {
-            type: "object",
-            name: "testimonials",
-            label: "Testimonials Page",
-            fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle", ui: { component: "textarea" } },
-              { type: "string", name: "viewAll", label: "View All Button" },
-              { type: "string", name: "joinClients", label: "Join Clients Heading" },
-              { type: "string", name: "experienceDescription", label: "Experience Description", ui: { component: "textarea" } }
-            ]
-          },
-          // Gallery Page
-          {
-            type: "object",
-            name: "gallery",
-            label: "Gallery Page",
-            fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle", ui: { component: "textarea" } },
-              { type: "string", name: "prev", label: "Previous Label" },
-              { type: "string", name: "next", label: "Next Label" }
-            ]
-          },
-          // Common UI
-          {
-            type: "object",
-            name: "common",
-            label: "Common UI",
-            fields: [
-              { type: "string", name: "loading", label: "Loading" },
-              { type: "string", name: "error", label: "Error" },
-              { type: "string", name: "tryAgain", label: "Try Again" },
-              { type: "string", name: "close", label: "Close" },
-              { type: "string", name: "save", label: "Save" },
-              { type: "string", name: "cancel", label: "Cancel" },
-              { type: "string", name: "confirm", label: "Confirm" },
-              { type: "string", name: "delete", label: "Delete" },
-              { type: "string", name: "edit", label: "Edit" },
-              { type: "string", name: "add", label: "Add" },
-              { type: "string", name: "remove", label: "Remove" },
-              { type: "string", name: "search", label: "Search" },
-              { type: "string", name: "filter", label: "Filter" },
-              { type: "string", name: "sort", label: "Sort" },
-              { type: "string", name: "next", label: "Next" },
-              { type: "string", name: "previous", label: "Previous" },
-              { type: "string", name: "page", label: "Page" },
-              { type: "string", name: "of", label: "of" },
-              { type: "string", name: "results", label: "results" },
-              { type: "string", name: "noResults", label: "No Results" },
-              { type: "string", name: "selectLanguage", label: "Select Language" }
-            ]
-          },
-          // SEO & Meta
-          {
-            type: "object",
-            name: "meta",
-            label: "SEO & Meta",
-            fields: [
-              { type: "string", name: "homeTitle", label: "Home Title" },
-              { type: "string", name: "homeDescription", label: "Home Description", ui: { component: "textarea" } },
-              { type: "string", name: "menuTitle", label: "Menu Title" },
-              { type: "string", name: "menuDescription", label: "Menu Description", ui: { component: "textarea" } },
-              { type: "string", name: "testimonialsTitle", label: "Testimonials Title" },
-              { type: "string", name: "testimonialsDescription", label: "Testimonials Description", ui: { component: "textarea" } },
-              { type: "string", name: "contactTitle", label: "Contact Title" },
-              { type: "string", name: "contactDescription", label: "Contact Description", ui: { component: "textarea" } },
-              { type: "string", name: "ogImage", label: "Default OG Image Path" }
-            ]
-          },
-          // Contact copy
-          {
-            type: "object",
-            name: "contact",
-            label: "Contact Copy",
-            fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle" },
-              { type: "string", name: "getInTouch", label: "Get In Touch Title" },
-              { type: "string", name: "description", label: "Description", ui: { component: "textarea" } },
-              { type: "string", name: "phone", label: "Phone Label" },
-              { type: "string", name: "email", label: "Email Label" },
-              { type: "string", name: "address", label: "Address Label" },
-              { type: "string", name: "hours", label: "Hours Label" },
-              { type: "string", name: "hoursText", label: "Hours Text" },
-              { type: "string", name: "fastResponse", label: "Fast Response Label" },
-              // Form fields
-              { type: "string", name: "name", label: "Form: Name" },
-              { type: "string", name: "phoneLabel", label: "Form: Phone" },
-              { type: "string", name: "deliveryDate", label: "Form: Delivery Date" },
-              { type: "string", name: "wheelsUpTime", label: "Form: Wheels Up Time" },
-              { type: "string", name: "specialRequests", label: "Form: Special Requests" },
-              { type: "string", name: "specialRequestsPlaceholder", label: "Form: Special Requests Placeholder", ui: { component: "textarea" } },
-              // Submit
-              { type: "string", name: "submitInquiry", label: "Submit Inquiry Button" },
-              { type: "string", name: "submitting", label: "Submitting State" },
-              { type: "string", name: "thankYou", label: "Thank You Title" },
-              { type: "string", name: "thankYouMessage", label: "Thank You Message", ui: { component: "textarea" } },
-              { type: "string", name: "sendAnother", label: "Send Another Button" },
-              // Contact info text
-              { type: "string", name: "phoneMain", label: "Phone (Main)" },
-              { type: "string", name: "phoneDirect", label: "Phone (Direct)" },
-              { type: "string", name: "emailAddress", label: "Email Address" },
-              { type: "string", name: "addressLine1", label: "Address Line 1" },
-              { type: "string", name: "addressLine2", label: "Address Line 2" },
-              { type: "string", name: "addressCountry", label: "Address Country" }
-            ]
-          },
-          // Footer
-          {
-            type: "object",
-            name: "footer",
-            label: "Footer",
-            fields: [
-              { type: "string", name: "airportsServed", label: "Airports Served Title" },
-              { type: "string", name: "emailDescription", label: "Email Description", ui: { component: "textarea" } },
-              { type: "string", name: "quickLinks", label: "Quick Links" },
-              { type: "string", name: "legal", label: "Legal" },
-              { type: "string", name: "privacyPolicy", label: "Privacy Policy" },
-              { type: "string", name: "termsOfService", label: "Terms of Service" },
-              { type: "string", name: "copyright", label: "Copyright" }
-            ]
-          },
-          // How It Works copy
-          {
-            type: "object",
-            name: "howItWorks",
-            label: "How It Works",
-            fields: [
-              { type: "string", name: "title", label: "Title" },
-              { type: "string", name: "subtitle", label: "Subtitle" }
-            ]
-          },
-          // Page strings
-          {
-            type: "object",
-            name: "page",
-            label: "Page Strings",
-            fields: [
-              { type: "string", name: "airportKMSP", label: "Airport KMSP" },
-              { type: "string", name: "airportKSTP", label: "Airport KSTP" },
-              { type: "string", name: "airportKFCM", label: "Airport KFCM" },
-              { type: "string", name: "airportKANE", label: "Airport KANE" }
+              { type: "string", name: "title", label: "Page Title" },
+              { type: "string", name: "subtitle", label: "Page Subtitle" },
+              { type: "string", name: "heroTitle", label: "Hero Banner Title" },
+              { type: "string", name: "heroSubtitle", label: "Hero Banner Subtitle" },
+              { type: "string", name: "customMenuTitle", label: "Custom Menu Section Title" },
+              { type: "string", name: "customMenuDescription", label: "Custom Menu Description", ui: { component: "textarea" } },
+              { type: "string", name: "requestCustomMenu", label: "Custom Menu Button Text" },
+              { type: "string", name: "qualityTitle", label: "Quality Promise Title" },
+              { type: "string", name: "qualityDescription1", label: "Quality Description - Part 1", ui: { component: "textarea" } },
+              { type: "string", name: "qualityDescription2", label: "Quality Description - Part 2", ui: { component: "textarea" } }
             ]
           }
         ]

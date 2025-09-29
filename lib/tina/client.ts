@@ -1,70 +1,96 @@
-// Tina CMS Client - Placeholder for future implementation
-// This will be properly configured once Tina Cloud is set up
+// Tina CMS Client - Optimized implementation with advanced caching
+import { client as generatedClient } from '../../tina/__generated__/client'
+import { ExperimentalGetTinaClient, queries } from '../../tina/__generated__/types'
+import { contentCache, buildCache } from '../cache/content-cache'
 
 const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const isBuild = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build'
 
-// Placeholder client - will be replaced with actual Tina client
-export const tinaClient = {
-  queries: {
-    siteSettings: async (params?: any) => ({ data: { siteSettings: null } }),
-    menuItemsConnection: async (params?: any) => ({ data: { menuItemsConnection: { edges: [] } } }),
-    testimonialsConnection: async (params?: any) => ({ data: { testimonialsConnection: { edges: [] } } }),
-    galleryImagesConnection: async (params?: any) => ({ data: { galleryImagesConnection: { edges: [] } } }),
-    translations: async (params?: any) => ({ data: { translations: null } }),
+// Use the generated Tina client with proper error handling
+const baseClient = isLocal ? generatedClient : generatedClient
+export const tinaClient = queries(baseClient)
+
+// Choose appropriate cache based on context
+const cache = isBuild ? buildCache : contentCache
+
+async function getCachedContent<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+  // Check cache first
+  const cached = cache.get<T>(key)
+  if (cached !== null) {
+    return cached
   }
-};
 
-// Helper functions for fetching content
-export async function getSiteSettings() {
   try {
-    const response = await tinaClient.queries.siteSettings({
-      relativePath: "site.json",
-    });
-    return response.data.siteSettings;
+    const data = await fetcher()
+    cache.set(key, data)
+    return data
   } catch (error) {
-    console.error("Error fetching site settings:", error);
-    return null;
+    console.error(`Error fetching content for key ${key}:`, error)
+    throw error
   }
+}
+
+// Helper functions for fetching content with caching
+export async function getSiteSettings() {
+  return getCachedContent('siteSettings', async () => {
+    try {
+      const response = await tinaClient.siteSettings({
+        relativePath: "site.json",
+      });
+      return response.data.siteSettings;
+    } catch (error) {
+      console.error("Error fetching site settings:", error);
+      return null;
+    }
+  })
 }
 
 export async function getMenuItems() {
-  try {
-    const response = await tinaClient.queries.menuItemsConnection();
-    return (response.data.menuItemsConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
-  } catch (error) {
-    console.error("Error fetching menu items:", error);
-    return [];
-  }
+  return getCachedContent('menuItems', async () => {
+    try {
+      const response = await tinaClient.menuItemsConnection();
+      return (response.data.menuItemsConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
+      return [];
+    }
+  })
 }
 
 export async function getTestimonials() {
-  try {
-    const response = await tinaClient.queries.testimonialsConnection();
-    return (response.data.testimonialsConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
-  } catch (error) {
-    console.error("Error fetching testimonials:", error);
-    return [];
-  }
+  return getCachedContent('testimonials', async () => {
+    try {
+      const response = await tinaClient.testimonialsConnection();
+      return (response.data.testimonialsConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
+    } catch (error) {
+      console.error("Error fetching testimonials:", error);
+      return [];
+    }
+  })
 }
 
 export async function getGalleryImages() {
-  try {
-    const response = await tinaClient.queries.galleryImagesConnection();
-    return (response.data.galleryImagesConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
-  } catch (error) {
-    console.error("Error fetching gallery images:", error);
-    return [];
-  }
+  return getCachedContent('galleryImages', async () => {
+    try {
+      const response = await tinaClient.galleryImagesConnection();
+      return (response.data.galleryImagesConnection.edges as any[])?.map((edge: any) => edge?.node) || [];
+    } catch (error) {
+      console.error("Error fetching gallery images:", error);
+      return [];
+    }
+  })
 }
 
 export async function getTranslations(language: string = "en") {
-  try {
-    const response = await tinaClient.queries.translations({
-      relativePath: `${language}.json`,
-    });
-    return response.data.translations;
-  } catch (error) {
-    console.error(`Error fetching translations for ${language}:`, error);
-    return null;
-  }
+  return getCachedContent(`translations-${language}`, async () => {
+    try {
+      const response = await tinaClient.translations({
+        relativePath: `${language}.json`,
+      });
+      return response.data.translations;
+    } catch (error) {
+      console.error(`Error fetching translations for ${language}:`, error);
+      return null;
+    }
+  })
 }

@@ -65,6 +65,30 @@ export default function MenuClient({
   const handleRemoveItem = (id: string) => setOrderItems(prev => prev.filter(item => item.id !== id))
   const handleClearOrder = () => setOrderItems([])
 
+  // Handle empty content state
+  if (categories.length === 0 || items.length === 0) {
+    return (
+      <>
+        <MenuHero />
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="font-montserrat text-3xl md:text-4xl font-bold mb-4">{i18nStrings.title}</h1>
+            <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-10"></div>
+            <div className="max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 mb-8">We're currently updating our menu. Please check back soon or contact us directly for current offerings.</p>
+              <Button
+                asChild
+                className="bg-[#D4AF37] hover:bg-[#B69121] text-white font-semibold px-8 py-3 rounded-full"
+              >
+                <a href="/contact">Contact Us</a>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </>
+    )
+  }
+
   return (
     <>
       <MenuHero />

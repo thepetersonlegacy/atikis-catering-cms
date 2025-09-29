@@ -1,27 +1,33 @@
 import MenuClient, { UICategory, UIMenuItem } from './MenuClient'
 import { getMenuCategories, getMenuItems } from '@/lib/content/menu'
-import { allMenuItems } from '@/lib/data/menu-data'
 import { translations } from '@/lib/i18n/translations'
 
 export default async function Menu() {
-  // Prefer Tina content; fall back to static data if needed
+  // Load content from Tina CMS with proper error handling
   const tinaCategories = getMenuCategories()
   const tinaItems = getMenuItems()
 
-  const categories: UICategory[] = tinaCategories.length
-    ? tinaCategories.map((c) => ({ key: c.key, name: c.name }))
-    : []
+  // Ensure we have categories and items - if not, show appropriate message
+  const categories: UICategory[] = tinaCategories.map((c) => ({ key: c.key, name: c.name }))
 
-  const items: UIMenuItem[] = (tinaItems.length ? tinaItems : allMenuItems).map((i) => ({
+  const items: UIMenuItem[] = tinaItems.map((i) => ({
     id: i.id,
     title: i.title,
-    description: (i as any).description ?? '',
+    description: i.description ?? '',
     category: i.category,
-    image: (i as any).image,
+    image: i.image,
     featured: false,
-    sections: (i as any).sections ?? [],
-    boxMaxItemsPerBox: (i as any).boxMaxItemsPerBox,
+    sections: (i.sections ?? []).map(section => ({
+      title: section.title ?? '',
+      items: section.items ?? []
+    })),
+    boxMaxItemsPerBox: i.boxMaxItemsPerBox,
   }))
+
+  // If no content is available, we'll handle this in the client component
+  if (categories.length === 0 || items.length === 0) {
+    console.warn('Menu content not available from Tina CMS')
+  }
 
   const menuI18n = translations.en.menu as unknown as {
     title: string;
