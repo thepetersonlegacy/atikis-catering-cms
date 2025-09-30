@@ -79,6 +79,19 @@ export function getMenuItems(): TinaMenuItem[] {
     })
   }
 
-  return items
+  // Sort items to move all "Box Options" items to the bottom
+  // Box options are items that contain "Boxes Available" in their name
+  return items.sort((a, b) => {
+    const aIsBoxOption = a.title.includes('Boxes Available')
+    const bIsBoxOption = b.title.includes('Boxes Available')
+
+    // If both are box options or both are regular items, maintain alphabetical order
+    if (aIsBoxOption === bIsBoxOption) {
+      return a.title.localeCompare(b.title)
+    }
+
+    // Box options go to the bottom (return 1 means a comes after b)
+    return aIsBoxOption ? 1 : -1
+  })
 }
 
