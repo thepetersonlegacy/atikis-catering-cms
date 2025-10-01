@@ -164,10 +164,6 @@ export default function MenuClient({
                       {boxOptionsItems.length > 0 && (
                         <div className="space-y-8 mt-12">
                           <div className="border-t-2 border-[#D4AF37] pt-8">
-                            <h3 className="font-montserrat text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                              <span className="text-[#D4AF37] mr-3">📦</span>
-                              Box Options
-                            </h3>
                             {boxOptionsItems.map(item => (
                               <div key={item.id} itemScope itemType="https://schema.org/MenuItem" className="mb-8">
                                 <MenuItemCard key={item.id} item={item as any} onAddToOrder={handleAddToOrder} isBoxOption={true} />
