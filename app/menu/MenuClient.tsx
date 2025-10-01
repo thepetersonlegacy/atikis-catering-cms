@@ -138,15 +138,44 @@ export default function MenuClient({
 
                 {categories.map((cat) => {
                   const catItems = items.filter(i => i.category === cat.name)
+
+                  // Separate regular items from Box Options items
+                  const regularItems = catItems.filter(item =>
+                    !item.title.toLowerCase().includes('boxes available')
+                  )
+                  const boxOptionsItems = catItems.filter(item =>
+                    item.title.toLowerCase().includes('boxes available')
+                  )
+
                   return (
                     <TabsContent key={cat.key} value={cat.key} className="mt-10">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {catItems.map(item => (
-                          <div key={item.id} itemScope itemType="https://schema.org/MenuItem">
-                            <MenuItemCard key={item.id} item={item as any} onAddToOrder={handleAddToOrder} />
+                      {/* Regular menu items in 2-column grid */}
+                      {regularItems.length > 0 && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+                          {regularItems.map(item => (
+                            <div key={item.id} itemScope itemType="https://schema.org/MenuItem">
+                              <MenuItemCard key={item.id} item={item as any} onAddToOrder={handleAddToOrder} />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Box Options items in full-width rows */}
+                      {boxOptionsItems.length > 0 && (
+                        <div className="space-y-8 mt-12">
+                          <div className="border-t-2 border-[#D4AF37] pt-8">
+                            <h3 className="font-montserrat text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                              <span className="text-[#D4AF37] mr-3">📦</span>
+                              Box Options
+                            </h3>
+                            {boxOptionsItems.map(item => (
+                              <div key={item.id} itemScope itemType="https://schema.org/MenuItem" className="mb-8">
+                                <MenuItemCard key={item.id} item={item as any} onAddToOrder={handleAddToOrder} isBoxOption={true} />
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      )}
                     </TabsContent>
                   )
                 })}

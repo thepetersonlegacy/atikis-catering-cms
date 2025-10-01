@@ -12,6 +12,7 @@ import { useI18n } from '@/lib/i18n/i18n-context'
 interface MenuItemCardProps {
   item: MenuItem;
   onAddToOrder: (item: MenuItem, quantity: number, notes?: string, boxSelections?: BoxSelection[]) => void;
+  isBoxOption?: boolean;
 }
 
 interface BoxSelection {
@@ -20,7 +21,7 @@ interface BoxSelection {
   note?: string;
 }
 
-export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
+export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuItemCardProps) => {
   const { t, tp } = useI18n()
   const [quantity, setQuantity] = useState(1)
   const [notes, setNotes] = useState('')
@@ -82,10 +83,18 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
   const maxReached = maxPerBox !== null && totalBoxItems >= maxPerBox
 
   return (
-    <article className="bg-white rounded-lg p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 hover:transform hover:scale-[1.02]">
+    <article className={`bg-white rounded-lg shadow-sm border transition-all duration-300 ${
+      isBoxOption
+        ? 'p-10 border-2 border-[#D4AF37] hover:shadow-2xl hover:border-[#B69121]'
+        : 'p-8 border-gray-100 hover:shadow-lg hover:transform hover:scale-[1.02]'
+    }`}>
       <div className="mb-6">
-        <h3 className="font-montserrat text-xl font-bold mb-5 text-gray-900 leading-[1.3]" itemProp="name">{item.title}</h3>
-        <p className="text-gray-600 text-base leading-[1.618]" itemProp="description">{item.description}</p>
+        <h3 className={`font-montserrat font-bold mb-5 text-gray-900 leading-[1.3] ${
+          isBoxOption ? 'text-2xl' : 'text-xl'
+        }`} itemProp="name">{item.title}</h3>
+        <p className={`text-gray-600 leading-[1.618] ${
+          isBoxOption ? 'text-lg' : 'text-base'
+        }`} itemProp="description">{item.description}</p>
       </div>
 
       {item.sections && (
@@ -96,12 +105,18 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
 
             if (isBoxSection) {
               return (
-                <div key={index} className="bg-gray-50 rounded-lg p-6">
-                  <h4 className="font-montserrat text-base font-semibold text-[#D4AF37] mb-5 border-b border-gray-200 pb-3">
+                <div key={index} className={`rounded-lg ${
+                  isBoxOption ? 'bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 p-8 border-2 border-[#D4AF37]/30' : 'bg-gray-50 p-6'
+                }`}>
+                  <h4 className={`font-montserrat font-semibold text-[#D4AF37] mb-5 border-b border-gray-200 pb-3 ${
+                    isBoxOption ? 'text-lg' : 'text-base'
+                  }`}>
                     {section.title}
                   </h4>
                   <div className="space-y-4">
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className={`text-gray-600 mb-4 ${
+                      isBoxOption ? 'text-base' : 'text-sm'
+                    }`}>
                       {t('menu.boxOptions.selectionHeader')}
                     </p>
 
@@ -120,8 +135,12 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                           const currentQty = currentSelection?.quantity || 0
 
                           return (
-                            <div key={itemIndex} className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200">
-                              <span className="text-sm font-medium text-gray-700 flex-1">
+                            <div key={itemIndex} className={`flex items-center justify-between bg-white rounded-md border border-gray-200 ${
+                              isBoxOption ? 'p-4' : 'p-3'
+                            }`}>
+                              <span className={`font-medium text-gray-700 flex-1 ${
+                                isBoxOption ? 'text-base' : 'text-sm'
+                              }`}>
                                 {boxItem}
                               </span>
                               <div className="flex items-center space-x-2 ml-4">
@@ -130,10 +149,12 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleBoxSelectionChange(boxItem, Math.max(0, currentQty - 1))}
-                                  className="h-7 w-7 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
+                                  className={`p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white ${
+                                    isBoxOption ? 'h-9 w-9' : 'h-7 w-7'
+                                  }`}
                                   disabled={currentQty === 0}
                                 >
-                                  <Minus className="h-3 w-3" />
+                                  <Minus className={isBoxOption ? 'h-4 w-4' : 'h-3 w-3'} />
                                 </Button>
                                 <Input
                                   aria-label={`${boxItem} quantity`}
@@ -145,7 +166,9 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                                     const capped = maxPerBox ? Math.min(nextVal, Math.max(0, maxPerBox - (totalBoxItems - currentQty))) : nextVal
                                     handleBoxSelectionChange(boxItem, capped)
                                   }}
-                                  className="w-12 text-center text-xs border-[#D4AF37] focus:ring-[#D4AF37]"
+                                  className={`text-center border-[#D4AF37] focus:ring-[#D4AF37] ${
+                                    isBoxOption ? 'w-14 text-sm' : 'w-12 text-xs'
+                                  }`}
                                   min="0"
                                   max={maxPerBox ? Math.max(0, maxPerBox - (totalBoxItems - currentQty)) : 99}
                                 />
@@ -154,10 +177,12 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleBoxSelectionChange(boxItem, currentQty + 1)}
-                                  className="h-7 w-7 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white disabled:opacity-50"
+                                  className={`p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white disabled:opacity-50 ${
+                                    isBoxOption ? 'h-9 w-9' : 'h-7 w-7'
+                                  }`}
                                   disabled={!!maxPerBox && totalBoxItems >= maxPerBox}
                                 >
-                                  <Plus className="h-3 w-3" />
+                                  <Plus className={isBoxOption ? 'h-4 w-4' : 'h-3 w-3'} />
                                 </Button>
                                 {/* Per-option note */}
                                 <Input
@@ -178,7 +203,9 @@ export const MenuItemCard = ({ item, onAddToOrder }: MenuItemCardProps) => {
                                     return next
                                   })}
                                   placeholder={t('menu.boxOptions.perOptionNotePlaceholder')}
-                                  className="ml-2 flex-1 text-xs border-gray-300 focus:ring-[#D4AF37]"
+                                  className={`ml-2 flex-1 border-gray-300 focus:ring-[#D4AF37] ${
+                                    isBoxOption ? 'text-sm' : 'text-xs'
+                                  }`}
                                 />
                               </div>
                             </div>
