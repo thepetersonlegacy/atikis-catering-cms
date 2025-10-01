@@ -29,7 +29,7 @@ const CAPTION_MAP: Record<string, string> = {
   dsc_6664: 'Asian chicken',
   dsc_6703: 'Nicoise salad',
   "dsc_6722-enhanced-nr (1)": 'Shrimp Cavatappi',
-  dsc_7019: 'Buddha Salad',
+  dsc_7019: 'Buddha Bowl',
   dsc_7162: 'Brie chicken with caramelized apples',
   dsc_7918: 'Toasted baguette with herb butter',
   dsc_7971: 'Chocolate-dipped strawberries',
