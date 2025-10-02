@@ -8,7 +8,17 @@ export async function GET() {
     const tinaTestimonials = await getTestimonials()
 
     if (tinaTestimonials && tinaTestimonials.length > 0) {
-      return NextResponse.json(tinaTestimonials, {
+      // Transform Tina testimonials to match the expected Testimonial interface
+      const transformedTestimonials = tinaTestimonials.map((testimonial: any, index: number) => ({
+        id: testimonial.id || String(index + 1),
+        name: testimonial.name || '',
+        title: testimonial.company || '',
+        quote: testimonial.content || '', // Map 'content' field to 'quote'
+        rating: testimonial.rating,
+        avatar: testimonial.avatar
+      }))
+
+      return NextResponse.json(transformedTestimonials, {
         status: 200,
         headers: {
           'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
