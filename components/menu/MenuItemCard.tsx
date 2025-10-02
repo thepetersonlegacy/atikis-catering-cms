@@ -83,11 +83,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
   const maxReached = maxPerBox !== null && totalBoxItems >= maxPerBox
 
   return (
-    <article className={`bg-white rounded-lg shadow-sm border transition-all duration-300 ${
-      isBoxOption
-        ? 'p-10 border-2 border-[#D4AF37] hover:shadow-2xl hover:border-[#B69121]'
-        : 'p-8 border-gray-100 hover:shadow-lg hover:transform hover:scale-[1.02]'
-    }`}>
+    <article className="bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-10 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121]">
       <div className="mb-6">
         <h3 className={`font-montserrat font-bold mb-5 text-gray-900 leading-[1.3] ${
           isBoxOption ? 'text-2xl' : 'text-xl'
