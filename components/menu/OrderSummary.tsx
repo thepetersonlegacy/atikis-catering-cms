@@ -75,6 +75,7 @@ ORDER DETAILS:
 
 ADDITIONAL INFORMATION:
 ======================
+Tail Number: [Please specify]
 Wheels Up: [Please specify]
 Flight Date: [Please specify]
 Delivery Time: [Please specify]
