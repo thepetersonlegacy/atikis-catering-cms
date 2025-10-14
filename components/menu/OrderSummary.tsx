@@ -82,6 +82,7 @@ Delivery Time: [Please specify]
 Delivery Location: [Please specify airport/FBO]
 Number of Passengers: [Please specify]
 Special Dietary Requirements: [Please specify if any]
+Credit Card Information: [Please specify]
 
 Please confirm availability and provide pricing for this order.
 
