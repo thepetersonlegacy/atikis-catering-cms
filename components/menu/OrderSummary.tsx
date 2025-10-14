@@ -82,7 +82,8 @@ Delivery Time: [Please specify]
 Delivery Location: [Please specify airport/FBO]
 Number of Passengers: [Please specify]
 Special Dietary Requirements: [Please specify if any]
-Credit Card Information: [Please specify]
+Payment Method: [Please specify - Credit Card or Add to Fuel Bill]
+Credit Card Information (if paying by card): [Please specify card details]
 
 Please confirm availability and provide pricing for this order.
 
