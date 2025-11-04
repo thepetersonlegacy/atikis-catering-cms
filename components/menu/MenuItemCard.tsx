@@ -275,52 +275,56 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
 
       {/* Order Controls */}
       <div className="border-t border-gray-200 pt-6 space-y-4">
-        {/* Quantity Selector */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">
-            {isBoxOptionsItem ? t('menu.boxOptions.numberOfBoxesLabel') : t('menu.boxOptions.quantityLabel')}
-          </span>
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuantityChange(quantity - 1)}
-              disabled={quantity <= 1}
-              className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <Input
-              type="number"
-              value={quantity}
-              onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-              className="w-16 text-center border-[#D4AF37] focus:ring-[#D4AF37]"
-              min="1"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuantityChange(quantity + 1)}
-              className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+        {/* Quantity Selector - Only show for regular menu items, not Box Options */}
+        {!isBoxOptionsItem && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">
+              {t('menu.boxOptions.quantityLabel')}
+            </span>
+            <div className="flex items-center space-x-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleQuantityChange(quantity - 1)}
+                disabled={quantity <= 1}
+                className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <Input
+                type="number"
+                value={quantity}
+                onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                className="w-16 text-center border-[#D4AF37] focus:ring-[#D4AF37]"
+                min="1"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleQuantityChange(quantity + 1)}
+                className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Special Notes */}
-        <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">
-            Special Notes (optional):
-          </label>
-          <Input
-            type="text"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Dietary restrictions, preferences, etc."
-            className="border-gray-300 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
-          />
-        </div>
+        {/* Special Notes - Only show for regular menu items, not Box Options */}
+        {!isBoxOptionsItem && (
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-2">
+              Special Notes (optional):
+            </label>
+            <Input
+              type="text"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Dietary restrictions, preferences, etc."
+              className="border-gray-300 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+            />
+          </div>
+        )}
 
         {/* Validation Message for Box Items */}
         {isBoxOptionsItem && totalBoxItems === 0 && (
