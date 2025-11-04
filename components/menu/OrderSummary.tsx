@@ -61,9 +61,17 @@ ORDER DETAILS:
         })
       }
       
-      if (orderItem.notes) {
-        body += `
-   Special Notes: ${orderItem.notes}`
+      // Only show Special Notes if there are actual customer notes (not auto-generated "From Box Options" text)
+      if (orderItem.notes && !orderItem.notes.startsWith('From Box Options:')) {
+        // If notes contain both customer notes and "From Box Options", extract only the customer part
+        const customerNotes = orderItem.notes.includes(' | From Box Options:')
+          ? orderItem.notes.split(' | From Box Options:')[0]
+          : orderItem.notes
+
+        if (customerNotes.trim()) {
+          body += `
+   Special Notes: ${customerNotes}`
+        }
       }
       
       body += `
