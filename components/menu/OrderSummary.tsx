@@ -48,7 +48,7 @@ ORDER DETAILS:
 
     orderItems.forEach((orderItem, index) => {
       body += `${index + 1}. ${orderItem.item.title}
-   Number of Boxes: ${orderItem.quantity}
+   Number of Items: ${orderItem.quantity}
    Category: ${orderItem.item.category}
    Description: ${orderItem.item.description}`
       
