@@ -147,7 +147,7 @@ Best regards,
                 </Button>
               </div>
               <div className="flex justify-between items-center text-xs text-gray-600">
-                <span>Number of Boxes: {orderItem.quantity}</span>
+                <span>Number of Items: {orderItem.quantity}</span>
                 <Badge variant="outline" className="text-xs">
                   {orderItem.item.category}
                 </Badge>
