@@ -3,6 +3,5 @@
   "description": "Rich and creamy chocolate mousse served in 3 oz. portions.",
   "price": 0,
   "category": "content/menu-categories/elegant-desserts-and-confections.json",
-  "image": "/images/menu/chocolate-mousse.jpg",
   "featured": false
 }
