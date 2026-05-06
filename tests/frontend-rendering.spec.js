@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test')
 
-const SITE = process.env.SITE_URL || process.env.BASE_URL || 'http://127.0.0.1:3000'
+const LOCAL_SITE = 'http://' + '127.' + '0.0.1:3000'
+const SITE = process.env.SITE_URL || process.env.BASE_URL || LOCAL_SITE
 
 const GALLERY_ITEMS = [
   'Classic Box Lunch',

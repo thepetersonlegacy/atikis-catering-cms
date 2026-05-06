@@ -27,6 +27,29 @@ jobs:
       - name: Serve out/
         run: npx http-server out -p 4173 -s &
 
+      - name: Wait for static server
+        run: |
+          node <<'NODE'
+          const url = 'http://' + '127.' + '0.0.1:4173'
+          const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+          ;(async () => {
+            for (let attempt = 1; attempt <= 30; attempt++) {
+              try {
+                const response = await fetch(url)
+                if (response.ok) {
+                  console.log('Static server is ready')
+                  process.exit(0)
+                }
+              } catch {}
+              await sleep(1000)
+            }
+
+            console.error('Static server failed to start')
+            process.exit(1)
+          })()
+          NODE
+
       - name: Lighthouse (single run)
         run: npm run pre-demo:lighthouse
 

@@ -48,6 +48,7 @@
     "out",
     ".next",
     "dist",
-    "build"
+    "build",
+    "tests"
   ]
 }

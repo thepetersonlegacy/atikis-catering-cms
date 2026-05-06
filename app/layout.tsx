@@ -20,10 +20,10 @@ const openSans = Open_Sans({
 })
 
 
-const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://atikis-flight-catering.netlify.app'
 
 export const metadata: Metadata = {
-  ...(rawSiteUrl ? { metadataBase: new URL(rawSiteUrl) } : {}),
+  metadataBase: new URL(rawSiteUrl),
   title: 'Premium Aviation Catering Services in Minnesota | Atikis',
   description: 'Atikis Minnesota Aviation Catering provides exceptional in-flight dining for private jets. Serving KMSP, KSTP, KFCM, and KANE airports with gourmet meals crafted for altitude dining.',
   openGraph: {
