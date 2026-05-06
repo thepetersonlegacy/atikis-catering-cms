@@ -1,5 +1,6 @@
 {
   "name": "Classic Box Lunch",
   "description": "A Box of your choice of sandwich or wrap plus a bag of chips, savory salad, fresh fruit, dessert & cookie.",
-  "category": "content/menu-categories/in-flight-lunch-selections.json"
+  "category": "content/menu-categories/in-flight-lunch-selections.json",
+  "image": "/images/gallery/Classic Box Lunch.jpg"
 }

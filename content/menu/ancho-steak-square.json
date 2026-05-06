@@ -1,5 +1,6 @@
 {
   "name": "Ancho Steak",
   "description": "Grilled shredded filet with mixed greens, roasted corn, black beans, rice, cheddar cheese, salsa, crispy wontons and ancho dressing",
-  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json"
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "image": "/images/gallery/DSC_6543.jpg"
 }

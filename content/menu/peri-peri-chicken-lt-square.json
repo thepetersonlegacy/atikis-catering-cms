@@ -1,5 +1,6 @@
 {
   "name": "Peri Peri Chicken LT",
   "description": "Spicy peri peri chicken, bacon, cucumber, cheddar cheese, wonton strips, lettuce, and tomato.",
-  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json"
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "image": "/images/gallery/DSC_6557.jpg"
 }

@@ -1,5 +1,6 @@
 {
   "name": "Euro Continental Breakfast",
   "description": "Consists of baked goods, cheeses, cold cuts/cured meats, crackers, yogurt, granola, fruit, boiled eggs, and juice.",
-  "category": "content/menu-categories/signature-breakfast-collection.json"
+  "category": "content/menu-categories/signature-breakfast-collection.json",
+  "image": "/images/gallery/Euro Continental Breakfast .png"
 }

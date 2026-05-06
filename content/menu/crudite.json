@@ -1,5 +1,6 @@
 {
   "name": "Crudite",
   "description": "Our Crudite platter is an assortment of raw vegetables that are cut or sliced, and served with hummus and ranch sauces. It is simply another term for a veggie tray!",
-  "category": "content/menu-categories/in-flight-lunch-selections.json"
+  "category": "content/menu-categories/in-flight-lunch-selections.json",
+  "image": "/images/gallery/Crudite.jpg"
 }

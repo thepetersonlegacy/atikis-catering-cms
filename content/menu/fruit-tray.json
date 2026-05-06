@@ -1,5 +1,6 @@
 {
   "name": "Fruit Tray",
   "description": "An arrangement of fresh and colorful fruits; Included, but not limited to, raspberries, grapes, kiwi, pineapple, watermelon, cantaloupe, honeydew, strawberries, and blackberries.",
-  "category": "content/menu-categories/in-flight-lunch-selections.json"
+  "category": "content/menu-categories/in-flight-lunch-selections.json",
+  "image": "/images/gallery/Fruit Tray.jpg"
 }

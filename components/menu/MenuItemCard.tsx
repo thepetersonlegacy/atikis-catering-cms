@@ -1,5 +1,6 @@
 "use client"
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -84,6 +85,18 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
 
   return (
     <article className="bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-10 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121]">
+      {item.image && !isBoxOptionsItem && (
+        <div className="relative mb-7 aspect-[4/3] overflow-hidden rounded-lg border border-[#D4AF37]/20 bg-white shadow-sm">
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+      )}
+
       <div className="mb-6">
         <h3 className={`font-montserrat font-bold mb-5 text-gray-900 leading-[1.3] ${
           isBoxOption ? 'text-2xl' : 'text-xl'

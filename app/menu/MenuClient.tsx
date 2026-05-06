@@ -120,7 +120,7 @@ export default function MenuClient({
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">Explore the menu</p>
                       <h2 className="font-montserrat text-2xl font-bold text-gray-950">Choose a category</h2>
                     </div>
-                    <p className="max-w-md text-sm leading-relaxed text-gray-500">Select any collection below to instantly reveal its dishes—no horizontal scrolling required.</p>
+                    <p className="max-w-md text-sm leading-relaxed text-gray-500">Select any collection below to instantly reveal its dishes.</p>
                   </div>
 
                   <TabsList className="grid h-auto w-full grid-cols-1 gap-3 rounded-none bg-transparent p-0 sm:grid-cols-2 xl:grid-cols-4">

@@ -1,5 +1,6 @@
 {
   "name": "Classic Cobb",
   "description": "Traditional Cobb with chicken, egg, avocado, bacon, tomato, cucumber, cheddar, and blue cheese.",
-  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json"
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "image": "/images/gallery/DSC_6403.jpg"
 }

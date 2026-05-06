@@ -1,5 +1,6 @@
 {
   "name": "Mezze",
   "description": "Tabbolueh, hummus, kalamata olives, feta cheese, stuffed grape leaves, crudite, grilled artichoke and pita bread.",
-  "category": "content/menu-categories/in-flight-lunch-selections.json"
+  "category": "content/menu-categories/in-flight-lunch-selections.json",
+  "image": "/images/gallery/Mezze.jpg"
 }

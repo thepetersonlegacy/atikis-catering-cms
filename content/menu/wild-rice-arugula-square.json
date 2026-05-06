@@ -1,5 +1,6 @@
 {
   "name": "Wild Rice Arugula",
   "description": "Minnesota wild rice, arugula, goat cheese, sweet potatoes, chicken, and dried cherries.",
-  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json"
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "image": "/images/gallery/DSC_6653.jpg"
 }

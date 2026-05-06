@@ -1,5 +1,6 @@
 {
   "name": "Steak and Gorgonzola",
   "description": "Grilled filet, pears, grapes, gorgonzola, candied walnuts with mixed greens",
-  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json"
+  "category": "content/menu-categories/artisan-salad-and-grain-bowls.json",
+  "image": "/images/gallery/DSC_6574.jpg"
 }
