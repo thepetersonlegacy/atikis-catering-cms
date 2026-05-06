@@ -37,7 +37,7 @@ export default function MenuClient({
   useEffect(() => {
     const updateStickyState = () => {
       const nav = categoryNavRef.current
-      setIsCategoryNavStuck(Boolean(nav && window.innerWidth >= 1024 && nav.getBoundingClientRect().top <= 97))
+      setIsCategoryNavStuck(Boolean(nav && window.innerWidth >= 1024 && nav.getBoundingClientRect().top <= 113))
     }
 
     updateStickyState()
@@ -119,9 +119,18 @@ export default function MenuClient({
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value)
 
-    window.requestAnimationFrame(() => {
-      contentStartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
+    window.setTimeout(() => {
+      const anchor = contentStartRef.current
+      if (!anchor) return
+
+      const isDesktop = window.innerWidth >= 1024
+      const navHeight = isDesktop ? (categoryNavRef.current?.offsetHeight ?? 0) : 0
+      const stickyTopOffset = isDesktop ? 112 : 24
+      const breathingRoom = isDesktop ? 72 : 24
+      const targetY = window.scrollY + anchor.getBoundingClientRect().top - navHeight - stickyTopOffset - breathingRoom
+
+      window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' })
+    }, 0)
   }
 
   return (
@@ -141,7 +150,7 @@ export default function MenuClient({
               <Tabs value={selectedCategory || categories[0]?.key} onValueChange={handleCategoryChange} className="w-full">
                 <div
                   ref={categoryNavRef}
-                  className={`relative z-20 mb-12 rounded-2xl border border-[#D4AF37]/20 bg-white/90 p-4 shadow-xl shadow-black/5 backdrop-blur-xl transition-[box-shadow,border-color,background-color] duration-300 supports-[backdrop-filter]:bg-white/80 sm:p-6 lg:sticky lg:top-24 lg:z-30 ${isCategoryNavStuck ? 'lg:border-[#D4AF37]/40 lg:bg-white/95 lg:shadow-2xl lg:shadow-black/15' : 'lg:shadow-xl lg:shadow-black/5'}`}
+                  className={`relative z-20 mb-12 rounded-2xl border border-b-2 border-[#D4AF37]/20 bg-white/90 p-4 shadow-xl shadow-black/5 backdrop-blur-xl transition-[box-shadow,border-color,background-color] duration-300 supports-[backdrop-filter]:bg-white/80 sm:p-6 lg:sticky lg:top-28 lg:z-30 ${isCategoryNavStuck ? 'lg:border-[#D4AF37]/50 lg:border-b-[#D4AF37]/70 lg:bg-white/95 lg:shadow-[0_28px_80px_rgba(0,0,0,0.24)]' : 'lg:shadow-xl lg:shadow-black/5'}`}
                 >
                   <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -171,7 +180,7 @@ export default function MenuClient({
                   </TabsList>
                 </div>
 
-                <div ref={contentStartRef} aria-hidden="true" className="scroll-mt-[36rem] lg:scroll-mt-[24rem]" />
+                <div ref={contentStartRef} aria-hidden="true" className="scroll-mt-[36rem] lg:scroll-mt-[44rem] xl:scroll-mt-[34rem]" />
 
                 {categories.map((cat) => {
                   const catItems = items.filter(i => i.category === cat.name)
@@ -185,7 +194,7 @@ export default function MenuClient({
                   )
 
                   return (
-                    <TabsContent key={cat.key} value={cat.key} className="mt-0 scroll-mt-[36rem] pt-8 lg:scroll-mt-[24rem] lg:pt-10">
+                    <TabsContent key={cat.key} value={cat.key} className="mt-0 scroll-mt-[36rem] pt-10 lg:scroll-mt-[44rem] lg:pt-[36rem] xl:scroll-mt-[34rem] xl:pt-[26rem]">
                       {/* Regular menu items in 2-column grid */}
                       {regularItems.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
