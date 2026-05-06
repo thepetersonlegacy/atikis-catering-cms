@@ -89,6 +89,13 @@ export default function MenuClient({
     )
   }
 
+  const categoryItemCounts = categories.reduce<Record<string, number>>((acc, cat) => {
+    acc[cat.key] = items.filter(item =>
+      item.category === cat.name && !item.title.toLowerCase().includes('boxes available')
+    ).length
+    return acc
+  }, {})
+
   return (
     <>
       <MenuHero />
@@ -104,36 +111,33 @@ export default function MenuClient({
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3">
               <Tabs defaultValue={categories[0]?.key} className="w-full">
-                <div className="mb-13 relative">
-                  <button id="scroll-left" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-0 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                    onClick={() => { const c = document.getElementById('tabs-container'); if (c) c.scrollBy({ left: -200, behavior: 'smooth' }); }} aria-label="Scroll menu left">
-                    <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                  </button>
-                  <button id="scroll-right" className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 opacity-100 transition-opacity duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                    onClick={() => { const c = document.getElementById('tabs-container'); if (c) c.scrollBy({ left: 200, behavior: 'smooth' }); }} aria-label="Scroll menu right">
-                    <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                  </button>
-
-                  <div id="tabs-container" className="overflow-x-auto scrollbar-hide px-8"
-                    onScroll={() => {
-                      const container = document.getElementById('tabs-container')
-                      const leftArrow = document.getElementById('scroll-left')
-                      const rightArrow = document.getElementById('scroll-right')
-                      if (container && leftArrow && rightArrow) {
-                        const { scrollLeft, scrollWidth, clientWidth } = container
-                        leftArrow.style.opacity = scrollLeft > 10 ? '1' : '0'
-                        rightArrow.style.opacity = scrollLeft < scrollWidth - clientWidth - 10 ? '1' : '0'
-                      }
-                    }}
-                  >
-                    <TabsList className="flex justify-start gap-3 p-3 min-w-max mx-auto">
-                      {categories.map((cat) => (
-                        <TabsTrigger key={cat.key} value={cat.key} className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white px-6 py-3 text-sm whitespace-nowrap rounded-lg transition-all duration-300 flex-shrink-0">
-                          {cat.name}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
+                <div className="sticky top-24 z-30 mb-12 rounded-2xl border border-[#D4AF37]/20 bg-white/95 p-4 shadow-xl shadow-black/5 backdrop-blur supports-[backdrop-filter]:bg-white/85 sm:p-6">
+                  <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">Explore the menu</p>
+                      <h2 className="font-montserrat text-2xl font-bold text-gray-950">Choose a category</h2>
+                    </div>
+                    <p className="max-w-md text-sm leading-relaxed text-gray-500">Select any collection below to instantly reveal its dishes—no horizontal scrolling required.</p>
                   </div>
+
+                  <TabsList className="grid h-auto w-full grid-cols-1 gap-3 rounded-none bg-transparent p-0 sm:grid-cols-2 xl:grid-cols-4">
+                    {categories.map((cat) => (
+                      <TabsTrigger
+                        key={cat.key}
+                        value={cat.key}
+                        className="group h-full min-h-[92px] whitespace-normal rounded-xl border border-gray-200 bg-white px-4 py-4 text-left shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:shadow-lg data-[state=active]:border-[#D4AF37] data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#D4AF37] data-[state=active]:to-[#B69121] data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:shadow-[#D4AF37]/20"
+                      >
+                        <span className="flex h-full w-full flex-col items-start justify-between gap-3">
+                          <span className="font-montserrat text-sm font-semibold leading-snug text-gray-900 group-data-[state=active]:text-white sm:text-[15px]">
+                            {cat.name}
+                          </span>
+                          <span className="rounded-full bg-gray-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 group-data-[state=active]:bg-white/20 group-data-[state=active]:text-white/90">
+                            {categoryItemCounts[cat.key]} selections
+                          </span>
+                        </span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
                 </div>
 
                 {categories.map((cat) => {
