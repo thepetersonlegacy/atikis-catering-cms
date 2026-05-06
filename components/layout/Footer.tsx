@@ -96,7 +96,15 @@ export default function Footer() {
               © {new Date().getFullYear()} {t('footer.copyright')}
             </p>
             <p className="font-open-sans text-gray-400 text-sm">
-              Designed by Peterson Pro Services, LLC
+              Designed by{' '}
+              <a
+                href="https://petersonproservices.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-[#D4AF37] transition-colors"
+              >
+                Peterson Pro Services, LLC
+              </a>
             </p>
           </div>
         </div>
