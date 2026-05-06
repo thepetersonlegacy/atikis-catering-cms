@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MenuHero from '@/components/menu/MenuHero'
@@ -29,6 +29,26 @@ export default function MenuClient({
   i18nStrings: { title: string; subtitle: string; customTitle: string; customDescription: string; requestLabel: string; qualityTitle: string; qualityDescription1: string; qualityDescription2: string }
 }) {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([])
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]?.key ?? '')
+  const [isCategoryNavStuck, setIsCategoryNavStuck] = useState(false)
+  const categoryNavRef = useRef<HTMLDivElement | null>(null)
+  const contentStartRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const updateStickyState = () => {
+      const nav = categoryNavRef.current
+      setIsCategoryNavStuck(Boolean(nav && window.innerWidth >= 1024 && nav.getBoundingClientRect().top <= 97))
+    }
+
+    updateStickyState()
+    window.addEventListener('scroll', updateStickyState, { passive: true })
+    window.addEventListener('resize', updateStickyState)
+
+    return () => {
+      window.removeEventListener('scroll', updateStickyState)
+      window.removeEventListener('resize', updateStickyState)
+    }
+  }, [])
 
   const handleAddToOrder = (item: any, quantity: number, notes?: string, boxSelections?: any[]) => {
     if (boxSelections && boxSelections.length > 0) {
@@ -96,6 +116,14 @@ export default function MenuClient({
     return acc
   }, {})
 
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value)
+
+    window.requestAnimationFrame(() => {
+      contentStartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
   return (
     <>
       <MenuHero />
@@ -110,8 +138,11 @@ export default function MenuClient({
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3">
-              <Tabs defaultValue={categories[0]?.key} className="w-full">
-                <div className="sticky top-24 z-30 mb-12 rounded-2xl border border-[#D4AF37]/20 bg-white/95 p-4 shadow-xl shadow-black/5 backdrop-blur supports-[backdrop-filter]:bg-white/85 sm:p-6">
+              <Tabs value={selectedCategory || categories[0]?.key} onValueChange={handleCategoryChange} className="w-full">
+                <div
+                  ref={categoryNavRef}
+                  className={`relative z-20 mb-12 rounded-2xl border border-[#D4AF37]/20 bg-white/90 p-4 shadow-xl shadow-black/5 backdrop-blur-xl transition-[box-shadow,border-color,background-color] duration-300 supports-[backdrop-filter]:bg-white/80 sm:p-6 lg:sticky lg:top-24 lg:z-30 ${isCategoryNavStuck ? 'lg:border-[#D4AF37]/40 lg:bg-white/95 lg:shadow-2xl lg:shadow-black/15' : 'lg:shadow-xl lg:shadow-black/5'}`}
+                >
                   <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">Explore the menu</p>
@@ -140,6 +171,8 @@ export default function MenuClient({
                   </TabsList>
                 </div>
 
+                <div ref={contentStartRef} aria-hidden="true" className="scroll-mt-[36rem] lg:scroll-mt-[24rem]" />
+
                 {categories.map((cat) => {
                   const catItems = items.filter(i => i.category === cat.name)
 
@@ -152,7 +185,7 @@ export default function MenuClient({
                   )
 
                   return (
-                    <TabsContent key={cat.key} value={cat.key} className="mt-10">
+                    <TabsContent key={cat.key} value={cat.key} className="mt-0 scroll-mt-[36rem] pt-8 lg:scroll-mt-[24rem] lg:pt-10">
                       {/* Regular menu items in 2-column grid */}
                       {regularItems.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
