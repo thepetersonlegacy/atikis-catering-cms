@@ -10,7 +10,7 @@ export default function TermsPage(): JSX.Element {
       <h1 className="text-3xl font-semibold mb-4">Terms of Service</h1>
       <p className="text-gray-700 mb-6">Last updated: {new Date().toLocaleDateString()}</p>
 
-      <p className="text-gray-700">Welcome to Atikis Minnesota Aviation Catering ("Atikis"). By accessing or using our website and services, you agree to these Terms of Service. If you do not agree, please do not use our site or services.</p>
+      <p className="text-gray-700">Welcome to Atikis Minnesota Aviation Catering (&quot;Atikis&quot;). By accessing or using our website and services, you agree to these Terms of Service. If you do not agree, please do not use our site or services.</p>
 
       <h2 className="mt-8 text-2xl font-semibold">1. Services</h2>
       <p className="text-gray-700">We provide aviation catering services for private and corporate flights. Availability may vary by location, date, and requested items.</p>
@@ -51,7 +51,7 @@ export default function TermsPage(): JSX.Element {
       <p className="text-gray-700">These terms are governed by the laws of the State of Minnesota, without regard to conflict of law principles.</p>
 
       <h2 className="mt-8 text-2xl font-semibold">10. Changes to These Terms</h2>
-      <p className="text-gray-700">We may update these terms from time to time. The updated version will be indicated by an updated "Last updated" date.</p>
+      <p className="text-gray-700">We may update these terms from time to time. The updated version will be indicated by an updated &quot;Last updated&quot; date.</p>
 
       <h2 className="mt-8 text-2xl font-semibold">11. Contact</h2>
       <p className="text-gray-700">Questions about these terms? Contact us at <a href="mailto:order@atikismn.com" className="text-[#D4AF37] underline">order@atikismn.com</a> or call <a href="tel:6516474940" className="text-[#D4AF37] underline">(651) 647-4940</a>.</p>

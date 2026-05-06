@@ -10,7 +10,7 @@ export default function PrivacyPage(): JSX.Element {
       <h1 className="text-3xl font-semibold mb-4">Privacy Policy</h1>
       <p className="text-gray-700 mb-6">Last updated: {new Date().toLocaleDateString()}</p>
 
-      <p className="text-gray-700">Atikis Minnesota Aviation Catering ("Atikis", "we", "our", or "us") respects your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and when you contact us to request services.</p>
+      <p className="text-gray-700">Atikis Minnesota Aviation Catering (&quot;Atikis&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) respects your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and when you contact us to request services.</p>
 
       <h2 className="mt-8 text-2xl font-semibold">Information We Collect</h2>
       <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -42,7 +42,7 @@ export default function PrivacyPage(): JSX.Element {
       <h2 className="mt-8 text-2xl font-semibold">Security</h2>
       <p className="text-gray-700">We use reasonable administrative, technical, and physical safeguards designed to protect your information. No method of transmission or storage is perfectly secure; therefore, we cannot guarantee absolute security.</p>
 
-      <h2 className="mt-8 text-2xl font-semibold">Children's Privacy</h2>
+      <h2 className="mt-8 text-2xl font-semibold">Children&apos;s Privacy</h2>
       <p className="text-gray-700">Our services are intended for professional aviation catering and are not directed to children. We do not knowingly collect personal information from children.</p>
 
       <h2 className="mt-8 text-2xl font-semibold">International Visitors</h2>

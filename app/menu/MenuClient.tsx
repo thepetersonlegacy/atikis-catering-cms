@@ -75,7 +75,7 @@ export default function MenuClient({
             <h1 className="font-montserrat text-3xl md:text-4xl font-bold mb-4">{i18nStrings.title}</h1>
             <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-10"></div>
             <div className="max-w-2xl mx-auto">
-              <p className="text-lg text-gray-600 mb-8">We're currently updating our menu. Please check back soon or contact us directly for current offerings.</p>
+              <p className="text-lg text-gray-600 mb-8">We&apos;re currently updating our menu. Please check back soon or contact us directly for current offerings.</p>
               <Button
                 asChild
                 className="bg-[#D4AF37] hover:bg-[#B69121] text-white font-semibold px-8 py-3 rounded-full"
