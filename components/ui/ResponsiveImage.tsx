@@ -133,7 +133,7 @@ const ResponsiveImage = ({
         priority={priority}
         quality={quality}
         sizes={responsiveSizes}
-        loading={loading}
+        loading={priority ? undefined : loading}
         onLoad={handleLoad}
         onError={handleError}
         {...props}

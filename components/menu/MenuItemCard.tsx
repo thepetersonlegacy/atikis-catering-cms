@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Minus, ShoppingCart, ChevronDown } from 'lucide-react'
+import { Plus, Minus, ShoppingCart } from 'lucide-react'
 import { TinaMenuItem as MenuItem } from '@/lib/content/menu'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/lib/hooks/use-toast'
@@ -71,7 +71,10 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
     // Toast and clear selections for Box Options
     if (isBoxOptionsItem && cleanSelections.length > 0) {
       const toastTitle = `${t('menu.boxOptions.toastAddedPrefix')} ${totalBoxItems} ${tp('menu.boxOptions.item', totalBoxItems)} ${t('menu.boxOptions.toastFrom')} ${item.title}`
-      toast({ title: toastTitle })
+      toast({
+        title: toastTitle,
+        className: 'border-[#D4AF37]/40 bg-slate-950 text-white shadow-2xl',
+      })
       setBoxSelections([])
       setInlineConfirm(true)
       setTimeout(() => setInlineConfirm(false), 2000)
@@ -82,9 +85,24 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
   const totalBoxItems = boxSelections.reduce((sum, sel) => sum + sel.quantity, 0)
   const maxPerBox = isBoxOptionsItem ? (item as any).boxMaxItemsPerBox ?? null : null
   const maxReached = maxPerBox !== null && totalBoxItems >= maxPerBox
+  const boxProgressPercent = maxPerBox
+    ? Math.min(100, (totalBoxItems / maxPerBox) * 100)
+    : totalBoxItems > 0 ? 100 : 0
+  const selectionPhases = [
+    { label: 'Select', active: totalBoxItems > 0 || isAdded },
+    { label: maxPerBox ? 'Curate' : 'Review', active: totalBoxItems > 1 || maxReached || isAdded },
+    { label: maxReached ? 'Ready' : 'Add', active: isAdded || maxReached },
+  ]
+  const addButtonLabel = isAdded
+    ? 'Order added'
+    : isBoxOptionsItem
+      ? (totalBoxItems === 0
+          ? t('menu.boxOptions.selectItemsToAdd')
+          : `${t('menu.boxOptions.addItemsPrefix')} ${totalBoxItems} ${tp('menu.boxOptions.item', totalBoxItems)}`)
+      : t('menu.boxOptions.addToOrder')
 
   return (
-    <article className="bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-10 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121]">
+      <article className="bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-10 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121]">
       {item.image && !isBoxOptionsItem && (
         <div className="relative mb-7 aspect-[4/3] overflow-hidden rounded-lg border border-[#D4AF37]/20 bg-white shadow-sm">
           <Image
@@ -129,6 +147,47 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                       {t('menu.boxOptions.selectionHeader')}
                     </p>
 
+                    <div className="rounded-xl border border-[#D4AF37]/25 bg-white/90 p-4 shadow-sm transition-all duration-500">
+                      <div className="mb-3 flex items-center justify-between gap-4">
+                        <div>
+                          <p className="font-montserrat text-xs font-semibold uppercase tracking-[0.24em] text-[#8A6D1D]">
+                            Selection progress
+                          </p>
+                          <p className="mt-1 text-xs text-slate-500">
+                            {maxPerBox ? `${totalBoxItems} of ${maxPerBox} reserved` : `${totalBoxItems} selected`}
+                          </p>
+                        </div>
+                        <div className="rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-1 text-xs font-semibold text-[#8A6D1D]">
+                          {maxReached ? 'Limit secured' : totalBoxItems > 0 ? 'In progress' : 'Ready'}
+                        </div>
+                      </div>
+                      <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-[#8A6D1D] via-[#D4AF37] to-[#F2D675] transition-all duration-700 ease-out"
+                          style={{ width: `${boxProgressPercent}%` }}
+                        />
+                      </div>
+                      <div className="mt-4 grid grid-cols-3 gap-2">
+                        {selectionPhases.map((phase, phaseIndex) => (
+                          <div
+                            key={phase.label}
+                            className={`rounded-lg border px-3 py-2 text-center transition-all duration-500 ${
+                              phase.active
+                                ? 'border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#8A6D1D] shadow-sm'
+                                : 'border-slate-200 bg-slate-50 text-slate-400'
+                            }`}
+                          >
+                            <span className="block text-[10px] font-semibold uppercase tracking-[0.2em]">
+                              Step {phaseIndex + 1}
+                            </span>
+                            <span className="mt-1 block font-montserrat text-xs font-semibold">
+                              {phase.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Interactive Box Selection */}
                     <div className="grid gap-4">
                       {(() => {
@@ -144,12 +203,14 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                           const currentQty = currentSelection?.quantity || 0
 
                           return (
-                            <div key={itemIndex} className={`flex items-center justify-between bg-white rounded-md border border-gray-200 ${
-                              isBoxOption ? 'p-4' : 'p-3'
-                            }`}>
-                              <span className={`font-medium text-gray-700 flex-1 ${
-                                isBoxOption ? 'text-base' : 'text-sm'
-                              }`}>
+                            <div key={itemIndex} className={`flex items-center justify-between rounded-xl border transition-all duration-300 ${
+                              currentQty > 0
+                                ? 'border-[#D4AF37]/60 bg-white shadow-md ring-1 ring-[#D4AF37]/15'
+                                : 'border-slate-200 bg-white hover:border-[#D4AF37]/30 hover:shadow-sm'
+                            } ${isBoxOption ? 'p-4' : 'p-3'}`}>
+                              <span className={`font-medium flex-1 transition-colors duration-300 ${
+                                currentQty > 0 ? 'text-slate-950' : 'text-gray-700'
+                              } ${isBoxOption ? 'text-base' : 'text-sm'}`}>
                                 {boxItem}
                               </span>
                               <div className="flex items-center space-x-2 ml-4">
@@ -226,7 +287,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                     {/* Quick actions */}
                     {boxSelections.length > 0 && (
                       <div className="mt-3 flex justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => setBoxSelections([])} className="text-red-600 hover:text-red-700">
+                        <Button variant="ghost" size="sm" onClick={() => setBoxSelections([])} className="text-slate-500 hover:text-[#8A6D1D]">
                           {t('menu.boxOptions.clearSelections')}
                         </Button>
                       </div>
@@ -234,28 +295,31 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
 
                     {/* Selection Summary */}
                     {boxSelections.length > 0 && (
-                      <div className="mt-3 p-3 bg-[#D4AF37]/10 rounded-md">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-[#D4AF37]">
+                      <div className="mt-4 overflow-hidden rounded-xl border border-[#D4AF37]/25 bg-white shadow-sm transition-all duration-500">
+                        <div className="h-1 bg-gradient-to-r from-[#8A6D1D] via-[#D4AF37] to-[#F2D675]" />
+                        <div className="flex items-center justify-between gap-3 p-4">
+                          <span className="font-montserrat text-xs font-semibold uppercase tracking-[0.22em] text-[#8A6D1D]">
                             {t('menu.boxOptions.selectedItemsLabel')}
                           </span>
-                          <Badge variant="secondary" className="bg-[#D4AF37] text-white">
-                            {maxPerBox && (
-                              <span className="ml-2 text-xs text-gray-600">{t('menu.boxOptions.chooseUpTo')} {maxPerBox}</span>
-                            )}
-
-                        {maxReached && (
-                          <div className="text-xs text-red-600">{t('menu.boxOptions.reachedMax')} {maxPerBox}</div>
-                        )}
-
+                          <Badge variant="secondary" className="border border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#8A6D1D] shadow-none">
                             {totalBoxItems} {tp('menu.boxOptions.item', totalBoxItems)}
                           </Badge>
                         </div>
-                        <div className="space-y-1">
+                        {maxPerBox && (
+                          <div className="mx-4 mb-3 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
+                            {t('menu.boxOptions.chooseUpTo')} {maxPerBox}
+                            {maxReached && (
+                              <span className="ml-2 font-semibold text-[#8A6D1D]">
+                                · {t('menu.boxOptions.reachedMax')} {maxPerBox}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        <div className="space-y-2 px-4 pb-4">
                           {boxSelections.map((selection, idx) => (
-                            <div key={idx} className="flex justify-between text-xs text-gray-600">
+                            <div key={idx} className="flex justify-between gap-4 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
                               <span>{selection.itemName}{selection.note ? ` (Note: ${selection.note})` : ''}</span>
-                              <span>×{selection.quantity}</span>
+                              <span className="font-semibold text-[#8A6D1D]">×{selection.quantity}</span>
                             </div>
                           ))}
                         </div>
@@ -350,24 +414,28 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
         <Button
           onClick={handleAddToOrder}
           disabled={isBoxOptionsItem && totalBoxItems === 0}
-          className={`w-full transition-all duration-300 sticky bottom-3 sm:static sm:bottom-auto ${
+          className={`relative w-full overflow-hidden border transition-all duration-500 sticky bottom-3 sm:static sm:bottom-auto ${
             isAdded
-              ? 'bg-green-600 hover:bg-green-700 text-white'
-              : 'bg-[#D4AF37] hover:bg-[#B69121] text-white'
+              ? 'border-[#D4AF37]/60 bg-slate-950 text-[#F5E6B3] shadow-[0_16px_40px_rgba(15,23,42,0.22)] hover:bg-slate-900'
+              : 'border-[#D4AF37] bg-[#D4AF37] text-white shadow-sm hover:bg-[#B69121] hover:border-[#B69121] hover:shadow-lg'
           } ${isBoxOptionsItem && totalBoxItems === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          {isAdded
-            ? 'Added to Order!'
-            : isBoxOptionsItem
-              ? (totalBoxItems === 0
-                  ? t('menu.boxOptions.selectItemsToAdd')
-                  : `${t('menu.boxOptions.addItemsPrefix')} ${totalBoxItems} ${tp('menu.boxOptions.item', totalBoxItems)}`)
-              : t('menu.boxOptions.addToOrder')
-          }
+          <span className={`absolute inset-0 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.32),transparent)] transition-transform duration-700 ${
+            isAdded ? 'translate-x-full' : '-translate-x-full'
+          }`} />
+          <span className="relative flex items-center justify-center">
+            {isAdded ? (
+              <span className="mr-3 h-2 w-2 rounded-full bg-[#D4AF37] shadow-[0_0_14px_rgba(212,175,55,0.9)]" />
+            ) : (
+              <ShoppingCart className="h-4 w-4 mr-2" />
+            )}
+            <span className="font-montserrat text-sm font-semibold uppercase tracking-[0.12em]">
+              {addButtonLabel}
+            </span>
+          </span>
         </Button>
         {inlineConfirm && (
-          <div className="text-xs text-green-700 bg-green-50 mt-2 p-2 rounded text-center">
+          <div className="mt-3 rounded-xl border border-[#D4AF37]/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-3 text-center font-open-sans text-xs uppercase tracking-[0.18em] text-[#F5E6B3] shadow-lg transition-all duration-500">
             {t('menu.boxOptions.inlineAdded')}
           </div>
         )}

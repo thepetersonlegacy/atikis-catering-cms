@@ -128,25 +128,22 @@ const HowItWorksSection = () => {
                           relative w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center
                           transition-all duration-300 transform group-hover:scale-110
                           ${isActive
-                            ? 'bg-[#D4AF37] text-white shadow-lg shadow-[#D4AF37]/30'
+                            ? 'bg-[#D4AF37] text-white shadow-lg shadow-[#D4AF37]/30 ring-4 ring-[#D4AF37]/20'
                             : isCompleted
-                              ? 'bg-green-500 text-white'
+                              ? 'border-2 border-[#D4AF37]/70 bg-slate-950/80 text-[#D4AF37] shadow-[0_0_24px_rgba(212,175,55,0.24)]'
                               : 'bg-white/20 text-white border-2 border-white/40'
                           }
                         `}>
                           <Icon className="w-6 h-6 lg:w-8 lg:h-8" />
-                          {isCompleted && !isActive && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <CheckCircle className="w-6 h-6 lg:w-8 lg:h-8" />
-                            </div>
-                          )}
                         </div>
 
                         <div className={`
                           mt-2 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold
                           ${isActive
                             ? 'bg-white text-[#D4AF37]'
-                            : 'bg-white/20 text-white'
+                            : isCompleted
+                              ? 'bg-[#D4AF37]/15 text-[#F5E6B3] border border-[#D4AF37]/40'
+                              : 'bg-white/20 text-white'
                           }
                         `}>
                           {step.id}
@@ -168,7 +165,7 @@ const HowItWorksSection = () => {
                       {index < processSteps.length - 1 && (
                         <div className={`
                           flex-1 h-0.5 mx-4 lg:mx-6 transition-colors duration-300
-                          ${activeStep > step.id ? 'bg-green-500' : 'bg-white/30'}
+                          ${activeStep > step.id ? 'bg-gradient-to-r from-[#8A6D1D] via-[#D4AF37] to-[#F2D675]' : 'bg-white/30'}
                         `} />
                       )}
                     </div>
@@ -205,25 +202,22 @@ const HowItWorksSection = () => {
                             relative w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center
                             transition-all duration-300 transform group-active:scale-95
                             ${isActive
-                              ? 'bg-[#D4AF37] text-white shadow-lg shadow-[#D4AF37]/30'
+                              ? 'bg-[#D4AF37] text-white shadow-lg shadow-[#D4AF37]/30 ring-4 ring-[#D4AF37]/20'
                               : isCompleted
-                                ? 'bg-green-500 text-white'
+                                ? 'border-2 border-[#D4AF37]/70 bg-slate-950/80 text-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.24)]'
                                 : 'bg-white/20 text-white border-2 border-white/40'
                             }
                           `}>
                             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                            {isCompleted && !isActive && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <CheckCircle className="w-6 h-6" />
-                              </div>
-                            )}
                           </div>
 
                           <div className={`
                             mt-2 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold
                             ${isActive
                               ? 'bg-white text-[#D4AF37]'
-                              : 'bg-white/20 text-white'
+                              : isCompleted
+                                ? 'bg-[#D4AF37]/15 text-[#F5E6B3] border border-[#D4AF37]/40'
+                                : 'bg-white/20 text-white'
                             }
                           `}>
                             {step.id}
