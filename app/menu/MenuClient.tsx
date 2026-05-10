@@ -123,12 +123,12 @@ export default function MenuClient({
                     <p className="max-w-md text-sm leading-relaxed text-gray-500">Select any collection below to instantly reveal its dishes.</p>
                   </div>
 
-                  <TabsList className="grid h-auto w-full grid-cols-1 gap-3 rounded-none bg-transparent p-0 sm:grid-cols-2 xl:grid-cols-4">
+                  <TabsList className="scrollbar-hide flex h-auto w-full snap-x snap-mandatory justify-start gap-3 overflow-x-auto rounded-none bg-transparent p-0 pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
                     {categories.map((cat) => (
                       <TabsTrigger
                         key={cat.key}
                         value={cat.key}
-                        className="group h-full min-h-[92px] whitespace-normal rounded-xl border border-gray-200 bg-white px-4 py-4 text-left shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:shadow-lg data-[state=active]:border-[#D4AF37] data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#D4AF37] data-[state=active]:to-[#B69121] data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:shadow-[#D4AF37]/20"
+                        className="group h-full min-h-[76px] min-w-[220px] flex-shrink-0 snap-start whitespace-normal rounded-xl border border-gray-200 bg-white px-4 py-3 text-left shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D4AF37]/70 hover:shadow-lg data-[state=active]:border-[#D4AF37] data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#D4AF37] data-[state=active]:to-[#B69121] data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:shadow-[#D4AF37]/20 sm:min-h-[92px] sm:min-w-0 sm:flex-shrink sm:px-4 sm:py-4"
                       >
                         <span className="flex h-full w-full flex-col items-start justify-between gap-3">
                           <span className="font-montserrat text-sm font-semibold leading-snug text-gray-900 group-data-[state=active]:text-white sm:text-[15px]">
@@ -158,7 +158,7 @@ export default function MenuClient({
                     <TabsContent key={cat.key} value={cat.key} className="mt-8 pt-0">
                       {/* Regular menu items in 2-column grid */}
                       {regularItems.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+                        <div className="grid grid-cols-1 gap-6 mb-10 md:grid-cols-2 md:gap-10">
                           {regularItems.map(item => (
                             <div key={item.id} itemScope itemType="https://schema.org/MenuItem">
                               <MenuItemCard key={item.id} item={item as any} onAddToOrder={handleAddToOrder} />

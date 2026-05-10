@@ -102,7 +102,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
       : t('menu.boxOptions.addToOrder')
 
   return (
-      <article className="bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-10 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121]">
+    <article className="mb-6 bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 rounded-lg shadow-sm border-2 border-[#D4AF37] p-4 transition-all duration-300 hover:shadow-2xl hover:border-[#B69121] sm:p-6 lg:p-10">
       {item.image && !isBoxOptionsItem && (
         <div className="relative mb-7 aspect-[4/3] overflow-hidden rounded-lg border border-[#D4AF37]/20 bg-white shadow-sm">
           <Image
@@ -116,16 +116,16 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
       )}
 
       <div className="mb-6">
-        <h3 className={`font-montserrat font-bold mb-5 text-gray-900 leading-[1.3] ${
-          isBoxOption ? 'text-2xl' : 'text-xl'
+        <h3 className={`font-montserrat font-bold mb-4 text-gray-900 leading-[1.3] sm:mb-5 ${
+          isBoxOption ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'
         }`} itemProp="name">{item.title}</h3>
-        <p className={`text-gray-600 leading-[1.618] ${
-          isBoxOption ? 'text-lg' : 'text-base'
+        <p className={`text-gray-600 leading-relaxed sm:leading-[1.618] ${
+          isBoxOption ? 'text-sm sm:text-lg' : 'text-sm sm:text-base'
         }`} itemProp="description">{item.description}</p>
       </div>
 
       {item.sections && (
-        <div className="space-y-6 mt-6 mb-8">
+        <div className="space-y-5 mt-5 mb-6 sm:space-y-6 sm:mt-6 sm:mb-8">
           {item.sections.map((section, index) => {
             const isBoxSection = section.title?.toLowerCase().includes('box options') ||
                                 section.title?.toLowerCase().includes('available')
@@ -133,54 +133,54 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
             if (isBoxSection) {
               return (
                 <div key={index} className={`rounded-lg ${
-                  isBoxOption ? 'bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 p-8 border-2 border-[#D4AF37]/30' : 'bg-gray-50 p-6'
+                  isBoxOption ? 'bg-gradient-to-br from-[#D4AF37]/5 to-[#D4AF37]/10 p-4 border-2 border-[#D4AF37]/30 sm:p-8' : 'bg-gray-50 p-4 sm:p-6'
                 }`}>
-                  <h4 className={`font-montserrat font-semibold text-[#D4AF37] mb-5 border-b border-gray-200 pb-3 ${
-                    isBoxOption ? 'text-lg' : 'text-base'
+                  <h4 className={`font-montserrat font-semibold text-[#D4AF37] mb-4 border-b border-gray-200 pb-3 sm:mb-5 ${
+                    isBoxOption ? 'text-base sm:text-lg' : 'text-base'
                   }`}>
                     {section.title}
                   </h4>
                   <div className="space-y-4">
                     <p className={`text-gray-600 mb-4 ${
-                      isBoxOption ? 'text-base' : 'text-sm'
+                      isBoxOption ? 'text-sm leading-relaxed sm:text-base' : 'text-sm leading-relaxed'
                     }`}>
                       {t('menu.boxOptions.selectionHeader')}
                     </p>
 
-                    <div className="rounded-xl border border-[#D4AF37]/25 bg-white/90 p-4 shadow-sm transition-all duration-500">
-                      <div className="mb-3 flex items-center justify-between gap-4">
-                        <div>
-                          <p className="font-montserrat text-xs font-semibold uppercase tracking-[0.24em] text-[#8A6D1D]">
+                    <div className="sticky top-20 z-20 rounded-xl border border-[#D4AF37]/25 bg-white/90 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-500 sm:static sm:p-4 sm:shadow-sm">
+                      <div className="mb-3 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                        <div className="min-w-0">
+                          <p className="whitespace-nowrap font-montserrat text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8A6D1D] sm:text-xs sm:tracking-[0.24em]">
                             Selection progress
                           </p>
                           <p className="mt-1 text-xs text-slate-500">
                             {maxPerBox ? `${totalBoxItems} of ${maxPerBox} reserved` : `${totalBoxItems} selected`}
                           </p>
                         </div>
-                        <div className="rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-1 text-xs font-semibold text-[#8A6D1D]">
+                        <div className="shrink-0 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-1 text-xs font-semibold text-[#8A6D1D]">
                           {maxReached ? 'Limit secured' : totalBoxItems > 0 ? 'In progress' : 'Ready'}
                         </div>
                       </div>
                       <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#8A6D1D] via-[#D4AF37] to-[#F2D675] transition-all duration-700 ease-out"
-                          style={{ width: `${boxProgressPercent}%` }}
+                          className="h-full w-full origin-left transform-gpu rounded-full bg-gradient-to-r from-[#8A6D1D] via-[#D4AF37] to-[#F2D675] transition-transform duration-700 ease-out will-change-transform [backface-visibility:hidden]"
+                          style={{ transform: `scaleX(${boxProgressPercent / 100})` }}
                         />
                       </div>
-                      <div className="mt-4 grid grid-cols-3 gap-2">
+                      <div className="mt-4 grid grid-cols-3 gap-1 sm:gap-2">
                         {selectionPhases.map((phase, phaseIndex) => (
                           <div
                             key={phase.label}
-                            className={`rounded-lg border px-3 py-2 text-center transition-all duration-500 ${
+                            className={`min-w-0 rounded-lg border px-1.5 py-2 text-center transition-all duration-500 will-change-transform [backface-visibility:hidden] sm:px-3 ${
                               phase.active
                                 ? 'border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#8A6D1D] shadow-sm'
                                 : 'border-slate-200 bg-slate-50 text-slate-400'
                             }`}
                           >
-                            <span className="block text-[10px] font-semibold uppercase tracking-[0.2em]">
+                            <span className="block whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.2em]">
                               Step {phaseIndex + 1}
                             </span>
-                            <span className="mt-1 block font-montserrat text-xs font-semibold">
+                            <span className="mt-1 block truncate font-montserrat text-xs font-semibold">
                               {phase.label}
                             </span>
                           </div>
@@ -203,7 +203,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                           const currentQty = currentSelection?.quantity || 0
 
                           return (
-                            <div key={itemIndex} className={`flex items-center justify-between rounded-xl border transition-all duration-300 ${
+                            <div key={itemIndex} className={`flex flex-col gap-3 rounded-xl border transition-all duration-300 sm:flex-row sm:items-center sm:justify-between ${
                               currentQty > 0
                                 ? 'border-[#D4AF37]/60 bg-white shadow-md ring-1 ring-[#D4AF37]/15'
                                 : 'border-slate-200 bg-white hover:border-[#D4AF37]/30 hover:shadow-sm'
@@ -213,15 +213,13 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                               } ${isBoxOption ? 'text-base' : 'text-sm'}`}>
                                 {boxItem}
                               </span>
-                              <div className="flex items-center space-x-2 ml-4">
+                              <div className="flex w-full flex-wrap items-center gap-2 sm:ml-4 sm:w-auto sm:flex-nowrap">
                                 <Button
                                   aria-label={`Decrease ${boxItem} quantity`}
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleBoxSelectionChange(boxItem, Math.max(0, currentQty - 1))}
-                                  className={`p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white ${
-                                    isBoxOption ? 'h-9 w-9' : 'h-7 w-7'
-                                  }`}
+                                  className="h-11 w-11 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white sm:h-9 sm:w-9"
                                   disabled={currentQty === 0}
                                 >
                                   <Minus className={isBoxOption ? 'h-4 w-4' : 'h-3 w-3'} />
@@ -236,9 +234,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                                     const capped = maxPerBox ? Math.min(nextVal, Math.max(0, maxPerBox - (totalBoxItems - currentQty))) : nextVal
                                     handleBoxSelectionChange(boxItem, capped)
                                   }}
-                                  className={`text-center border-[#D4AF37] focus:ring-[#D4AF37] ${
-                                    isBoxOption ? 'w-14 text-sm' : 'w-12 text-xs'
-                                  }`}
+                                  className="h-11 w-14 text-center text-sm border-[#D4AF37] focus:ring-[#D4AF37] sm:h-10 sm:w-14"
                                   min="0"
                                   max={maxPerBox ? Math.max(0, maxPerBox - (totalBoxItems - currentQty)) : 99}
                                 />
@@ -247,9 +243,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleBoxSelectionChange(boxItem, currentQty + 1)}
-                                  className={`p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white disabled:opacity-50 ${
-                                    isBoxOption ? 'h-9 w-9' : 'h-7 w-7'
-                                  }`}
+                                  className="h-11 w-11 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white disabled:opacity-50 sm:h-9 sm:w-9"
                                   disabled={!!maxPerBox && totalBoxItems >= maxPerBox}
                                 >
                                   <Plus className={isBoxOption ? 'h-4 w-4' : 'h-3 w-3'} />
@@ -273,9 +267,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                                     return next
                                   })}
                                   placeholder={t('menu.boxOptions.perOptionNotePlaceholder')}
-                                  className={`ml-2 flex-1 border-gray-300 focus:ring-[#D4AF37] ${
-                                    isBoxOption ? 'text-sm' : 'text-xs'
-                                  }`}
+                                  className="min-w-[180px] flex-1 basis-full border-gray-300 text-sm focus:ring-[#D4AF37] sm:ml-2 sm:basis-auto"
                                 />
                               </div>
                             </div>
@@ -351,7 +343,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
       )}
 
       {/* Order Controls */}
-      <div className="border-t border-gray-200 pt-6 space-y-4">
+      <div className="border-t border-gray-200 pt-5 space-y-4 sm:pt-6">
         {/* Quantity Selector - Only show for regular menu items, not Box Options */}
         {!isBoxOptionsItem && (
           <div className="flex items-center justify-between">
@@ -364,7 +356,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                 size="sm"
                 onClick={() => handleQuantityChange(quantity - 1)}
                 disabled={quantity <= 1}
-                className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
+                className="h-11 w-11 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white sm:h-8 sm:w-8"
               >
                 <Minus className="h-4 w-4" />
               </Button>
@@ -372,14 +364,14 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                 type="number"
                 value={quantity}
                 onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-                className="w-16 text-center border-[#D4AF37] focus:ring-[#D4AF37]"
+                className="h-11 w-16 text-center border-[#D4AF37] focus:ring-[#D4AF37] sm:h-10"
                 min="1"
               />
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleQuantityChange(quantity + 1)}
-                className="h-8 w-8 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white"
+                className="h-11 w-11 p-0 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white sm:h-8 sm:w-8"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -414,13 +406,13 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
         <Button
           onClick={handleAddToOrder}
           disabled={isBoxOptionsItem && totalBoxItems === 0}
-          className={`relative w-full overflow-hidden border transition-all duration-500 sticky bottom-3 sm:static sm:bottom-auto ${
+          className={`relative w-full overflow-hidden border backdrop-blur-md transition-all duration-500 sticky bottom-3 z-30 shadow-[0_-8px_30px_rgb(0,0,0,0.12)] sm:static sm:bottom-auto sm:z-auto sm:shadow-sm ${
             isAdded
               ? 'border-[#D4AF37]/60 bg-slate-950 text-[#F5E6B3] shadow-[0_16px_40px_rgba(15,23,42,0.22)] hover:bg-slate-900'
               : 'border-[#D4AF37] bg-[#D4AF37] text-white shadow-sm hover:bg-[#B69121] hover:border-[#B69121] hover:shadow-lg'
           } ${isBoxOptionsItem && totalBoxItems === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <span className={`absolute inset-0 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.32),transparent)] transition-transform duration-700 ${
+          <span className={`absolute inset-0 transform-gpu bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.32),transparent)] transition-transform duration-700 will-change-transform [backface-visibility:hidden] ${
             isAdded ? 'translate-x-full' : '-translate-x-full'
           }`} />
           <span className="relative flex items-center justify-center">
