@@ -147,7 +147,7 @@ export const MenuItemCard = ({ item, onAddToOrder, isBoxOption = false }: MenuIt
                       {t('menu.boxOptions.selectionHeader')}
                     </p>
 
-                    <div className="sticky top-20 z-20 rounded-xl border border-[#D4AF37]/25 bg-white/90 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.08)] backdrop-blur-md transition-all duration-500 sm:static sm:p-4 sm:shadow-sm">
+                    <div className="rounded-xl border border-[#D4AF37]/25 bg-white/90 p-4 shadow-sm transition-all duration-500">
                       <div className="mb-3 flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                         <div className="min-w-0">
                           <p className="whitespace-nowrap font-montserrat text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8A6D1D] sm:text-xs sm:tracking-[0.24em]">
